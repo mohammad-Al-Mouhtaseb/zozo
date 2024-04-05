@@ -46,7 +46,7 @@ def login(request):
         email= data['email']
         password=data['password']
         if authenticate(request, username=email,password=password):
-            Json_res=User.objects.get(email=email)
+            Json_res=Abo.objects.get(email=email)
             Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=50))
             Json_res.save()
             try:
@@ -72,7 +72,7 @@ def logout(request):
         token= data['token']
         obj_res=None
         try:
-            obj_res=User.objects.get(id=id,token=token)
+            obj_res=Abo.objects.get(id=id,token=token)
         except:
             pass
         if obj_res!=None:
@@ -89,7 +89,7 @@ def exp_logout(request):
         id= data['id']
         obj_res=None
         try:
-            obj_res=User.objects.get(id=id)
+            obj_res=Abo.objects.get(id=id)
         except:
             pass
         if obj_res:
@@ -107,7 +107,7 @@ def edit(request):
         token=data['token']
         param=data['param']
         new_value=data['new_value']
-        person_obj=User.objects.get(id=id,token=token)
+        person_obj=Abo.objects.get(id=id,token=token)
         if person_obj:
             if person_obj.type=="patient":
                 if hasattr(Patient, param):
@@ -135,7 +135,7 @@ def edit(request):
 @csrf_exempt 
 def photo(request,id):
     try:
-        person=User.objects.get(id=id)
+        person=Abo.objects.get(id=id)
         img = open(str(person.photo), 'rb')
         response = FileResponse(img)
         return response
@@ -145,7 +145,7 @@ def photo(request,id):
 @csrf_exempt 
 def get_profile(request,id):
     try:
-        res=User.objects.get(id=id)
+        res=Abo.objects.get(id=id)
         if res.type=="patient":
             res=Patient.objects.get(id=id)
             return JsonResponse({"first_name":res.first_name,"last_name":res.last_name,"email":res.email,"birth":res.birth,"gender":res.gender})
@@ -161,7 +161,7 @@ def check_token(request):
     data = json.loads(request.body)
     id= data['id']
     token= data['token']
-    obj_res = User.objects.filter(id=id,token=token)
+    obj_res = Abo.objects.filter(id=id,token=token)
     if obj_res:
         return obj_res[0]
     else:
