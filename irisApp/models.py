@@ -6,8 +6,8 @@ from datetime import date
 
 class Panic_Disorder(models.Model):
 
-    Person_Id = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='Person_Id')
-    Doctor_Id = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='Doctor_Id') 
+    Person_email = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True, related_name='Person_Id')
+    Doctor_email = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='Doctor_Id') 
     Positive_Negative=models.BooleanField(null=True, blank=True)
     Family_History=models.IntegerField(null=True, blank=True)
     Personal_History=models.IntegerField(null=True, blank=True)
@@ -29,4 +29,4 @@ class Panic_Disorder(models.Model):
     
     class Meta:
         verbose_name = 'Panic_Disorder'
-        ordering = ['Person_Id']
+        # ordering = ['Person_Id']

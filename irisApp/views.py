@@ -17,8 +17,10 @@ def Panic(request):
         person_resul=check_token(request)
         if check_token(request):
             try:
-                Age = date.today().year - person_resul.birth.year
-                Gender = 1 if person_resul.gender == 'male' else 0 
+                patient=Patient.objects.get(email=person_resul
+                                            .email)
+                Age = date.today().year - patient.birth.year
+                Gender = 1 if patient.gender == 'male' else 0 
                 Family_History=data['Family_History']	
                 Personal_History=data['Personal_History']	
                 Current_Stressors=data['Current_Stressors']	
@@ -36,9 +38,9 @@ def Panic(request):
                 new_test=[Age,Gender,Family_History,Personal_History,Current_Stressors,Symptoms,Severity,Impact_on_Life,Demographics,Medical_History,Psychiatric_History,Substance_Use,Coping_Mechanisms,Social_Support,Lifestyle_Factors]
                 pred=XGBoost.predict([new_test])
                 pred= False if pred[0] == 0 else True
-                obj_res=Panic_Disorder.objects.filter(Person_Id=person_resul)
+                obj_res=Panic_Disorder.objects.filter(Person_email=patient)
                 fields = {
-                    'Person_Id': person_resul,
+                    'Person_email': patient,
                     'Positive_Negative': pred,
                     'Family_History': Family_History,
                     'Personal_History': Personal_History,
@@ -60,22 +62,21 @@ def Panic(request):
                     obj_res = Panic_Disorder.objects.create(**fields)
                 return JsonResponse({'Panic_Disorder' : pred}, status=200)
 
-            except:
+            except Exception as e:
                 params=dict(data)
                 for k in params:
                     if k in all_q:
                         if hasattr(Panic_Disorder, k):
                             try:
-                                obj=Panic_Disorder.objects
-                                obj_res = obj.get(Person_Id=person_resul.id)
+                                obj_res=Panic_Disorder.objects.get(Person_email=patient)
                                 if obj_res:
                                     setattr(obj_res, k,params[k])
                                     obj_res.save()
-                            except: 
+                            except Exception as e:
                                 return JsonResponse({'state':'form is not valid'}, status=201)
-                obj=Panic_Disorder.objects.get(Person_Id=person_resul.id)
-                Age = date.today().year - person_resul.birth.year
-                Gender = 1 if person_resul.gender == 'male' else 0 
+                obj=Panic_Disorder.objects.get(Person_email=patient.email)
+                Age = date.today().year - patient.birth.year
+                Gender = 1 if patient.gender == 'male' else 0 
                 new_test=[Age,Gender,obj.Family_History,obj.Personal_History,obj.Current_Stressors,obj.Symptoms,obj.Severity,obj.Impact_on_Life,obj.Demographics,obj.Medical_History,obj.Psychiatric_History,obj.Substance_Use,obj.Coping_Mechanisms,obj.Social_Support,obj.Lifestyle_Factors]
                 pred=XGBoost.predict([new_test])
                 if pred[0] == 0:
@@ -95,6 +96,8 @@ def QPanic(request):
         data = json.loads(request.body)
         person_resul=check_token(request)
         if check_token(request):
+            patient=Patient.objects.get(email=person_resul
+                                            .email)
             questions = [
             "Do you have a family history of any medical conditions?",
             "Do you have a personal history of any medical conditions?",
@@ -115,7 +118,7 @@ def QPanic(request):
                     ["Rural","Urban"],["Bipolar disorder","Anxiety disorder", "2 for Depressive disorder", "3 for None"],["None","Drugs", "2 for Alcohol"],
                     ["Socializing","Exercise", "2 for Seeking therapy", "3 for Meditation"],["High","Moderate", "2 for Low"],["Sleep quality","Exercise", "2 for Diet"]]
             try:
-                obj_res=Panic_Disorder.objects.filter(Person_Id=person_resul)[0]
+                obj_res=Panic_Disorder.objects.filter(Person_email=patient)[0]
                 all_q2=[obj_res.Family_History,obj_res.Personal_History,obj_res.Current_Stressors,obj_res.Symptoms,obj_res.Severity,obj_res.Impact_on_Life,obj_res.Demographics,obj_res.Medical_History,obj_res.Psychiatric_History,obj_res.Substance_Use,obj_res.Coping_Mechanisms,obj_res.Social_Support,obj_res.Lifestyle_Factors]
                 if obj_res:
                     q=list()
@@ -148,10 +151,12 @@ def doctor_view(request):
         person_resul=check_token(request)
         if check_token(request):
             if person_resul.type=='doctor':
-                p_id=data['p_id']
+                patient_email=data['patient_email']
                 try:
-                    info=Panic_Disorder.objects.get(Person_Id=p_id)
-                except:
+                    p=Patient.objects.get(email=patient_email)
+                    info=Panic_Disorder.objects.get(Person_email=p)
+                except Exception as e:
+                    print(e)
                     return JsonResponse({'state':'form is not valid'}, status=201)
                 res=dict()
                 for i in all_q:
@@ -170,14 +175,15 @@ def select_doctor(request):
         person_resul=check_token(request)
         if check_token(request):
             try:
-                obj_res = Panic_Disorder.objects.get(Person_Id=person_resul.id)
+                p=Patient.objects.get(email=person_resul.email)
+                obj_res = Panic_Disorder.objects.get(Person_email=p)
                 if obj_res:
                     selection=data['doctor']
-                    doc=Doctor.objects.get(id=selection)
-                    setattr(obj_res, "Doctor_Id", doc)
+                    doc=Doctor.objects.get(email=selection)
+                    setattr(obj_res, "Doctor_email", doc)
                     obj_res.save()
                     return JsonResponse({'state':'success'}, status=200)
-                elif Patient.objects.get(Person_Id=person_resul.id):
+                elif Patient.objects.get(Person_email=person_resul.email):
                     return JsonResponse({'state':'you must doing test'}, status=201)
             except: 
                 return JsonResponse({'state':'form is not valid'}, status=201)  
