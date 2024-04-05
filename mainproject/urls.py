@@ -22,6 +22,6 @@ urlpatterns = [
     path("users/", include('users.urls')),
     path("", include('web.urls')),
     path("to-do-list/", include('to_do_list.urls')),
-    # path("ai/", include('irisApp.urls')),
+    path("ai/", include('irisApp.urls')),
     # path("chat/", include('chat.urls')),
 ]
