@@ -5,6 +5,8 @@ import string ,random,json
 from django.contrib.auth.hashers import make_password
 from . models import *
 from django.contrib.auth import authenticate
+import base64
+from django.core.files.base import ContentFile
 
 # Create your views here.
 
@@ -25,16 +27,19 @@ def register(request):
             if roll:
                 if roll=="doctor":
                     d=Doctor.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
+                    send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
                     return JsonResponse({'state':'success'}, status=200)
                 else:
                     roll="patient"
                     p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
+                    send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
                     return JsonResponse({'state':'success'}, status=200)      
         except Exception as e:
             print(e)
         if roll==None:
             roll="patient"
             p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
+            send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
             return JsonResponse({'state':'success'}, status=200)
         return JsonResponse({'state':'form is not valid'}, status=201)
     return JsonResponse({'state':'error request method'}, status=201)
@@ -104,30 +109,32 @@ def edit(request):
         data = json.loads(request.body)
         email= data['email']
         token=data['token']
-        param=data['param']
-        new_value=data['new_value']
+        params=data['params']
+        new_values=data['new_values']
         user=User.objects.get(email=email,token=token)
         if user:
             if user.type=="patient":
-                if hasattr(Patient, param):
-                    try:
-                        obj_res=Patient.objects.get(email=email)
-                        if obj_res:
-                            setattr(obj_res, param, new_value)
-                            obj_res.save()
-                            return JsonResponse({'state':"success"}, status=200)
-                    except: 
-                        return JsonResponse({'state':'form is not valid'}, status=201)       
+                for i ,j in zip(params,new_values):
+                    if hasattr(Patient, i):
+                        try:
+                            obj_res=Patient.objects.get(email=email)
+                            if obj_res:
+                                setattr(obj_res, i, j)
+                                obj_res.save()
+                                return JsonResponse({'state':"success"}, status=200)
+                        except: 
+                            return JsonResponse({'state':'form is not valid'}, status=201)       
             else:
-                if hasattr(Doctor, param):
-                    try:
-                        obj_res=Doctor.objects.get(email=email)
-                        if obj_res:
-                            setattr(obj_res, param, new_value)
-                            obj_res.save()
-                            return JsonResponse({'state':"success"}, status=200)
-                    except: 
-                        return JsonResponse({'state':'form is not valid'}, status=201)
+                for i ,j in zip(params,new_values):
+                    if hasattr(Doctor, i):
+                        try:
+                            obj_res=Doctor.objects.get(email=email)
+                            if obj_res:
+                                setattr(obj_res, i, j)
+                                obj_res.save()
+                                return JsonResponse({'state':"success"}, status=200)
+                        except: 
+                            return JsonResponse({'state':'form is not valid'}, status=201)
         return JsonResponse({'state':'form is not valid'}, status=201)
     return JsonResponse({'state':'error request method'}, status=201)
 
@@ -141,6 +148,21 @@ def photo(request,email):
     except:
         return JsonResponse({"res":None})
     
+@csrf_exempt 
+def upload_photo(request,email):
+    try:
+        # data:image/jpeg;base64,
+        data = json.loads(request.body)
+        user= User.objects.get(email=email)
+        format, imgstr = data["photo"].split(';base64,') 
+        ext = format.split('/')[-1] 
+        user.photo = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+        user.save()
+        return JsonResponse({'state':"success"}, status=200)
+    except Exception as e:
+        print(e)
+        return JsonResponse({'state':e}, status=201)
+
 @csrf_exempt 
 def get_profile(request,email):
     try:
@@ -194,3 +216,27 @@ def reating(request):
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
+
+import requests
+@csrf_exempt 
+def send_mail(sendto,title,body):
+    url = "https://mail-sender-api1.p.rapidapi.com/"
+    payload = {
+        "sendto": sendto,
+        "name": "Selene",
+        "replyTo": "",
+        "ishtml": "false",
+        "title": title,
+        "body": body
+    }
+    headers = {
+        "content-type": "application/json",
+        "X-RapidAPI-Key": "4120ca7630msh5566122415863dep16069fjsn207bd1f0e6f4",
+        "X-RapidAPI-Host": "mail-sender-api1.p.rapidapi.com"
+    }
+    response = requests.post(url, json=payload, headers=headers)
+    if(response.status_code!=200):
+        url = "https://rapidmail.p.rapidapi.com/"
+        response = requests.post(url, json=payload, headers=headers)
+
+    print(response.json())

@@ -73,6 +73,7 @@ class Patient(User):
         ordering = ['id']
 
 class Doctor(User):
+    specialization=models.CharField(max_length=50,default='',null=True, blank=True)
     clinic_address=models.CharField(max_length=50,default='',null=True, blank=True)
     rate=models.DecimalField(max_digits=2, decimal_places=1, default=0.0, null=True, blank=True)
     num_of_rate=models.DecimalField(max_digits=5, decimal_places=1, default=0.0, null=True, blank=True)
