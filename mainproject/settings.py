@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "to_do_list",
     "irisApp",
 ]
+AUTH_USER_MODEL = "users.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -86,9 +87,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'RVIbOmSnVYvlICSOTarqNGDJKLveEQDV',
-        'HOST': 'monorail.proxy.rlwy.net',
-        'PORT': '44036',
+        'PASSWORD': 'yeFIdwSAaLkPtaLjdvIxihuTpxXJRIYS',
+        'HOST': 'roundhouse.proxy.rlwy.net',
+        'PORT': '15614',
     }
 }
 # DATABASES = {
