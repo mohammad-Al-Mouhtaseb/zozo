@@ -156,7 +156,7 @@ def upload_photo(request,email):
         user= User.objects.get(email=email)
         format, imgstr = data["photo"].split(';base64,') 
         ext = format.split('/')[-1] 
-        user.photo = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+        user.photo = ContentFile(base64.b64decode(imgstr), name=user.type+' '+user.first_name+' '+user.last_name+'.' + ext)
         user.save()
         return JsonResponse({'state':"success"}, status=200)
     except Exception as e:
