@@ -13,7 +13,7 @@ def set_to_do_list(request):
         data = json.loads(request.body)
         person_resul=check_token(request)
         if check_token(request):
-            id= data['id']
+            email= data['email']
             try:
                 if person_resul.type=="doctor":
                     patients= data['patients']
@@ -21,7 +21,8 @@ def set_to_do_list(request):
                     goals=data['goals']
                     for i in patients:
                         for j in goals:
-                            form = add_goal({'doctor':id,'patient':i,'aim':aim,'goal':j})
+                            p=Patient.objects.get(email=i)
+                            form = add_goal({'doctor':person_resul,'patient':p,'aim':aim,'goal':j})
                             if form.is_valid():
                                 form.save()
                     return JsonResponse({'state':"success"}, status=200)
@@ -38,9 +39,10 @@ def get_to_do_list(request):
         data = json.loads(request.body)
         person_resul=check_token(request)
         if check_token(request):
-            id= data['id']
+            email= data['email']
             try:
-                res=To_Do.objects.filter(patient=id)
+                user=User.objects.get(email=email)
+                res=To_Do.objects.filter(patient=user)
                 x=dict()
                 for i in res:
                     k=i.aim
@@ -63,11 +65,10 @@ def done_to_do_goal(request):
         data = json.loads(request.body)
         person_resul=check_token(request)
         if check_token(request):
-            id= data['id']
             aim=data['aim']
             goal=data['goal']
             try:
-                res=To_Do.objects.get(patient=id,aim=aim,goal=goal)
+                res=To_Do.objects.get(patient=person_resul,aim=aim,goal=goal)
                 print(res)
                 if res:
                     setattr(res, 'is_done', True)
