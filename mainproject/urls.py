@@ -23,6 +23,9 @@ admin.site.index_title = "Site administration"
 admin.site.site_title = "Selene site administration"
 from django.views.generic import TemplateView
 
+# from django.contrib.admin.models import LogEntry
+# LogEntry.objects.all().delete()
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include('users.urls')),
