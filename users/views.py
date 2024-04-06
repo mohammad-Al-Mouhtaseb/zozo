@@ -7,6 +7,7 @@ from . models import *
 from django.contrib.auth import authenticate
 import base64
 from django.core.files.base import ContentFile
+import requests
 
 # Create your views here.
 
@@ -22,26 +23,28 @@ def register(request):
         gender=data['gender']
         birth=data['birth']
         roll=None
-        try:
-            roll=data['type']
-            if roll:
-                if roll=="doctor":
-                    d=Doctor.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                    send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
-                    return JsonResponse({'state':'success'}, status=200)
-                else:
-                    roll="patient"
-                    p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                    send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
-                    return JsonResponse({'state':'success'}, status=200)      
-        except Exception as e:
-            print(e)
-        if roll==None:
-            roll="patient"
-            p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-            send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
-            return JsonResponse({'state':'success'}, status=200)
-        return JsonResponse({'state':'form is not valid'}, status=201)
+        if chack_email(email):
+            try:
+                roll=data['type']
+                if roll:
+                    if roll=="doctor":
+                        d=Doctor.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
+                        send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
+                        return JsonResponse({'state':'success'}, status=200)
+                    else:
+                        roll="patient"
+                        p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
+                        send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
+                        return JsonResponse({'state':'success'}, status=200)      
+            except Exception as e:
+                print(e)
+            if roll==None:
+                roll="patient"
+                p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
+                send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
+                return JsonResponse({'state':'success'}, status=200)
+            return JsonResponse({'state':'form is not valid'}, status=201)
+        return JsonResponse({'state':'email is not valid'}, status=201)
     return JsonResponse({'state':'error request method'}, status=201)
 
 @csrf_exempt 
@@ -220,7 +223,7 @@ def reating(request):
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
 
-import requests
+
 @csrf_exempt 
 def send_mail(sendto,title,body):
     url = "https://mail-sender-api1.p.rapidapi.com/"
@@ -243,3 +246,19 @@ def send_mail(sendto,title,body):
         response = requests.post(url, json=payload, headers=headers)
 
     print(response.json())
+
+@csrf_exempt 
+def chack_email(email):
+    url = "https://validect-email-verification-v1.p.rapidapi.com/v1/verify"
+    querystring = {"email":email}
+    headers = {
+        "X-RapidAPI-Key": "4120ca7630msh5566122415863dep16069fjsn207bd1f0e6f4",
+        "X-RapidAPI-Host": "validect-email-verification-v1.p.rapidapi.com"
+    }
+    response = requests.get(url, headers=headers, params=querystring)
+    if response.status_code==200:
+        print(response.json())
+        v=response.json()['status']
+        if v=="valid":
+            return True
+    return False
