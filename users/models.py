@@ -27,7 +27,6 @@ class CustomUserManager(UserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(blank=True, default='', unique=True)
     name = models.CharField(max_length=255, blank=True, default='')
-
     first_name=models.CharField(max_length=50,default='',null=True, blank=True)
     last_name=models.CharField(max_length=50,default='',null=True, blank=True)
 
@@ -42,9 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    
     date_joined = models.DateTimeField(default=timezone.now)
-
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
@@ -52,17 +49,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = '*User'
+        verbose_name_plural = '*Users'
     
     def get_full_name(self):
         return self.name
     
     def get_short_name(self):
         return self.name or self.email.split('@')[0]
-    class Meta:
-        verbose_name = '*User'
 
+    
 class Patient(User):
     
     def __str__(self):
