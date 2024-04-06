@@ -25,8 +25,8 @@ class Panic_Disorder(models.Model):
 
 
     def __str__(self):
-        return  str(self.Person_Id)
+        return  str(self.Person_email)
     
     class Meta:
         verbose_name = 'Panic_Disorder'
-        # ordering = ['Person_Id']
+        # ordering = ['Person_email']
