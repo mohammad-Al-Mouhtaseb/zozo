@@ -64,7 +64,7 @@ JAZZMIN_SETTINGS = {
     # Links to put along the top menu
     "topmenu_links": [
         # Url that gets reversed (Permissions can be added)
-        {"name": "your_site_name", "url": "home", "permissions": ["auth.view_user"]},
+        {"name": "Admin Page", "url": "home", "permissions": ["auth.view_user"]},
         # model admin to link to (Permissions checked against model)
         {"model": "auth.User"},
     ],
@@ -114,6 +114,18 @@ JAZZMIN_SETTINGS = {
     },
 }
 
+JAZZMIN_UI_TWEAKS = {
+    "navbar": "navbar-dark",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+}
+
 AUTH_USER_MODEL = "users.User"
 
 MIDDLEWARE = [
@@ -146,7 +158,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "mainproject.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
