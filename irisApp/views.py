@@ -17,7 +17,7 @@ def Panic(request):
         person_resul=check_token(request)
         if check_token(request):
             try:
-                patient=Patient.objects.get(Person_email=person_resul
+                patient=Patient.objects.get(email=person_resul
                                             .email)
                 Age = date.today().year - patient.birth.year
                 Gender = 1 if patient.gender == 'male' else 0 
