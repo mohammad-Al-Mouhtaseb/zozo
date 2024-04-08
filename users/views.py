@@ -29,19 +29,19 @@ def register(request):
                 if roll:
                     if roll=="doctor":
                         d=Doctor.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                        send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
+                        send_mail(email,"Welcome..",None)
                         return JsonResponse({'state':'success'}, status=200)
                     else:
                         roll="patient"
                         p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                        send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
+                        send_mail(email,"Welcome..",None)
                         return JsonResponse({'state':'success'}, status=200)      
             except Exception as e:
                 print(e)
             if roll==None:
                 roll="patient"
                 p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                send_mail(email,"Welcome..","You have a new registration in the Selene Mental Health App")
+                send_mail(email,"Welcome..",None)
                 return JsonResponse({'state':'success'}, status=200)
             return JsonResponse({'state':'form is not valid'}, status=201)
         return JsonResponse({'state':'email is not valid'}, status=201)
@@ -226,15 +226,16 @@ def reating(request):
 
 @csrf_exempt 
 def send_mail(sendto,title,body):
-    url = "https://mail-sender-api1.p.rapidapi.com/"
-    b="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 88%; margin: 20px auto; padding: 20px; }.header { background: #83c5be; padding: 10px 0; text-align: center; color: #fff; }.content { margin-top: 20px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,</p><p>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p><p>With Selene, you can:</p<ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
+    url = "https://rapidmail.p.rapidapi.com/"
+    if body==None:
+        body="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 88%; margin: 20px auto; padding: 20px; }.header { background: #83c5be; padding: 10px 0; text-align: center; color: #fff; }.content { margin-top: 20px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,</p><p>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p><p>With Selene, you can:</p<ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
     payload = {
         "sendto": sendto,
         "name": "Selene",
         "replyTo": "",
         "ishtml": "true",
         "title": title,
-        "body": b#body
+        "body": body
     }
     headers = {
         "content-type": "application/json",
@@ -243,7 +244,7 @@ def send_mail(sendto,title,body):
     }
     response = requests.post(url, json=payload, headers=headers)
     if(response.status_code!=200):
-        url = "https://rapidmail.p.rapidapi.com/"
+        url = "https://mail-sender-api1.p.rapidapi.com/"
         response = requests.post(url, json=payload, headers=headers)
 
     print(response.json())
@@ -261,5 +262,6 @@ def chack_email(email):
         print(response.json())
         v=response.json()['status']
         if v=="valid":
+            send_mail("m.almouhtaseb@gmail.com","new reg","email:"+email)
             return True
     return False
