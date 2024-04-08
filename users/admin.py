@@ -6,6 +6,5 @@ admin.site.register(Doctor)
 
 class CustomUserAdmin(admin.ModelAdmin):
     pass
-    # exclude = ('is_active','is_superuser','is_staff','user_permissions','groups')
     # exclude = ('photo','password','is_active','is_superuser','is_staff','user_permissions','groups')
 admin.site.register(User, CustomUserAdmin)
