@@ -227,13 +227,14 @@ def reating(request):
 @csrf_exempt 
 def send_mail(sendto,title,body):
     url = "https://mail-sender-api1.p.rapidapi.com/"
+    b="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 80%; margin: 20px auto; padding: 20px; }.header { background: #83c5be; padding: 10px 0; text-align: center; color: #fff; }.content { margin-top: 20px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,</p><p>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p><p>With Selene, you can:</p<ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
     payload = {
         "sendto": sendto,
         "name": "Selene",
         "replyTo": "",
-        "ishtml": "false",
+        "ishtml": "true",
         "title": title,
-        "body": body
+        "body": b#body
     }
     headers = {
         "content-type": "application/json",
