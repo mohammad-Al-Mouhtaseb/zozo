@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "users",
     "to_do_list",
     "irisApp",
+    "chat",
 ]
 
 JAZZMIN_SETTINGS = {
