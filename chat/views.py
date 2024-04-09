@@ -16,7 +16,7 @@ def chat(request):
         data = json.loads(request.body)
         person_resul=check_token(request)
         if check_token(request):
-            send = data['id']
+            send = data['email']
             recive = data['recive']
             try:
                 msg = data['msg']
