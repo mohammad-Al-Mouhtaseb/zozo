@@ -10,4 +10,4 @@ class Message(models.Model):
 
 
     def __str__(self):
-        return f'Message from {self.sender.email} to {self.receiver.email} at {self.timestamp.strftime("%Y-%m-%d %H:%M:%S")}'
+        return f'from: {self.sender.email} to: {self.receiver.email} at {self.timestamp.strftime("%Y-%m-%d %H:%M:%S")}'
