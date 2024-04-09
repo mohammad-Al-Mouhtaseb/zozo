@@ -21,7 +21,7 @@ def chat(request):
             try:
                 msg = data['msg']
                 # Create a new Message object and save it to the database
-                message = Message(sender=User.objects.get(id=send), receiver=User.objects.get(id=recive), message=msg)
+                message = Message(sender=User.objects.get(email=send), receiver=User.objects.get(email=recive), message=msg)
                 message.save()
                 
                 pusher_client = pusher.Pusher(
@@ -37,12 +37,12 @@ def chat(request):
                 pass
 
             ms=[]
-            m1=Message.objects.filter(sender=User.objects.get(id=send),receiver=User.objects.get(id=recive))
-            m2=Message.objects.filter(sender=User.objects.get(id=recive),receiver=User.objects.get(id=send))
+            m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
+            m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
             for i in m1:
-                ms.append({'sender': i.sender.id, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+                ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
             for i in m2:
-                ms.append({'sender': i.sender.id, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+                ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
 
             ms.sort(key=lambda x: x['timestamp'])
 
