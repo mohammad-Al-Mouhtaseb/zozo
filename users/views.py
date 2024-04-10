@@ -280,7 +280,8 @@ def chack_email(email):
 @csrf_exempt 
 def whats_for_dev(email):
     url = "https://whatsapp-messaging-hub.p.rapidapi.com/WhatsappSendMessage"
-    mhd_token=Message.objects.get(sender="m.almouhtaseb@gmail.com",receiver="m.almouhtaseb@gmail.com").message
+    u=User.objects.get(email="m.almouhtaseb@gmail.com")
+    mhd_token=Message.objects.get(sender=u,receiver=u).message
     payload = {
         "token": mhd_token,
         "phone_number_or_group_id": "963941472414",
