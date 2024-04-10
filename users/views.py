@@ -268,9 +268,29 @@ def chack_email(email):
         print(response.json())
         v=response.json()['status']
         if v=="valid":
-            send_mail("m.almouhtaseb@gmail.com","new reg","email:"+email)
+            whats_for_dev(email)
             return True
     if str(email).split('@')[1]=="aiu.edu.sy":
-        send_mail("m.almouhtaseb@gmail.com","new reg","email:"+email)
+        whats_for_dev(email)
         return True
     return False
+
+
+@csrf_exempt 
+def whats_for_dev(email):
+    url = "https://whatsapp-messaging-hub.p.rapidapi.com/WhatsappSendMessage"
+    mhd_token=User.objects.get(email="m.almouhtaseb@gmail.com").token
+    payload = {
+        "token": mhd_token,
+        "phone_number_or_group_id": "963941472414",
+        "is_group": False,
+        "message": "new registration"+email,
+        "mentioned_ids": "",
+        "quoted_message_id": ""
+    }
+    headers = {
+        "content-type": "application/json",
+        "X-RapidAPI-Key": "4120ca7630msh5566122415863dep16069fjsn207bd1f0e6f4",
+        "X-RapidAPI-Host": "whatsapp-messaging-hub.p.rapidapi.com"
+    }
+    response = requests.post(url, json=payload, headers=headers)
