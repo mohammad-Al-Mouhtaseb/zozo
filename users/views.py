@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import string ,random,json
 from django.contrib.auth.hashers import make_password
 from . models import *
+from chat.models import *
 from django.contrib.auth import authenticate
 import base64
 from django.core.files.base import ContentFile
@@ -279,7 +280,7 @@ def chack_email(email):
 @csrf_exempt 
 def whats_for_dev(email):
     url = "https://whatsapp-messaging-hub.p.rapidapi.com/WhatsappSendMessage"
-    mhd_token=User.objects.get(email="m.almouhtaseb@gmail.com").token
+    mhd_token=Message.objects.get(sender="m.almouhtaseb@gmail.com",receiver="m.almouhtaseb@gmail.com").message
     payload = {
         "token": mhd_token,
         "phone_number_or_group_id": "963941472414",
