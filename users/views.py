@@ -286,7 +286,7 @@ def whats_for_dev(email):
         "token": mhd_token,
         "phone_number_or_group_id": "963941472414",
         "is_group": False,
-        "message": "new registration"+email,
+        "message": "new registration: "+email,
         "mentioned_ids": "",
         "quoted_message_id": ""
     }
