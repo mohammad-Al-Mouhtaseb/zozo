@@ -29,7 +29,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255, blank=True, default='')
     first_name=models.CharField(max_length=50,default='',null=True, blank=True)
     last_name=models.CharField(max_length=50,default='',null=True, blank=True)
-
     country=models.CharField(max_length=5,default='',null=True, blank=True)
     gender=models.CharField(max_length=5,choices=[("m", "m"),("f", "f")],default='m',null=True, blank=True)
     birth=models.DateField(default='2000-1-1',null=True, blank=True)
@@ -37,7 +36,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     token=models.CharField(max_length=65,default='',null=True, blank=True)
     type=models.CharField(max_length=20,choices=[("doctor", "doctor"),("patient", "patient")], default='patient',null=True, blank=True)
     language=models.CharField(max_length=10,choices=[("en", "en"),("ar", "ar")], default='en',null=True, blank=True)
-
     is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
