@@ -34,7 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     gender=models.CharField(max_length=5,choices=[("m", "m"),("f", "f")],default='m',null=True, blank=True)
     birth=models.DateField(default='2000-1-1',null=True, blank=True)
     photo=models.ImageField(upload_to='users/photos', default='users/photos/default.png',null=True)
-    token=models.CharField(max_length=50,default='',null=True, blank=True)
+    token=models.CharField(max_length=65,default='',null=True, blank=True)
     type=models.CharField(max_length=20,choices=[("doctor", "doctor"),("patient", "patient")], default='patient',null=True, blank=True)
     language=models.CharField(max_length=10,choices=[("en", "en"),("ar", "ar")], default='en',null=True, blank=True)
 
