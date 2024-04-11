@@ -25,9 +25,6 @@ def register(request):
         birth=data['birth']
         roll=None
         if chack_email(email):
-            u=User.objects.get(email=email)
-            u.is_active=True
-            u.save()
             try:
                 roll=data['type']
                 if roll:
@@ -58,24 +55,24 @@ def login(request):
         email= data['email']
         password=data['password']
         user=User.objects.get(email=email)
-        if user.is_active==True:
-            if authenticate(request, email=email,password=password): 
-                if user.type=="patient":
-                    Json_res=Patient.objects.get(email=email)
-                    Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-                    Json_res.save()
-                    res=Patient.objects.filter(email=email).values()[0]
-                    return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type']}}, status=200)
-                else:
-                    Json_res=Doctor.objects.get(email=email)
-                    Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-                    Json_res.save()
-                    res=Doctor.objects.filter(email=email).values()[0]
-                    return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type']}}, status=200)
+        # if user.is_active==True:
+        if authenticate(request, email=email,password=password): 
+            if user.type=="patient":
+                Json_res=Patient.objects.get(email=email)
+                Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                Json_res.save()
+                res=Patient.objects.filter(email=email).values()[0]
+                return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type']}}, status=200)
+            else:
+                Json_res=Doctor.objects.get(email=email)
+                Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                Json_res.save()
+                res=Doctor.objects.filter(email=email).values()[0]
+                return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type']}}, status=200)
 
-            return JsonResponse({'state':'form is not valid'}, status=201)
-        else:
-            return JsonResponse({'state':'Authenticate from email'}, status=201)
+        return JsonResponse({'state':'form is not valid'}, status=201)
+        # else:
+        #     return JsonResponse({'state':'Authenticate from email'}, status=201)
     return JsonResponse({'state':'error request method'}, status=201)
 
 @csrf_exempt 
