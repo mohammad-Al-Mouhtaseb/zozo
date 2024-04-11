@@ -273,7 +273,7 @@ def chack_email(email):
         if v=="valid":
             whats_for_dev(email)
             return True
-    if int(str(email).split('@')[1])>200510000 and int(str(email).split('@')[1])<202511999 and str(email).split('@')[1]=="aiu.edu.sy":
+    if int(str(email).split('@')[0])>200510000 and int(str(email).split('@')[0])<202511999 and str(email).split('@')[1]=="aiu.edu.sy":
         whats_for_dev(email)
         return True
     return False
