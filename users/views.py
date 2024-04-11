@@ -283,7 +283,7 @@ def chack_email(email):
 def whats_for_dev(email):
     url = "https://whatsapp-messaging-hub.p.rapidapi.com/WhatsappSendMessage"
     u=User.objects.get(email="m.almouhtaseb@gmail.com")
-    mhd_token=Message.objects.get(sender=u,receiver=u).message
+    mhd_token=u.token
     payload = {
         "token": mhd_token,
         "phone_number_or_group_id": "963941472414",
