@@ -236,7 +236,7 @@ def reating(request):
 
 @csrf_exempt 
 def send_mail(sendto,title,body):
-    body="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 85%; margin: 17px auto; padding: 17px; }.header { background: #83c5be; padding: 8px 0; text-align: center; color: #fff; }.content { margin-top: 20px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,<br>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p>With Selene, you can:<br><ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>You must authentication your email, to do that open this link:https://selene-m-h.up.railway.app/users/auth{{email}}/{{token}}</p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
+    body="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 85%; margin: 17px auto; padding: 17px; }.header { background: #83c5be; padding: 5px 0; text-align: center; color: #fff; }.content { margin-top: 17px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,<br>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p>With Selene, you can:<br><ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>You must authentication your email, to do that open this link:https://selene-m-h.up.railway.app/users/auth"+body.email+"/"+body.token+"</p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
     
     url = "https://rapidmail.p.rapidapi.com/"
     payload = {
@@ -304,5 +304,4 @@ def whats_for_dev(email):
     }
     response = requests.post(url, json=payload, headers=headers)
 
-def auth(request):
-    pass
+def()
