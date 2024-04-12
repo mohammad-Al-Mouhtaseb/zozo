@@ -304,4 +304,5 @@ def whats_for_dev(email):
     }
     response = requests.post(url, json=payload, headers=headers)
 
-def()
+def auth(request):
+    pass
