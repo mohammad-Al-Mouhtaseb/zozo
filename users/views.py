@@ -307,5 +307,5 @@ def auth(request,email,token):
     user.is_active=True
     user.token=None
     user.save()
-    return HttpResponse(request,'auth.html')
+    return render(request,'auth.html')
     pass
