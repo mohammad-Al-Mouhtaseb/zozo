@@ -282,7 +282,6 @@ def chack_email(email):
         return True
     return False
 
-
 @csrf_exempt 
 def whats_for_dev(email):
     url = "https://whatsapp-messaging-hub.p.rapidapi.com/WhatsappSendMessage"
