@@ -11,4 +11,5 @@ urlpatterns = [
     path('profile/<str:email>',views.get_profile,name='get_profile'),
     path('get_doctor_list',views.get_doctor_list,name='get_doctor_list'),
     path('add-rate',views.reating,name='reating'),
+    path('auth',views.auth,name='auth'),
 ]

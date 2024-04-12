@@ -30,12 +30,18 @@ def register(request):
                 if roll:
                     if roll=="doctor":
                         d=Doctor.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                        send_mail(email,"Welcome..",None)
+                        d=Doctor.objects.get(email=email)
+                        d.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                        d.save()
+                        send_mail(email,"Welcome..",{"email":email,"token":d.token})
                         return JsonResponse({'state':'success'}, status=200)
                     else:
                         roll="patient"
                         p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                        send_mail(email,"Welcome..",None)
+                        p=Patient.objects.get(email=email)
+                        p.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                        p.save()
+                        send_mail(email,"Welcome..",{"email":email,"token":p.token})
                         return JsonResponse({'state':'success'}, status=200)      
             except Exception as e:
                 print(e)
@@ -55,24 +61,24 @@ def login(request):
         email= data['email']
         password=data['password']
         user=User.objects.get(email=email)
-        # if user.is_active==True:
-        if authenticate(request, email=email,password=password): 
-            if user.type=="patient":
-                Json_res=Patient.objects.get(email=email)
-                Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-                Json_res.save()
-                res=Patient.objects.filter(email=email).values()[0]
-                return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type']}}, status=200)
-            else:
-                Json_res=Doctor.objects.get(email=email)
-                Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-                Json_res.save()
-                res=Doctor.objects.filter(email=email).values()[0]
-                return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type']}}, status=200)
+        if user.is_active==True:
+            if authenticate(request, email=email,password=password): 
+                if user.type=="patient":
+                    Json_res=Patient.objects.get(email=email)
+                    Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                    Json_res.save()
+                    res=Patient.objects.filter(email=email).values()[0]
+                    return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type']}}, status=200)
+                else:
+                    Json_res=Doctor.objects.get(email=email)
+                    Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                    Json_res.save()
+                    res=Doctor.objects.filter(email=email).values()[0]
+                    return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type']}}, status=200)
 
-        return JsonResponse({'state':'form is not valid'}, status=201)
-        # else:
-        #     return JsonResponse({'state':'Authenticate from email'}, status=201)
+            return JsonResponse({'state':'form is not valid'}, status=201)
+        else:
+            return JsonResponse({'state':'Authenticate from email'}, status=201)
     return JsonResponse({'state':'error request method'}, status=201)
 
 @csrf_exempt 
@@ -230,8 +236,7 @@ def reating(request):
 
 @csrf_exempt 
 def send_mail(sendto,title,body):
-    if body==None:
-        body="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 85%; margin: 20px auto; padding: 20px; }.header { background: #83c5be; padding: 10px 0; text-align: center; color: #fff; }.content { margin-top: 20px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,</p><p>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p><p>With Selene, you can:</p<ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
+    body="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 85%; margin: 17px auto; padding: 17px; }.header { background: #83c5be; padding: 8px 0; text-align: center; color: #fff; }.content { margin-top: 20px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,<br>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p>With Selene, you can:<br><ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>You must authentication your email, to do that open this link:https://selene-m-h.up.railway.app/users/auth{{email}}/{{token}}</p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
     
     url = "https://rapidmail.p.rapidapi.com/"
     payload = {
@@ -298,3 +303,6 @@ def whats_for_dev(email):
         "X-RapidAPI-Host": "whatsapp-messaging-hub.p.rapidapi.com"
     }
     response = requests.post(url, json=payload, headers=headers)
+
+def auth(request):
+    pass
