@@ -315,3 +315,4 @@ def auth(request,email,token):
         return render(request,'auth.html')
     except:
         return HttpResponseForbidden(request)
+    
