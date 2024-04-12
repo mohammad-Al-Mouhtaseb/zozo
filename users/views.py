@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse, FileResponse
+from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 import string ,random,json
 from django.contrib.auth.hashers import make_password
@@ -307,9 +307,11 @@ def whats_for_dev(email):
     response = requests.post(url, json=payload, headers=headers)
 
 def auth(request,email,token):
-    user=User.objects.get(email=email,token=token)
-    user.is_active=True
-    user.token=None
-    user.save()
-    return render(request,'auth.html')
-    pass
+    try:
+        user=User.objects.get(email=email,token=token)
+        user.is_active=True
+        user.token=None
+        user.save()
+        return render(request,'auth.html')
+    except:
+        return HttpResponseForbidden(request)
