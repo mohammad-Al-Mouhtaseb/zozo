@@ -33,7 +33,7 @@ def register(request):
                         d=Doctor.objects.get(email=email)
                         d.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
                         d.save()
-                        send_mail(email,"Welcome..",{"email":email,"token":d.token})
+                        send_mail(email,"Welcome to selene..",{"email":email,"token":d.token})
                         return JsonResponse({'state':'success'}, status=200)
                     else:
                         roll="patient"
@@ -41,12 +41,12 @@ def register(request):
                         p=Patient.objects.get(email=email)
                         p.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
                         p.save()
-                        send_mail(email,"Welcome..",{"email":email,"token":p.token})
+                        send_mail(email,"Welcome to selene..",{"email":email,"token":p.token})
                         return JsonResponse({'state':'success'}, status=200)      
                 if roll==None:
                     roll="patient"
                     p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                    send_mail(email,"Welcome..",None)
+                    send_mail(email,"Welcome to selene..",None)
                     return JsonResponse({'state':'success'}, status=200)
             except Exception as e:
                 return JsonResponse({'state':'Email already exists'}, status=201)
