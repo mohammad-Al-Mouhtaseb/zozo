@@ -51,3 +51,6 @@ def chat(request):
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
 
+@csrf_exempt
+def note(request):
+    return render(request,'chat.html')

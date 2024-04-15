@@ -6,5 +6,5 @@ urlpatterns = [
     # # path('msgs', views.chatall, name='chatall'),
     # path('network', views.get_my_network, name='get_my_network'),
     # path('translate', views.translate, name='translate'),
-    # path('note', views.note, name='note'),
+    path('note', views.note, name='note'),
 ]
