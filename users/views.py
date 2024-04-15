@@ -215,7 +215,7 @@ def get_doctor_list(request):
         # users.sort(reverse=True,key=myFunc)
         userss = sorted(users, reverse=True)
         for i in users:
-            res.append({"email":i.email,"first_name":i.first_name,"last_name":i.last_name,"rate":i.rate})
+            res.append({"email":i.email,"first_name":i.first_name,"last_name":i.last_name,"specialization":i.specialization,"clinic_address":i.clinic_address,"rate":i.rate})
     except Exception as e:
         print(e)
         pass
