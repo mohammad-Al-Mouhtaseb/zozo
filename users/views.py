@@ -210,12 +210,14 @@ def get_doctor_list(request):
     res=[]
     try:
         users=Doctor.objects.all()
-        def myFunc(e):
-            return e['rate']
-        users.sort(reverse=True,key=myFunc)
+        # def myFunc(e):
+        #     return e['rate']
+        # users.sort(reverse=True,key=myFunc)
+        userss = sorted(users, reverse=True)
         for i in users:
             res.append({"email":i.email,"first_name":i.first_name,"last_name":i.last_name,"rate":i.rate})
-    except:
+    except Exception as e:
+        print(e)
         pass
     return JsonResponse({"doctors":res})
 
