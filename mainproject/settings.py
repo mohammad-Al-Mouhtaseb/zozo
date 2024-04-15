@@ -27,7 +27,7 @@ CSRF_TRUSTED_ORIGINS = ['https://selene-m-h.up.railway.app']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app','.now.sh','127.0.0.1','localhost','.up.railway.app','*']
 
