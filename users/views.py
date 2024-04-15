@@ -76,7 +76,7 @@ def login(request):
                         Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
                         Json_res.save()
                         res=Doctor.objects.filter(email=email).values()[0]
-                        return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type']}}, status=200)
+                        return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type'],"specialization":res['specialization'],"clinic_address":res['clinic_address'],"rate":res['rate']}}, status=200)
 
                 return JsonResponse({'state':'form is not valid'}, status=201)
             else:
