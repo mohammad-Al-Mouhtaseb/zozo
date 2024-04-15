@@ -208,12 +208,15 @@ def check_token(request):
 @csrf_exempt 
 def get_doctor_list(request):
     res=[]
-    users=Doctor.objects.all()
-    def myFunc(e):
-        return e['rate']
-    users.sort(reverse=True,key=myFunc)
-    for i in users:
-        res.append({"email":i.email,"first_name":i.first_name,"last_name":i.last_name,"rate":i.rate})
+    try:
+        users=Doctor.objects.all()
+        def myFunc(e):
+            return e['rate']
+        users.sort(reverse=True,key=myFunc)
+        for i in users:
+            res.append({"email":i.email,"first_name":i.first_name,"last_name":i.last_name,"rate":i.rate})
+    except:
+        pass
     return JsonResponse({"doctors":res})
 
 @csrf_exempt 
