@@ -51,6 +51,29 @@ def chat(request):
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
 
+@csrf_exempt 
+def get_my_network(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        person_resul=check_token(request)
+        if person_resul:
+            res=[]
+            if person_resul.type=='patient':
+                doctor=Doctor.objects.all()
+                for user in doctor:
+                    res.append({"first_name":user.first_name,"last_name":user.last_name,"email":user.email,"birth":user.birth,"gender":user.gender,"clinic_address":user.clinic_address,"rate":user.rate})
+            else:
+                i_am = data['email']
+                i_am=User.objects.get(email=i_am)
+                users=Message.objects.filter(receiver=i_am)
+                for i in users:
+                    user=Patient.objects.filter(email=i.sender)[0]
+                    res.append({"first_name":user.first_name,"last_name":user.last_name,"email":user.email,"birth":user.birth,"gender":user.gender})
+            return JsonResponse({"network":res})
+        else:
+            return exp_logout(request)
+    return JsonResponse({'state':'error request method'}, status=201)
+
 @csrf_exempt
 def note(request,channel):
     return render(request,'chat.html',{'channel':channel})
