@@ -32,7 +32,8 @@ def chat(request):
                     ssl=True
                 )
 
-                pusher_client.trigger("my-channel", 'my-event', {'sender':str(send),'message': msg})
+                pusher_client.trigger(recive, send, msg)
+
             except:
                 pass
 
@@ -52,5 +53,5 @@ def chat(request):
     return JsonResponse({'state':'error request method'}, status=201)
 
 @csrf_exempt
-def note(request):
-    return render(request,'chat.html')
+def note(request,channel,event):
+    return render(request,'chat.html',{'channel':channel,'event':event})

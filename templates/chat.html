@@ -3,24 +3,15 @@
   <title>Pusher Test</title>
   <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
   <script>
-    window.onload = function() {
-      // Your code here
-      document.getElementById("textarea").value = "{{ ms }}";
-    };
-
-    // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
     var pusher = new Pusher('5571a7e3223bf9795d51', {
       cluster: 'ap2'
     });
-    var channel = pusher.subscribe("channel");
-    channel.bind("{{ recive }}", function(data) {
-      var jsonString = JSON.stringify(data); // Convert to JSON string
-      var dataObject = JSON.parse(jsonString); // Convert back to JavaScript object
-      // Now you can access values from the dataObject
-      var value = dataObject.message; // Replace 'key' with the actual key you're interested in
-       document.getElementById("textarea").value = "{{ ms|safe }}" + document.getElementById("textarea").value + "\n" + "{{ recive }}: " + value ;
-      // document.getElementById("textarea").value = document.getElementById("textarea").value + "\n" + "{{ recive }}: " + value ;
+    var channel = pusher.subscribe("{{ channel }}");
+    channel.bind("{{ event }}", function(data) {
+      var jsonString = JSON.stringify(data);
+      var msg = JSON.parse(jsonString); 
+       document.getElementById("textarea").value = document.getElementById("textarea").value + "\n" + msg ;
       alert("new msg");
     });
   </script>
@@ -30,13 +21,6 @@
     {{ send }}
     <div>
       <textarea name="textarea" id="textarea" cols="30" rows="10" style="margin: auto; width: 50%; resize: none;"></textarea>
-      {% csrf_token %}
-      <form action="" method="post" style="margin: auto; width: 50%;">
-        <input type="text" name="msg" id="msg">
-        <input type="hidden" name="send" id="send" value="{{ send }}">
-        <input type="hidden" name="recive" id="recive" value="{{ recive }}">
-        <input type="submit" value="submit">
-      </form>
     </div>
   </div>
   {% for i in ms  %}
