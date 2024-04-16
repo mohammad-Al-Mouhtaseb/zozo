@@ -8,7 +8,7 @@
       cluster: 'ap2'
     });
     var channel = pusher.subscribe("{{ channel }}");
-    channel.bind("{{ event }}", function(data) {
+    channel.bind("event", function(data) {
       var jsonString = JSON.stringify(data);
       var msg = JSON.parse(jsonString); 
        document.getElementById("textarea").value = document.getElementById("textarea").value + "\n" + msg ;
