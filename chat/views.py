@@ -5,6 +5,8 @@ from users.views import *
 from users.models import *
 from .models import Message
 import pusher, json, requests
+import base64
+from cryptography.hazmat.primitives import asymmetric, serialization
 
 # from langdetect import detect
 # from googletrans import Translator
@@ -77,3 +79,46 @@ def get_my_network(request):
 @csrf_exempt
 def note(request,channel):
     return render(request,'chat.html',{'channel':channel})
+
+@csrf_exempt 
+def encrypt_text(public_key, message):
+    try:
+        # Ensure the message is a byte string for encryption
+        message_bytes = message.encode('utf-8')
+    except UnicodeEncodeError:
+        raise ValueError("Message contains non-encodable characters.")
+
+    # Use PKCS#OAEP padding for encryption to prevent padding oracle attacks
+    encryptor = public_key.encrypt(
+        message_bytes,
+        asymmetric.padding.OAEP(
+            mgf=asymmetric.padding.MGF1(algorithm=asymmetric.hashes.SHA256()),
+            algorithm=asymmetric.hashes.SHA256(),
+            label=None
+        )
+    )
+
+    return encryptor
+
+@csrf_exempt 
+def decrypt_text(private_key, encrypted_message):
+    decryptor = private_key.decrypt(
+        encrypted_message,
+        asymmetric.padding.OAEP(
+            mgf=asymmetric.padding.MGF1(algorithm=asymmetric.hashes.SHA256()),
+            algorithm=asymmetric.hashes.SHA256(),
+            label=None
+        )
+    )
+
+    try:
+        # Decode the decrypted bytes back to a text string
+        decrypted_message = decryptor.decode('utf-8')
+    except UnicodeDecodeError:
+        raise ValueError("Encrypted message contains invalid UTF-8 characters.")
+
+    return decrypted_message
+
+
+# encrypted_message = encrypt_text(public_key, message)
+# decrypted_message = decrypt_text(private_key, encrypted_message)
