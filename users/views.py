@@ -54,7 +54,7 @@ def register(request):
                 # generate_key_pair(email,2048)
                 return JsonResponse({'state':'success'}, status=200)
         except Exception as e:
-            return JsonResponse({'state':'Email already exists'}, status=201)
+            return JsonResponse({'state':'Email already exists'+e}, status=201)
             print(e)
             return JsonResponse({'state':'form is not valid'}, status=201)
         return JsonResponse({'state':'email is not valid'}, status=201)
