@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse, FileResponse,HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseRedirect, http
 import requests
 
 from transformers import pipeline
-# import scipy
+import scipy
 
 synthesiser = pipeline("text-to-audio", "facebook/musicgen-small")
 
@@ -18,3 +18,8 @@ def test(request,name):
     response = requests.get(url, headers=headers, params=querystring)
     print(response.json()[0]['url'])
     return HttpResponseRedirect(response.json()[0]['url'])
+
+def create(request):
+    music = synthesiser("lo-fi music with a soothing melody", forward_params={"do_sample": True})
+    scipy.io.wavfile.write("musicgen_out.wav", rate=music["sampling_rate"], data=music["audio"])
+    return HttpResponse(music["audio"], mimetype="audio/mpeg") 
