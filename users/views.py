@@ -26,36 +26,36 @@ def register(request):
         gender=data['gender']
         birth=data['birth']
         roll=None
-        # if chack_email(email):
-        try:
-            roll=data['type']
-            if roll:
-                if roll=="doctor":
-                    d=Doctor.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                    d=Doctor.objects.get(email=email)
-                    d.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-                    d.save()
-                    # send_mail(email,"Welcome to selene..",{"email":email,"token":d.token})
-                    # generate_key_pair(email,2048)
-                    return JsonResponse({'state':'success'}, status=200)
-                else:
+        if chack_email(email):
+            try:
+                roll=data['type']
+                if roll:
+                    if roll=="doctor":
+                        d=Doctor.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
+                        d=Doctor.objects.get(email=email)
+                        d.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                        d.save()
+                        send_mail(email,"Welcome to selene..",{"email":email,"token":d.token})
+                        # generate_key_pair(email,2048)
+                        return JsonResponse({'state':'success'}, status=200)
+                    else:
+                        roll="patient"
+                        p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
+                        p=Patient.objects.get(email=email)
+                        p.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                        p.save()
+                        send_mail(email,"Welcome to selene..",{"email":email,"token":p.token})
+                        # generate_key_pair(email,2048)
+                        return JsonResponse({'state':'success'}, status=200)      
+                if roll==None:
                     roll="patient"
                     p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                    p=Patient.objects.get(email=email)
-                    p.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-                    p.save()
-                    # send_mail(email,"Welcome to selene..",{"email":email,"token":p.token})
+                    send_mail(email,"Welcome to selene..",None)
                     # generate_key_pair(email,2048)
-                    return JsonResponse({'state':'success'}, status=200)      
-            if roll==None:
-                roll="patient"
-                p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                # send_mail(email,"Welcome to selene..",None)
-                # generate_key_pair(email,2048)
-                return JsonResponse({'state':'success'}, status=200)
-        except Exception as e:
-            return JsonResponse({'state':'Email already exists'+e}, status=201)
-            print(e)
+                    return JsonResponse({'state':'success'}, status=200)
+            except Exception as e:
+                return JsonResponse({'state':'Email already exists','Exception':e}, status=201)
+                print(e)
             return JsonResponse({'state':'form is not valid'}, status=201)
         return JsonResponse({'state':'email is not valid'}, status=201)
     return JsonResponse({'state':'error request method'}, status=201)
@@ -248,54 +248,54 @@ def reating(request):
     return JsonResponse({'state':'error request method'}, status=201)
 
 
-# @csrf_exempt 
-# def send_mail(sendto,title,body):
-#     body="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 85%; margin: 17px auto; padding: 17px; }.header { background: #83c5be; padding: 5px 0; text-align: center; color: #fff; }.content { margin-top: 17px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,<br>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p>With Selene, you can:<ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>You must authentication your email, to do that open this link: <a href='https://selene-m-h.up.railway.app/users/auth/"+body['email']+"/"+body['token']+"'> Authentication</a></p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
-#     payload = {
-#         "sendto": sendto,
-#         "name": "Selene",
-#         "replyTo": "",
-#         "ishtml": "true",
-#         "title": title,
-#         "body": body
-#     }
+@csrf_exempt 
+def send_mail(sendto,title,body):
+    body="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 85%; margin: 17px auto; padding: 17px; }.header { background: #83c5be; padding: 5px 0; text-align: center; color: #fff; }.content { margin-top: 17px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,<br>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p>With Selene, you can:<ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>You must authentication your email, to do that open this link: <a href='https://selene-m-h.up.railway.app/users/auth/"+body['email']+"/"+body['token']+"'> Authentication</a></p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
+    payload = {
+        "sendto": sendto,
+        "name": "Selene",
+        "replyTo": "",
+        "ishtml": "true",
+        "title": title,
+        "body": body
+    }
     
-#     headers = {
-#         "content-type": "application/json",
-#         "X-RapidAPI-Key": "2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378",
-#         "X-RapidAPI-Host": "rapidmail.p.rapidapi.com"
-#     }
-#     url = "https://rapidmail.p.rapidapi.com/"
-#     response = requests.post(url, json=payload, headers=headers)
-#     if(response.status_code!=200):
-#         headers= {
-#             "content-type": "application/json",
-#             "X-RapidAPI-Key": "2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378",
-#             "X-RapidAPI-Host": "mail-sender-api1.p.rapidapi.com"
-#         }
-#         url = "https://mail-sender-api1.p.rapidapi.com/"
-#         response = requests.post(url, json=payload, headers=headers)
+    headers = {
+        "content-type": "application/json",
+        "X-RapidAPI-Key": "2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378",
+        "X-RapidAPI-Host": "rapidmail.p.rapidapi.com"
+    }
+    url = "https://rapidmail.p.rapidapi.com/"
+    response = requests.post(url, json=payload, headers=headers)
+    if(response.status_code!=200):
+        headers= {
+            "content-type": "application/json",
+            "X-RapidAPI-Key": "2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378",
+            "X-RapidAPI-Host": "mail-sender-api1.p.rapidapi.com"
+        }
+        url = "https://mail-sender-api1.p.rapidapi.com/"
+        response = requests.post(url, json=payload, headers=headers)
 
-#     print(response.json())
+    print(response.json())
 
-# @csrf_exempt 
-# def chack_email(email):
-#     url = "https://validect-email-verification-v1.p.rapidapi.com/v1/verify"
-#     querystring = {"email":email}
-#     headers = {
-#         "X-RapidAPI-Key": "2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378",
-#         "X-RapidAPI-Host": "validect-email-verification-v1.p.rapidapi.com"
-#     }
-#     response = requests.get(url, headers=headers, params=querystring)
-#     if response.status_code==200:
-#         v=response.json()['status']
-#         if v=="valid":
-#             whats_for_dev(email)
-#             return True
-#     if int(str(email).split('@')[0])>200510000 and int(str(email).split('@')[0])<202511999 and str(email).split('@')[1]=="aiu.edu.sy":
-#         whats_for_dev(email)
-#         return True
-#     return False
+@csrf_exempt 
+def chack_email(email):
+    url = "https://validect-email-verification-v1.p.rapidapi.com/v1/verify"
+    querystring = {"email":email}
+    headers = {
+        'X-RapidAPI-Key': '2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378',
+        'X-RapidAPI-Host': 'validect-email-verification-v1.p.rapidapi.com'
+    }
+    response = requests.get(url, headers=headers, params=querystring)
+    if response.status_code==200:
+        v=response.json()['status']
+        if v=="valid":
+            # whats_for_dev(email)
+            return True
+    if int(str(email).split('@')[0])>200510000 and int(str(email).split('@')[0])<202511999 and str(email).split('@')[1]=="aiu.edu.sy":
+        # whats_for_dev(email)
+        return True
+    return False
 
 # @csrf_exempt 
 # def whats_for_dev(email):
@@ -311,9 +311,9 @@ def reating(request):
 #         "quoted_message_id": ""
 #     }
 #     headers = {
-#         "content-type": "application/json",
-#         "X-RapidAPI-Key": "4120ca7630msh5566122415863dep16069fjsn207bd1f0e6f4",
-#         "X-RapidAPI-Host": "whatsapp-messaging-hub.p.rapidapi.com"
+#         'content-type': 'application/json',
+#         'X-RapidAPI-Key': '2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378',
+#         'X-RapidAPI-Host': 'whatsapp-messaging-hub.p.rapidapi.com'
 #     }
 #     response = requests.post(url, json=payload, headers=headers)
 
