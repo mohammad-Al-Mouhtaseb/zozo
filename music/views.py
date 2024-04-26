@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseRedirect, http
+from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseRedirect
 import requests
 
 from transformers import pipeline
