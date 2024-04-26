@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse, FileResponse,HttpResponseRed
 import requests
 
 from transformers import pipeline
-import scipy
+# import scipy
 
 synthesiser = pipeline("text-to-audio", "facebook/musicgen-small")
 
