@@ -22,4 +22,4 @@ def test(request,name):
 def create(request,text):
     music = synthesiser(text, forward_params={"do_sample": True})
     # scipy.io.wavfile.write("musicgen_out.wav", rate=music["sampling_rate"], data=music["audio"])
-    return HttpResponse(music["audio"], mimetype="audio/mpeg") 
+    return HttpResponse(music["audio"], mimetype="audio/mpeg")
