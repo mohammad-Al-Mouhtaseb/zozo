@@ -2,10 +2,14 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseRedirect
 import requests
 
-from transformers import pipeline
-# import scipy
+# from transformers import pipeline
+# # import scipy
 
-synthesiser = pipeline("text-to-audio", "facebook/musicgen-small")
+# synthesiser = pipeline("text-to-audio", "facebook/musicgen-small")
+
+from transformers import MusicgenForConditionalGeneration
+
+model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
 
 # Create your views here.
 def test(request,name):
