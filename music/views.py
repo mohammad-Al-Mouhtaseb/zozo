@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseRedirect
 import requests
 
-# from transformers import pipeline
+from transformers import pipeline
 # import scipy
 
-# synthesiser = pipeline("text-to-audio", "facebook/musicgen-small")
+synthesiser = pipeline("text-to-audio", "facebook/musicgen-small")
 
 # Create your views here.
 def test(request,name):
@@ -20,6 +20,6 @@ def test(request,name):
     return HttpResponseRedirect(response.json()[0]['url'])
 
 # def create(request,text):
-    # music = synthesiser(text, forward_params={"do_sample": True})
+    music = synthesiser(text, forward_params={"do_sample": True})
     # scipy.io.wavfile.write("musicgen_out.wav", rate=music["sampling_rate"], data=music["audio"])
-    # return HttpResponse(music["audio"], mimetype="audio/mpeg") 
+    return HttpResponse(music["audio"], mimetype="audio/mpeg") 
