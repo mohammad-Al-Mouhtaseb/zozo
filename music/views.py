@@ -6,10 +6,12 @@ import requests
 # # import scipy
 
 # synthesiser = pipeline("text-to-audio", "facebook/musicgen-small")
+from audiocraft.models import musicgen
+from audiocraft.utils.notebook import display_audio
+import torch
+model = musicgen.MusicGen.get_pretrained('medium', device='cuda')
+model.set_generation_params(duration=8)
 
-from transformers import MusicgenForConditionalGeneration
-
-model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
 
 # Create your views here.
 def test(request,name):
@@ -24,6 +26,6 @@ def test(request,name):
     return HttpResponseRedirect(response.json()[0]['url'])
 
 def create(request,text):
-    music = synthesiser(text, forward_params={"do_sample": True})
-    # scipy.io.wavfile.write("musicgen_out.wav", rate=music["sampling_rate"], data=music["audio"])
-    return HttpResponse(music["audio"], mimetype="audio/mpeg")
+    res = model.generate([text], progress=True)
+    display_audio(res, 32000)
+    return HttpResponse(res, mimetype="audio/mpeg")
