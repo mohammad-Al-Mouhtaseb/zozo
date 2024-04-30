@@ -28,4 +28,8 @@ def create(request,text):
     )
     audio_values = model.generate(**inputs.to(device), do_sample=True, guidance_scale=3, max_new_tokens=256)
     scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values)
-    return HttpResponse(res, mimetype="audio/mpeg")
+
+
+    file = open("musicgen_out.wav", "rb").read() 
+    response['Content-Disposition'] = 'attachment; filename=filename.wav' 
+    return HttpResponse(file, mimetype="audio/mpeg") 
