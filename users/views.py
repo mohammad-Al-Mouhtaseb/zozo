@@ -36,7 +36,7 @@ def register(request):
                         d.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
                         d.save()
                         send_mail(email,"Welcome to selene..",{"email":email,"token":d.token})
-                        # generate_key_pair(email,2048)
+                        generate_key_pair(email,2048)
                         return JsonResponse({'state':'success'}, status=200)
                     else:
                         roll="patient"
@@ -45,13 +45,13 @@ def register(request):
                         p.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
                         p.save()
                         send_mail(email,"Welcome to selene..",{"email":email,"token":p.token})
-                        # generate_key_pair(email,2048)
+                        generate_key_pair(email,2048)
                         return JsonResponse({'state':'success'}, status=200)      
                 if roll==None:
                     roll="patient"
                     p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
                     send_mail(email,"Welcome to selene..",None)
-                    # generate_key_pair(email,2048)
+                    generate_key_pair(email,2048)
                     return JsonResponse({'state':'success'}, status=200)
             except Exception as e:
                 return JsonResponse({'state':'Email already exists','Exception':str(e)}, status=201)
@@ -75,13 +75,13 @@ def login(request):
                         Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
                         Json_res.save()
                         res=Patient.objects.filter(email=email).values()[0]
-                        return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type'],"private_key":res['public_key']}}, status=200)
+                        return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type'],"private_key":res['private_key']}}, status=200)
                     else:
                         Json_res=Doctor.objects.get(email=email)
                         Json_res.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
                         Json_res.save()
                         res=Doctor.objects.filter(email=email).values()[0]
-                        return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type'],"specialization":res['specialization'],"clinic_address":res['clinic_address'],"rate":res['rate'],"private_key":res['public_key']}}, status=200)
+                        return JsonResponse({'state':{"first_name":res['first_name'],"last_name":res['last_name'],"email":res['email'],"country":res['country'],"gender":res['gender'],"birth":res['birth'],"photo":res['photo'],"language":res['language'],"password":"","token":res['token'],"type":res['type'],"specialization":res['specialization'],"clinic_address":res['clinic_address'],"rate":res['rate'],"private_key":res['private_key']}}, status=200)
 
                 return JsonResponse({'state':'form is not valid'}, status=201)
             else:
@@ -328,14 +328,14 @@ def auth(request,email,token):
     except:
         return HttpResponseForbidden(request)
 
-# @csrf_exempt 
-# def generate_key_pair(email,key_size):
-#     private_key = asymmetric.rsa.generate_private_key(
-#         public_exponent=65537,  # Common public exponent for RSA
-#         key_size=key_size
-#     )
-#     public_key = private_key.public_key()
-#     user=User.objects.get(email=email)
-#     user.private_key=private_key
-#     user.public_key=public_key
-#     user.save()
+@csrf_exempt 
+def generate_key_pair(email,key_size):
+    private_key = asymmetric.rsa.generate_private_key(
+        public_exponent=65537,  # Common public exponent for RSA
+        key_size=key_size
+    )
+    public_key = private_key.public_key()
+    user=User.objects.get(email=email)
+    user.private_key=private_key
+    user.public_key=public_key
+    user.save()
