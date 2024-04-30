@@ -86,8 +86,8 @@ def login(request):
                 return JsonResponse({'state':'form is not valid'}, status=201)
             else:
                 return JsonResponse({'state':'Authenticate from email'}, status=201)
-        except:
-            return JsonResponse({'state':'Email not found'}, status=201)
+        except Exception as e:
+            return JsonResponse({'state':'Email not found','Exception':str(e),'email':email}, status=201)
     return JsonResponse({'state':'error request method'}, status=201)
 
 @csrf_exempt 
