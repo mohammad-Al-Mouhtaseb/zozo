@@ -19,7 +19,7 @@ def test(request,name):
     print(response.json()[0]['url'])
     return HttpResponseRedirect(response.json()[0]['url'])
 
-# def create(request,text):
+def create(request,text):
     music = synthesiser(text, forward_params={"do_sample": True})
     # scipy.io.wavfile.write("musicgen_out.wav", rate=music["sampling_rate"], data=music["audio"])
     return HttpResponse(music["audio"], mimetype="audio/mpeg") 
