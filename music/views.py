@@ -9,9 +9,10 @@ model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-smal
 
 processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
 
-import torch
+# import torch
 
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
+# device = "cuda:0" if torch.cuda.is_available() else "cpu"
+device="cpu"
 model.to(device)
 sampling_rate = model.config.audio_encoder.sampling_rate
 
@@ -37,7 +38,4 @@ def create(request,text):
     audio_values = model.generate(**inputs.to(device), do_sample=True, guidance_scale=3, max_new_tokens=256)
     scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values)
 
-
-    file = open("musicgen_out.wav", "rb").read() 
-    response['Content-Disposition'] = 'attachment; filename=filename.wav' 
-    return HttpResponse(file, mimetype="audio/mpeg") 
+    return HttpResponse(sampling_rate) 
