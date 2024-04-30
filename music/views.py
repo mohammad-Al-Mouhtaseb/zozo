@@ -2,15 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseRedirect
 import requests
 
-# from transformers import pipeline
-# # import scipy
+from transformers import AutoProcessor
+import scipy
 
-# synthesiser = pipeline("text-to-audio", "facebook/musicgen-small")
-from audiocraft.models import musicgen
-from audiocraft.utils.notebook import display_audio
-import torch
-model = musicgen.MusicGen.get_pretrained('medium', device='cuda')
-model.set_generation_params(duration=8)
+processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
 
 
 # Create your views here.
@@ -26,6 +21,11 @@ def test(request,name):
     return HttpResponseRedirect(response.json()[0]['url'])
 
 def create(request,text):
-    res = model.generate([text], progress=True)
-    display_audio(res, 32000)
+    inputs = processor(
+        text=[text],
+        padding=True,
+        return_tensors="pt",
+    )
+    audio_values = model.generate(**inputs.to(device), do_sample=True, guidance_scale=3, max_new_tokens=256)
+    scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values)
     return HttpResponse(res, mimetype="audio/mpeg")
