@@ -5,7 +5,7 @@ import requests
 from transformers import AutoProcessor
 import scipy
 
-processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
+# processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
 
 
 # Create your views here.
