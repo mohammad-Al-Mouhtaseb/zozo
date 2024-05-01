@@ -339,3 +339,4 @@ def generate_key_pair(email,key_size):
     user.private_key=private_key
     user.public_key=public_key
     user.save()
+    
