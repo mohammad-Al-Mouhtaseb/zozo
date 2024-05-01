@@ -336,7 +336,29 @@ def generate_key_pair(email,key_size):
     )
     public_key = private_key.public_key()
     user=User.objects.get(email=email)
-    user.private_key=private_key
-    user.public_key=public_key
+    private_key_pem = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.TraditionalOpenSSL,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+    public_key_pem = public_key.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+    user.private_key=private_key_pem
+    user.public_key=public_key_pem
     user.save()
-    
+
+
+# serial_private = private_key.private_bytes(
+#     encoding=serialization.Encoding.PEM,
+#     format=serialization.PrivateFormat.PKCS8,
+#     encryption_algorithm=serialization.NoEncryption()
+# )
+# with open('private_noshare.pem', 'wb') as f: f.write(serial_private)
+
+# serial_pub = public_key.public_bytes(
+#     encoding=serialization.Encoding.PEM,
+#     format=serialization.PublicFormat.SubjectPublicKeyInfo
+# )
+# with open('public_shared.pem', 'wb') as f: f.write(serial_pub)
