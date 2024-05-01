@@ -11,7 +11,7 @@
     channel.bind("event", function(data) {
       var jsonString = JSON.stringify(data);
       var msg = JSON.parse(jsonString); 
-       document.getElementById("textarea").value = document.getElementById("textarea").value + "\n" + msg ;
+       document.getElementById("textarea").value = document.getElementById("textarea").value + "\n" + jsonString ;
       alert("new msg");
     });
   </script>
