@@ -12,4 +12,5 @@ urlpatterns = [
     path('get_doctor_list',views.get_doctor_list,name='get_doctor_list'),
     path('add-rate',views.reating,name='reating'),
     path('auth/<str:email>/<str:token>',views.auth,name='auth'),
+    path('public_key/<str:email>',views.get_public_key,name='get_public_key'),
 ]
