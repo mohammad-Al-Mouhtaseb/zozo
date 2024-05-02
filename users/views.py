@@ -251,7 +251,7 @@ def reating(request):
 def get_public_key(request,email):
     try:
         user=User.objects.get(email=email)
-        return JsonResponse({'publik_key':user.public_key}, status=200)
+        return JsonResponse({'public_key':user.public_key}, status=200)
     except Exception as e:
         return JsonResponse({'error':str(e)}, status=201)
     
