@@ -253,7 +253,7 @@ def get_public_key(request,email):
         user=User.objects.get(email=email)
         return JsonResponse({'publik_key':user.public_key}, status=200)
     except Exception as e:
-        return JsonResponse({'error':e}, status=201)
+        return JsonResponse({'error':str(e)}, status=201)
     
 @csrf_exempt 
 def send_mail(sendto,title,body):
