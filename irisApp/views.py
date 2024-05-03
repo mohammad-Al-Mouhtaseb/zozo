@@ -52,6 +52,7 @@ def firstquiz(request):
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
 
+
 all_q=['Family_History','Personal_History','Current_Stressors','Symptoms','Severity','Impact_on_Life','Demographics','Medical_History','Psychiatric_History','Substance_Use','Coping_Mechanisms','Social_Support','Lifestyle_Factors']
 
 @csrf_exempt
