@@ -13,28 +13,26 @@ def firstquiz(request):
         data = json.loads(request.body)
         person_resul=check_token(request)
         if check_token(request):
-            a1=bool(data['a1'])#Stress
-            a2=bool(data['a2'])#Anxiety
-            a3=bool(data['a3'])#Depression
-            a4=bool(data['a4'])#Stress
-            a5=bool(data['a5'])#Depression
-            a6=bool(data['a6'])#Anxiety
-            a7=bool(data['a7'])#Depression
-            a8=bool(data['a8'])#Anxiety
-
+            a1=int(data['a1'])#Stress
+            a2=int(data['a2'])#Anxiety
+            a3=int(data['a3'])#Depression
+            a4=int(data['a4'])#Stress
+            a5=int(data['a5'])#Depression
+            a6=int(data['a6'])#Anxiety
+            a7=int(data['a7'])#Depression
+            a8=int(data['a8'])#Anxiety
             class Robot(KnowledgeEngine):
-                
                 @Rule(NOT(Fact(Depression=W())))
                 def Depression(self):
-                    self.declare(Fact(Depression=bool(a3 and a5)or(a5 and a7)or(a3 and a7)))
+                    self.declare(Fact(Depression=bool((a3+a5+a7)>=4)))
 
                 @Rule((Fact(Depression=W())) and (NOT(Fact(Anxiety=W()))))
                 def Anxiety(self):
-                    self.declare(Fact(Anxiety=bool((a2 and a6)or(a6 and a8)or(a2 and a8))))
+                    self.declare(Fact(Anxiety=bool((a2+a6+a8)>=4)))
 
                 @Rule((Fact(Anxiety=W())) and (NOT(Fact(Stress=W()))))
                 def Stress(self):
-                    self.declare(Fact(Stress=bool(a1 or a4)))
+                    self.declare(Fact(Stress=bool((a1+a4)>=3)))
                     
             engine = Robot()
             engine.reset()
@@ -49,14 +47,13 @@ def firstquiz(request):
             d=d.split('=')
             a=a.split('=')
             s=s.split('=')
-            
             return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
 
-
 all_q=['Family_History','Personal_History','Current_Stressors','Symptoms','Severity','Impact_on_Life','Demographics','Medical_History','Psychiatric_History','Substance_Use','Coping_Mechanisms','Social_Support','Lifestyle_Factors']
+
 @csrf_exempt
 def Panic(request):
     mapping= load('./savedModels/mapping.joblib')
