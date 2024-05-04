@@ -47,6 +47,11 @@ def firstquiz(request):
             d=d.split('=')
             a=a.split('=')
             s=s.split('=')
+            if(d[1]=="True"):
+                a[1]="False"
+                s[1]="False"
+            elif(a[1]=="True"):
+                s[1]="False"
             return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
         else:
             return exp_logout(request)
