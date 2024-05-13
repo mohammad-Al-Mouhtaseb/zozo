@@ -16,9 +16,9 @@ class Iris(models.Model):
     das6=models.IntegerField(null=True, blank=True)#EXP
     das7=models.IntegerField(null=True, blank=True)#EXP
     das8=models.IntegerField(null=True, blank=True)#EXP
-    das_d=models.BooleanField(defult=False, null=True, blank=True)#EXP_res
-    das_a=models.BooleanField(defult=False, null=True, blank=True)#EXP_res
-    das_s=models.BooleanField(defult=False, null=True, blank=True)#EXP_res
+    das_d=models.BooleanField(default=False, null=True, blank=True)#EXP_res
+    das_a=models.BooleanField(default=False, null=True, blank=True)#EXP_res
+    das_s=models.BooleanField(default=False, null=True, blank=True)#EXP_res
 
     Family_History=models.IntegerField(null=True, blank=True)#Panic_Disorder
     Personal_History=models.IntegerField(null=True, blank=True)#Panic_Disorder
