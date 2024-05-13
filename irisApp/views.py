@@ -195,10 +195,34 @@ def QPanic(request):
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
- 
 
 @csrf_exempt
-def doctor_view(request):
+def select_doctor(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        person_resul=check_token(request)
+        if check_token(request):
+            try:
+                p=Patient.objects.get(email=person_resul.email)
+                obj_res = Panic_Disorder.objects.filter(Person_email=p)
+                if len(obj_res)!=0:
+                    selection=data['doctor']
+                    doc=Doctor.objects.get(email=selection)
+                    setattr(obj_res, "Doctor_email", doc)
+                    obj_res.save()
+                    return JsonResponse({'state':'success'}, status=200)
+                else:
+                    return JsonResponse({'state':'you must doing test'}, status=201)
+            except Exception as e: 
+                print(e)
+                return JsonResponse({'state':'form is not valid'}, status=201)  
+            
+        else:
+            return exp_logout(request)
+    return JsonResponse({'state':'error request method'}, status=201)
+
+@csrf_exempt
+def doctor_view(request): #for doctor view Patient data
     if request.method == 'POST':
         data = json.loads(request.body)
         person_resul=check_token(request)
@@ -222,25 +246,21 @@ def doctor_view(request):
     return JsonResponse({'state':'error request method'}, status=201)
 
 @csrf_exempt
-def select_doctor(request):
+def patient_list_for_doctor(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         person_resul=check_token(request)
         if check_token(request):
             try:
-                p=Patient.objects.get(email=person_resul.email)
-                obj_res = Panic_Disorder.objects.get(Person_email=p)
-                if obj_res:
-                    selection=data['doctor']
-                    doc=Doctor.objects.get(email=selection)
-                    setattr(obj_res, "Doctor_email", doc)
-                    obj_res.save()
-                    return JsonResponse({'state':'success'}, status=200)
-                elif Patient.objects.get(Person_email=person_resul.email):
-                    return JsonResponse({'state':'you must doing test'}, status=201)
-            except: 
+                users=Panic_Disorder.objects.filter(Doctor_email=person_resul)
+                res=[]
+                for i in users:
+                    u=Patient.objects.get(email=i.Person_email)
+                    res.append({"email":u.email,"first_name":u.first_name,"last_name":u.last_name})
+                return JsonResponse({'info':res}, status=200)  
+            except Exception as e: 
+                print(e)
                 return JsonResponse({'state':'form is not valid'}, status=201)  
-            
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)

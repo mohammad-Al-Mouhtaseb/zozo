@@ -7,4 +7,5 @@ urlpatterns = [
     path('QPanic_Disorder',views.QPanic,name='QPanic_Disorder'),
     path('Panic_view',views.doctor_view,name='doctor_view'),
     path('select_doctor',views.select_doctor,name='select_doctor'),
+    path('show_my_patient',views.patient_list_for_doctor,name='patient_list_for_doctor'),
 ]
