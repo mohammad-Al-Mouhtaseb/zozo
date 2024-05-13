@@ -21,6 +21,9 @@ def firstquiz(request):
             a6=int(data['a6'])#Anxiety
             a7=int(data['a7'])#Depression
             a8=int(data['a8'])#Anxiety
+            
+            iris=Iris.objects.create(das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
+
             class Robot(KnowledgeEngine):
                 @Rule(NOT(Fact(Depression=W())))
                 def Depression(self):
@@ -50,8 +53,13 @@ def firstquiz(request):
             if(d[1]=="True"):
                 a[1]="False"
                 s[1]="False"
+                iris.das_d=True
             elif(a[1]=="True"):
                 s[1]="False"
+                iris.das_a=True
+            elif(s[1]=="True"):
+                iris.das_s=True
+            iris.save()
             return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
         else:
             return exp_logout(request)
@@ -91,7 +99,7 @@ def Panic(request):
                 new_test=[Age,Gender,Family_History,Personal_History,Current_Stressors,Symptoms,Severity,Impact_on_Life,Demographics,Medical_History,Psychiatric_History,Substance_Use,Coping_Mechanisms,Social_Support,Lifestyle_Factors]
                 pred=XGBoost.predict([new_test])
                 pred= False if pred[0] == 0 else True
-                obj_res=Panic_Disorder.objects.filter(Person_email=patient)
+                obj_res=Iris.objects.filter(Person_email=patient)
                 fields = {
                     'Person_email': patient,
                     'Positive_Negative': pred,
@@ -112,22 +120,22 @@ def Panic(request):
                 if obj_res:
                     obj_res.update(**fields)
                 else:
-                    obj_res = Panic_Disorder.objects.create(**fields)
-                return JsonResponse({'Panic_Disorder' : pred}, status=200)
+                    obj_res = Iris.objects.create(**fields)
+                return JsonResponse({'Iris' : pred}, status=200)
 
             except Exception as e:
                 params=dict(data)
                 for k in params:
                     if k in all_q:
-                        if hasattr(Panic_Disorder, k):
+                        if hasattr(Iris, k):
                             try:
-                                obj_res=Panic_Disorder.objects.get(Person_email=patient)
+                                obj_res=Iris.objects.get(Person_email=patient)
                                 if obj_res:
                                     setattr(obj_res, k,params[k])
                                     obj_res.save()
                             except Exception as e:
                                 return JsonResponse({'state':'form is not valid'}, status=201)
-                obj=Panic_Disorder.objects.get(Person_email=patient.email)
+                obj=Iris.objects.get(Person_email=patient.email)
                 Age = date.today().year - patient.birth.year
                 Gender = 1 if patient.gender == 'male' else 0 
                 new_test=[Age,Gender,obj.Family_History,obj.Personal_History,obj.Current_Stressors,obj.Symptoms,obj.Severity,obj.Impact_on_Life,obj.Demographics,obj.Medical_History,obj.Psychiatric_History,obj.Substance_Use,obj.Coping_Mechanisms,obj.Social_Support,obj.Lifestyle_Factors]
@@ -137,7 +145,7 @@ def Panic(request):
                 else :
                     pred = True
 
-                return JsonResponse({'Panic_Disorder' : pred}, status=200)
+                return JsonResponse({'Iris' : pred}, status=200)
             return JsonResponse({'state':'form is not valid'}, status=201)
         else:
             return exp_logout(request)
@@ -171,7 +179,7 @@ def QPanic(request):
                     ["Rural","Urban"],["Bipolar disorder","Anxiety disorder", "2 for Depressive disorder", "3 for None"],["None","Drugs", "2 for Alcohol"],
                     ["Socializing","Exercise", "2 for Seeking therapy", "3 for Meditation"],["High","Moderate", "2 for Low"],["Sleep quality","Exercise", "2 for Diet"]]
             try:
-                obj_res=Panic_Disorder.objects.filter(Person_email=patient)[0]
+                obj_res=Iris.objects.filter(Person_email=patient)[0]
                 all_q2=[obj_res.Family_History,obj_res.Personal_History,obj_res.Current_Stressors,obj_res.Symptoms,obj_res.Severity,obj_res.Impact_on_Life,obj_res.Demographics,obj_res.Medical_History,obj_res.Psychiatric_History,obj_res.Substance_Use,obj_res.Coping_Mechanisms,obj_res.Social_Support,obj_res.Lifestyle_Factors]
                 if obj_res:
                     q=list()
@@ -204,7 +212,7 @@ def select_doctor(request):
         if check_token(request):
             try:
                 p=Patient.objects.get(email=person_resul.email)
-                obj_res = Panic_Disorder.objects.filter(Person_email=p)
+                obj_res = Iris.objects.filter(Person_email=p)
                 if len(obj_res)!=0:
                     selection=data['doctor']
                     doc=Doctor.objects.get(email=selection)
@@ -231,7 +239,7 @@ def doctor_view(request): #for doctor view Patient data
                 patient_email=data['patient_email']
                 try:
                     p=Patient.objects.get(email=patient_email)
-                    info=Panic_Disorder.objects.get(Person_email=p)
+                    info=Iris.objects.get(Person_email=p)
                 except Exception as e:
                     print(e)
                     return JsonResponse({'state':'form is not valid'}, status=201)
@@ -252,7 +260,7 @@ def patient_list_for_doctor(request):
         person_resul=check_token(request)
         if check_token(request):
             try:
-                users=Panic_Disorder.objects.filter(Doctor_email=person_resul)
+                users=Iris.objects.filter(Doctor_email=person_resul)
                 res=[]
                 for i in users:
                     u=Patient.objects.get(email=i.Person_email)
