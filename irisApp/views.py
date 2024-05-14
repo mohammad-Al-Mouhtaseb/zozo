@@ -84,13 +84,9 @@ def Panic(request):
                 data['Age']=Age
                 data['Gender']=Gender
                 new_test = [data[key] for key in panic_q_list]
-
                 pred = XGBoost.predict([new_test])
                 pred = False if pred == 0 else True
-
-                print("3")
                 fields = {'Person_email': patient, 'Age': Age, 'Gender': Gender, 'Positive_Negative_panic': pred}
-                print("3")
                 fields.update({key: data[key] for key in panic_q_list})
                 Iris.objects.filter(Person_email=patient).update(**fields)
 
@@ -108,8 +104,7 @@ def QPanic(request):
         data = json.loads(request.body)
         person_result=check_token(request)
         if check_token(request):
-            patient=Patient.objects.get(email=person_result
-                                            .email)
+            patient=Patient.objects.get(email=person_result.email)
             questions = [
             "Do you have a family history of any medical conditions?",
             "Do you have a personal history of any medical conditions?",
@@ -205,7 +200,7 @@ def doctor_view(request): #for doctor view Patient data
     return JsonResponse({'state':'error request method'}, status=201)
 
 @csrf_exempt
-def patient_list_for_doctor(request):
+def patient_list_for_doctor(request): #for doctor view Patient list
     if request.method == 'POST':
         data = json.loads(request.body)
         person_result=check_token(request)
