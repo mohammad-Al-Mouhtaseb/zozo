@@ -84,7 +84,7 @@ def Panic(request):
                 data['Age']=Age
                 data['Gender']=Gender
                 new_test = [data[key] for key in panic_q_list]
-                pred = XGBoost.predict([new_test])
+                pred = XGBoost.predict([new_test])[0]
                 pred = False if pred == 0 else True
                 fields = {'Person_email': patient, 'Age': Age, 'Gender': Gender, 'Positive_Negative_panic': pred}
                 fields.update({key: data[key] for key in panic_q_list})
