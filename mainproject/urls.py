@@ -33,4 +33,5 @@ urlpatterns = [
     path("to-do-list/", include('to_do_list.urls')),
     path("ai/", include('irisApp.urls')),
     path("chat/", include('chat.urls')),
+    path("sounds/", include('sounds.urls')),
 ]

@@ -31,7 +31,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app','.now.sh','127.0.0.1','localhost','.up.railway.app','*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
     "to_do_list",
     "irisApp",
     "chat",
+    "sounds",
 ]
 
 JAZZMIN_SETTINGS = {
@@ -85,7 +85,7 @@ JAZZMIN_SETTINGS = {
         "auth.Group": "fas fa-users",
         "admin.LogEntry": "fas fa-file",
         "to_do_list.To_Do": "fa fa-th-list",
-        "irisApp.Panic_Disorder":"fa fa-search",
+        "irisApp.IRIS": "fa fa-heartbeat",
     },
     # # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
