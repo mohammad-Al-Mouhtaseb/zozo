@@ -81,17 +81,22 @@ def Panic(request):
                 patient = Patient.objects.get(email=person_result.email)
                 Age = date.today().year - patient.birth.year
                 Gender = 1 if patient.gender == 'male' else 0 
-                new_test = [Age, Gender] + [data[key] for key in panic_q_list]
+                data['Age']=Age
+                data['Gender']=Gender
+                new_test = [data[key] for key in panic_q_list]
 
-                pred = XGBoost.predict([new_test])[0]
+                pred = XGBoost.predict([new_test])
                 pred = False if pred == 0 else True
 
-                fields = {'Person_email': patient, 'Age': Age, 'Gender': Gender, 'Positive_Negative': pred}
+                print("3")
+                fields = {'Person_email': patient, 'Age': Age, 'Gender': Gender, 'Positive_Negative_panic': pred}
+                print("3")
                 fields.update({key: data[key] for key in panic_q_list})
                 Iris.objects.filter(Person_email=patient).update(**fields)
 
                 return JsonResponse({'Iris_Panic' : pred}, status=200)
             except Exception as e:
+                print(e)
                 return JsonResponse({'state':'form is not valid','Exception':str(e)}, status=201)
         else:
             return exp_logout(request)

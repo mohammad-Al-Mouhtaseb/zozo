@@ -35,7 +35,7 @@ class Iris(models.Model):
     Coping_Mechanisms=models.IntegerField(null=True, blank=True)#Panic_Disorder
     Social_Support=models.IntegerField(null=True, blank=True)#Panic_Disorder
     Lifestyle_Factors=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Positive_Negative=models.BooleanField(null=True, blank=True)#Panic_Disorder_res
+    Positive_Negative_panic=models.BooleanField(null=True, blank=True)#Panic_Disorder_res
 
     Sadness = models.IntegerField(null=True, blank=True)#Dep_Bi
     Euphoric = models.IntegerField(null=True, blank=True)#Dep_Bi
