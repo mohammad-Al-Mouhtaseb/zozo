@@ -20,6 +20,8 @@ class Iris(models.Model):
     das_a=models.BooleanField(default=False, null=True, blank=True)#EXP_res
     das_s=models.BooleanField(default=False, null=True, blank=True)#EXP_res
 
+    Age=models.IntegerField(null=True, blank=True)#Panic_Disorder
+    Gender=models.IntegerField(null=True, blank=True)#Panic_Disorder
     Family_History=models.IntegerField(null=True, blank=True)#Panic_Disorder
     Personal_History=models.IntegerField(null=True, blank=True)#Panic_Disorder
     Current_Stressors=models.IntegerField(null=True, blank=True)#Panic_Disorder
@@ -53,6 +55,13 @@ class Iris(models.Model):
     Concentration = models.IntegerField(null=True, blank=True)#Dep_Bi
     Optimisim = models.IntegerField(null=True, blank=True)#Dep_Bi
     Expert_Diagnose = models.IntegerField(null=True, blank=True)#Dep_Bi_res
+
+    # Age...Panic_Disorder
+    # Gender...Panic_Disorder 
+    # Married=   
+    # Number_Children=
+    # Education_Level=
+
 
     def __str__(self):
         return  str(self.Person_email)
