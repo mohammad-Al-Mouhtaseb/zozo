@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-import requests, scipy, torch, threading, json
+import requests, json
 from . models import *
 
 # # Create your views here.
