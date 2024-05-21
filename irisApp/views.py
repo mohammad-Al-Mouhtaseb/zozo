@@ -132,16 +132,16 @@ def QPanic(request):
                     j=0
                     for i in all_q2:
                         if i== None:
-                            x={panic_q_list[j]:(questions[j],answer[j])}
+                            x={panic_q_list[j+2]:(questions[j],answer[j])}
                             q.append(x)
                         j+=1
                     return JsonResponse({'q':q}, status=200)
                 else:
-                    return JsonResponse({'q':panic_q_list}, status=200)
+                    return JsonResponse({'q':panic_q_list[2::]}, status=200)
             except:
                 q=list()
                 j=0
-                for i in panic_q_list:
+                for i in panic_q_list[2::]:
                     x={i:(questions[j],answer[j])}
                     q.append(x)
                     j+=1
