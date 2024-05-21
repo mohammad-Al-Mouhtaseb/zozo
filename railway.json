@@ -4,7 +4,7 @@
         "builder": "NIXPACKS"
     },
     "deploy": {
-        "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mainproject.wsgi",
+        "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mainproject.wsgi && python from transformers import AutoProcessor, MusicgenForConditionalGeneration",
         "restartPolicyType": "ON_FAILURE",
         "restartPolicyMaxRetries": 10
     }
