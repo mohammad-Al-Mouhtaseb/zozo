@@ -120,10 +120,10 @@ def QPanic(request):
             "What kind of social support do you have?",
             "Are there any lifestyle factors that might be affecting your health?",
         ]
-            answer=[["No","Yes"],["Yes","No"],["Moderate","High", "2 for Low"],["Shortness of breath","Panic attacks","2 for Chest pain","3 for Dizziness", "4 for Fear of losing control"],
-                    ["Mild","Moderate", "2 for Severe"],["Mild","Significant", "2 for Moderate"],["Diabetes","Asthma", "2 for None", "3 for Heart disease"],
-                    ["Rural","Urban"],["Bipolar disorder","Anxiety disorder", "2 for Depressive disorder", "3 for None"],["None","Drugs", "2 for Alcohol"],
-                    ["Socializing","Exercise", "2 for Seeking therapy", "3 for Meditation"],["High","Moderate", "2 for Low"],["Sleep quality","Exercise", "2 for Diet"]]
+            answer=[["No","Yes"],["Yes","No"],["Moderate","High", "Low"],["Shortness of breath","Panic attacks","Chest pain","Dizziness", "Fear of losing control"],
+                    ["Mild","Moderate", "Severe"],["Mild","Significant", "Moderate"],["Diabetes","Asthma", "None", "Heart disease"],
+                    ["Rural","Urban"],["Bipolar disorder","Anxiety disorder", "Depressive disorder", "None"],["None","Drugs", "Alcohol"],
+                    ["Socializing","Exercise", "Seeking therapy", "Meditation"],["High","Moderate", "Low"],["Sleep quality","Exercise", "Diet"]]
             try:
                 obj_res=Iris.objects.filter(Person_email=patient)[0]
                 all_q2=[obj_res.Family_History,obj_res.Personal_History,obj_res.Current_Stressors,obj_res.Symptoms,obj_res.Severity,obj_res.Impact_on_Life,obj_res.Demographics,obj_res.Medical_History,obj_res.Psychiatric_History,obj_res.Substance_Use,obj_res.Coping_Mechanisms,obj_res.Social_Support,obj_res.Lifestyle_Factors]
