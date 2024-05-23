@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 import datetime ,json
-from experta import *
+# from experta import *
 from users.views import *
 from . models import *
 from joblib import load
@@ -25,43 +25,43 @@ def firstquiz(request):
             patient=Patient.objects.get(email=person_result.email)
             iris=Iris.objects.create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
 
-            class Robot(KnowledgeEngine):
-                @Rule(NOT(Fact(Depression=W())))
-                def Depression(self):
-                    self.declare(Fact(Depression=bool((a3+a5+a7)>=4)))
+            # class Robot(KnowledgeEngine):
+            #     @Rule(NOT(Fact(Depression=W())))
+            #     def Depression(self):
+            #         self.declare(Fact(Depression=bool((a3+a5+a7)>=4)))
 
-                @Rule((Fact(Depression=W())) and (NOT(Fact(Anxiety=W()))))
-                def Anxiety(self):
-                    self.declare(Fact(Anxiety=bool((a2+a6+a8)>=4)))
+            #     @Rule((Fact(Depression=W())) and (NOT(Fact(Anxiety=W()))))
+            #     def Anxiety(self):
+            #         self.declare(Fact(Anxiety=bool((a2+a6+a8)>=4)))
 
-                @Rule((Fact(Anxiety=W())) and (NOT(Fact(Stress=W()))))
-                def Stress(self):
-                    self.declare(Fact(Stress=bool((a1+a4)>=3)))
+            #     @Rule((Fact(Anxiety=W())) and (NOT(Fact(Stress=W()))))
+            #     def Stress(self):
+            #         self.declare(Fact(Stress=bool((a1+a4)>=3)))
                     
-            engine = Robot()
-            engine.reset()
-            engine.run()
-            facts=list(engine.facts.items())
-            d=str(facts[1])
-            a=str(facts[2])
-            s=str(facts[3])
-            d=d[9:len(d)-2]
-            a=a[9:len(a)-2]
-            s=s[9:len(s)-2]
-            d=d.split('=')
-            a=a.split('=')
-            s=s.split('=')
-            if(d[1]=="True"):
-                a[1]="False"
-                s[1]="False"
-                iris.das_d=True
-            elif(a[1]=="True"):
-                s[1]="False"
-                iris.das_a=True
-            elif(s[1]=="True"):
-                iris.das_s=True
-            iris.save()
-            return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
+            # engine = Robot()
+            # engine.reset()
+            # engine.run()
+            # facts=list(engine.facts.items())
+            # d=str(facts[1])
+            # a=str(facts[2])
+            # s=str(facts[3])
+            # d=d[9:len(d)-2]
+            # a=a[9:len(a)-2]
+            # s=s[9:len(s)-2]
+            # d=d.split('=')
+            # a=a.split('=')
+            # s=s.split('=')
+            # if(d[1]=="True"):
+            #     a[1]="False"
+            #     s[1]="False"
+            #     iris.das_d=True
+            # elif(a[1]=="True"):
+            #     s[1]="False"
+            #     iris.das_a=True
+            # elif(s[1]=="True"):
+            #     iris.das_s=True
+            # iris.save()
+            # return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
