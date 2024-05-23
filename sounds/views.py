@@ -10,8 +10,9 @@ from . models import *
 
 # @csrf_exempt
 # def m_gen(request):
-#     url=music_ip+"music/gen"
-#     return HttpResponseRedirect(redirect_to=url)
+#     print()
+    # url=music_ip+"music/gen"
+    # return HttpResponseRedirect(redirect_to=url)
 
 # @csrf_exempt
 # def m_get_my_list(request):
