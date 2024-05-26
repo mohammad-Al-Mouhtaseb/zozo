@@ -24,7 +24,7 @@ def firstquiz(request):
 
             patient=Patient.objects.get(email=person_result.email)
             iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
-
+            iris=Iris.objects.get(Person_email=patient)
             # class Robot(KnowledgeEngine):
             #     @Rule(NOT(Fact(Depression=W())))
             #     def Depression(self):
@@ -63,7 +63,7 @@ def firstquiz(request):
             # iris.save()
             # return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
             
-            
+
             iris.das_d=True
             iris.das_d=False
             iris.das_d=False
