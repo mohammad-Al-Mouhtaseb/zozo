@@ -23,7 +23,7 @@ def firstquiz(request):
             a8=int(data['a8'])#Anxiety
 
             patient=Patient.objects.get(email=person_result.email)
-            iris=Iris.objects.create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
+            iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
 
             # class Robot(KnowledgeEngine):
             #     @Rule(NOT(Fact(Depression=W())))
@@ -62,6 +62,15 @@ def firstquiz(request):
             #     iris.das_s=True
             # iris.save()
             # return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
+            
+            
+            iris.das_d=True
+            iris.das_d=False
+            iris.das_d=False
+            iris.save()
+            return JsonResponse({'Depression':True,'Anxiety':False,'Stress':False}, status=200)
+
+
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
@@ -86,7 +95,7 @@ def Panic(request):
                 new_test = [data[key] for key in panic_q_list]
                 pred = XGBoost.predict([new_test])[0]
                 pred = False if pred == 0 else True
-                fields = {'Person_email': patient, 'Age': Age, 'Gender': Gender, 'Positive_Negative_panic': pred}
+                fields = {'Person_email': patient, 'Positive_Negative_panic': pred}
                 fields.update({key: data[key] for key in panic_q_list})
                 Iris.objects.filter(Person_email=patient).update(**fields)
 
