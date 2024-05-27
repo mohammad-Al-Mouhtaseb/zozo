@@ -54,7 +54,7 @@ class Iris(models.Model):
     Sexual_Activity = models.IntegerField(null=True, blank=True)#Dep_Bi
     Concentration = models.IntegerField(null=True, blank=True)#Dep_Bi
     Optimisim = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Expert_Diagnose = models.IntegerField(null=True, blank=True)#Dep_Bi_res
+    Expert_Diagnose = models.BooleanField(null=True, blank=True)#Dep_Bi_res
 
     # Age...Panic_Disorder
     # Gender...Panic_Disorder 

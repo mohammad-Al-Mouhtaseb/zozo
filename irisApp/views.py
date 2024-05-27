@@ -76,7 +76,7 @@ def firstquiz(request):
     return JsonResponse({'state':'error request method'}, status=201)
 
 panic_q_list=['Age','Gender','Family_History','Personal_History','Current_Stressors','Symptoms','Severity','Impact_on_Life','Demographics','Medical_History','Psychiatric_History','Substance_Use','Coping_Mechanisms','Social_Support','Lifestyle_Factors']
-Dep_Bi_q_list=['Sadness','Euphoric','Exhausted','Sleep_Dissorder','Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressiv_Response','Ignore_And_Move_On','Nervous_BreakDown','Admin_Mistakes','Overthinking','Sexual_Activity','Concentration','Optimisim','Expert_Diagnose']
+Dep_Bi_q_list=['Sadness','Euphoric','Exhausted','Sleep_Dissorder','Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressiv_Response','Ignore_And_Move_On','Nervous_BreakDown','Admin_Mistakes','Overthinking','Sexual_Activity','Concentration','Optimisim']
 
 @csrf_exempt
 def Panic(request):
@@ -113,26 +113,27 @@ def QPanic(request):
         data = json.loads(request.body)
         person_result=check_token(request)
         if check_token(request):
-            patient=Patient.objects.get(email=person_result.email)
+            patient=Patient.objects.get(email=person_result.email)	
             questions = [
-            "Do you have a family history of any medical conditions?",
-            "Do you have a personal history of any medical conditions?",
-            "How would you rate your current stress levels?",
-            "What symptoms have you been experiencing recently?",
-            "On a scale of 0-2, how would you rate the severity of your symptoms?",
-            "How have these symptoms impacted your daily life?",
-            "Could you provide some demographic information?",
-            "What is your general medical history?",
-            "Do you have a history of psychiatric conditions?",
-            "Have you used any substances? If so, which ones?",
-            "What coping mechanisms do you use to manage stress?",
-            "What kind of social support do you have?",
-            "Are there any lifestyle factors that might be affecting your health?",
-        ]
+                "Do you have a family history of any medical conditions?",
+                "Do you have a personal history of any medical conditions?",
+                "How would you rate your current stress levels?",
+                "What symptoms have you been experiencing recently?",
+                "On a scale of 0-2, how would you rate the severity of your symptoms?",
+                "How have these symptoms impacted your daily life?",
+                "Could you provide some demographic information?",
+                "What is your general medical history?",
+                "Do you have a history of psychiatric conditions?",
+                "Have you used any substances? If so, which ones?",
+                "What coping mechanisms do you use to manage stress?",
+                "What kind of social support do you have?",
+                "Are there any lifestyle factors that might be affecting your health?",
+            ]
             answer=[["No","Yes"],["Yes","No"],["Moderate","High", "Low"],["Shortness of breath","Panic attacks","Chest pain","Dizziness", "Fear of losing control"],
                     ["Mild","Moderate", "Severe"],["Mild","Significant", "Moderate"],["Diabetes","Asthma", "None", "Heart disease"],
                     ["Rural","Urban"],["Bipolar disorder","Anxiety disorder", "Depressive disorder", "None"],["None","Drugs", "Alcohol"],
                     ["Socializing","Exercise", "Seeking therapy", "Meditation"],["High","Moderate", "Low"],["Sleep quality","Exercise", "Diet"]]
+                
             try:
                 obj_res=Iris.objects.filter(Person_email=patient)[0]
                 all_q2=[obj_res.Family_History,obj_res.Personal_History,obj_res.Current_Stressors,obj_res.Symptoms,obj_res.Severity,obj_res.Impact_on_Life,obj_res.Demographics,obj_res.Medical_History,obj_res.Psychiatric_History,obj_res.Substance_Use,obj_res.Coping_Mechanisms,obj_res.Social_Support,obj_res.Lifestyle_Factors]
@@ -151,6 +152,97 @@ def QPanic(request):
                 q=list()
                 j=0
                 for i in panic_q_list[2::]:
+                    x={i:(questions[j],answer[j])}
+                    q.append(x)
+                    j+=1
+                return JsonResponse({'q':q}, status=200)
+        else:
+            return exp_logout(request)
+    return JsonResponse({'state':'error request method'}, status=201)
+
+
+@csrf_exempt
+def Dep_Bi(request):
+    # mapping= load('./savedModels/mapping.joblib')
+    # XGBoost= load('./savedModels/XGBoost.joblib')
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        person_result=check_token(request)
+        if check_token(request):
+            try:
+                patient = Patient.objects.get(email=person_result.email)
+                new_test = [data[key] for key in Dep_Bi_q_list]
+                # pred = XGBoost.predict([new_test])[0]
+                # pred = False if pred == 0 else True
+
+                pred=False # now
+
+                fields = {'Person_email': patient, 'Expert_Diagnose': pred}
+                fields.update({key: data[key] for key in Dep_Bi_q_list})
+                Iris.objects.filter(Person_email=patient).update(**fields)
+
+                return JsonResponse({'Iris_Dep_Bi' : pred}, status=200)
+            except Exception as e:
+                print(e)
+                return JsonResponse({'state':'form is not valid','Exception':str(e)}, status=201)
+        else:
+            return exp_logout(request)
+    return JsonResponse({'state':'error request method'}, status=201)
+
+@csrf_exempt
+def QDep_Bi(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        person_result=check_token(request)
+        if check_token(request):
+            patient=Patient.objects.get(email=person_result.email)
+            questions = [
+                "Sadness?",
+                "Euphoric?",
+                "Exhausted?",
+                "Sleep dissorder?",
+                "Mood Swing?",
+                "Suicidal thoughts?",
+                "Anorxia?",
+                "Authority Respect?",
+                "Try-Explanation?",
+                "Aggressive Response?",
+                "Ignore & Move-On?",
+                "Nervous Break-down?",
+                "Admit Mistakes?",
+                "Overthinking?",
+                "Sexual Activity?",
+                "Concentration?",
+                "Optimisim?"
+            ]	
+            answer=[["Usually","Sometimes","Seldom","Most-Often"],
+                    ["Seldom","Most-Often","Usually","Sometimes"],
+                    ["Sometimes","Usually","Seldom","Most-Often"],
+                    ["Sometimes","Most-Often","Usually","Seldom"],
+                    ["Yes","No"],["Yes","No"],["Yes","No"],["Yes","No"],["Yes","No"],
+                    ["Yes","No"],["Yes","No"],["Yes","No"],["Yes","No"],["Yes","No"],
+                    ["1","2","3","4","5","6","7","8","9","10"],
+                    ["1","2","3","4","5","6","7","8","9","10"],
+                    ["1","2","3","4","5","6","7","8","9","10"],
+                    ]
+            try:
+                obj_res=Iris.objects.filter(Person_email=patient)[0]
+                all_q2=[obj_res.Sadness,obj_res.Euphoric,obj_res.Exhausted,obj_res.Sleep_Dissorder,obj_res.Mood_Swing,obj_res.Suicidal_Thoughts,obj_res.Anorxia,obj_res.Authority_Respect,obj_res.Try_Explanation,obj_res.Aggressiv_Response,obj_res.Ignore_And_Move_On,obj_res.Nervous_BreakDown,obj_res.Admin_Mistakes,obj_res.Overthinking,obj_res.Sexual_Activity,obj_res.Concentration,obj_res.Optimisim,obj_res.Expert_Diagnose]
+                if obj_res:
+                    q=list()
+                    j=0
+                    for i in all_q2:
+                        if i== None:
+                            x={Dep_Bi_q_list[j]:(questions[j],answer[j])}
+                            q.append(x)
+                        j+=1
+                    return JsonResponse({'q':q}, status=200)
+                else:
+                    return JsonResponse({'q':Dep_Bi_q_list}, status=200)
+            except:
+                q=list()
+                j=0
+                for i in Dep_Bi_q_list:
                     x={i:(questions[j],answer[j])}
                     q.append(x)
                     j+=1
