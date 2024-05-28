@@ -5,14 +5,9 @@ import datetime ,json , pandas as pd
 # from experta import *
 from users.views import *
 from . models import *
-from joblib import load
-
-
-mapping= load('./savedModels/panic_mapping.joblib')
-XGBoost= load('./savedModels/panic_XGBoost.joblib')
 
 import Notebooks.dep_bi as dep_bi
-
+import Notebooks.panic as panic
 
 @csrf_exempt
 def firstquiz(request):
@@ -96,9 +91,10 @@ def Panic(request):
                 Age = date.today().year - patient.birth.year
                 Gender = "Male" if patient.gender == 'm' else "Female"
                 data['Gender']=Gender
-                new_test=[mapping[data[key]] for key in panic_q_list]
+                new_test=[panic.mapping[data[key]] for key in panic_q_list]
                 new_test.insert(0,Age)
-                pred = XGBoost.predict([new_test])[0]
+                # pred = XGBoost.predict([new_test])[0]
+                pred=panic.predict(new_test)[0]
                 pred = False if pred == 0 else True
                 fields = {'Person_email': patient, 'Positive_Negative_panic': pred}
                 fields.update({key: data[key] for key in panic_q_list})
