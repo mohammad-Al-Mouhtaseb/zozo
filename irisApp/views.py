@@ -1,11 +1,18 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
-import datetime ,json
+import datetime ,json , pandas as pd
 # from experta import *
 from users.views import *
 from . models import *
 from joblib import load
+
+
+mapping= load('./savedModels/panic_mapping.joblib')
+XGBoost= load('./savedModels/panic_XGBoost.joblib')
+
+import Notebooks.dep_bi as dep_bi
+
 
 @csrf_exempt
 def firstquiz(request):
@@ -76,12 +83,10 @@ def firstquiz(request):
     return JsonResponse({'state':'error request method'}, status=201)
 
 panic_q_list=['Age','Gender','Family_History','Personal_History','Current_Stressors','Symptoms','Severity','Impact_on_Life','Demographics','Medical_History','Psychiatric_History','Substance_Use','Coping_Mechanisms','Social_Support','Lifestyle_Factors']
-Dep_Bi_q_list=['Sadness','Euphoric','Exhausted','Sleep_Dissorder','Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressiv_Response','Ignore_And_Move_On','Nervous_BreakDown','Admin_Mistakes','Overthinking','Sexual_Activity','Concentration','Optimisim']
+Dep_Bi_q_list=['Sadness','Euphoric','Exhausted','Sleep_Dissorder','Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressive_Response','Ignore_And_Move_On','Nervous_BreakDown','Admit_Mistakes','Overthinking','Sexual_Activity','Concentration','Optimisim']
 
 @csrf_exempt
 def Panic(request):
-    mapping= load('./savedModels/mapping.joblib')
-    XGBoost= load('./savedModels/XGBoost.joblib')
     if request.method == 'POST':
         data = json.loads(request.body)
         person_result=check_token(request)
@@ -163,20 +168,23 @@ def QPanic(request):
 
 @csrf_exempt
 def Dep_Bi(request):
-    # mapping= load('./savedModels/mapping.joblib')
-    # XGBoost= load('./savedModels/XGBoost.joblib')
     if request.method == 'POST':
         data = json.loads(request.body)
         person_result=check_token(request)
         if check_token(request):
             try:
-                patient = Patient.objects.get(email=person_result.email)
-                new_test = [data[key] for key in Dep_Bi_q_list]
-                # pred = XGBoost.predict([new_test])[0]
-                # pred = False if pred == 0 else True
-
-                pred=False # now
-
+                patient = Patient.objects.get(email=person_result.email)  
+                new_test = {key:data[key] for key in Dep_Bi_q_list}
+                new_test=pd.DataFrame(new_test, index=[0])
+                pred=dep_bi.predict(new_test)
+                if pred == 0:
+                    pred="Bipolar Type-1"
+                elif pred == 1:
+                    pred="Bipolar Type-2"
+                elif pred == 2:
+                    pred="Depression"
+                elif pred == 3:
+                    pred="Normal"
                 fields = {'Person_email': patient, 'Expert_Diagnose': pred}
                 fields.update({key: data[key] for key in Dep_Bi_q_list})
                 Iris.objects.filter(Person_email=patient).update(**fields)
@@ -209,7 +217,7 @@ def QDep_Bi(request):
                 "Aggressive Response?",
                 "Ignore & Move-On?",
                 "Nervous Break-down?",
-                "Admit Mistakes?",
+                "Admit_Mistakes?",
                 "Overthinking?",
                 "Sexual Activity?",
                 "Concentration?",
@@ -219,11 +227,11 @@ def QDep_Bi(request):
                     ["Seldom","Most-Often","Usually","Sometimes"],
                     ["Sometimes","Usually","Seldom","Most-Often"],
                     ["Sometimes","Most-Often","Usually","Seldom"],
-                    ["Yes","No"],["Yes","No"],["Yes","No"],["Yes","No"],["Yes","No"],
-                    ["Yes","No"],["Yes","No"],["Yes","No"],["Yes","No"],["Yes","No"],
-                    ["1","2","3","4","5","6","7","8","9","10"],
-                    ["1","2","3","4","5","6","7","8","9","10"],
-                    ["1","2","3","4","5","6","7","8","9","10"],
+                    ["YES","NO"],["YES","NO"],["YES","NO"],["YES","NO"],["YES","NO"],
+                    ["YES","NO"],["YES","NO"],["YES","NO"],["YES","NO"],["YES","NO"],
+                    ["1 From 10","2 From 10","3 From 10","4 From 10","5 From 10","6 From 10","7 From 10","8 From 10","9 From 10","10 From 10"],
+                    ["1 From 10","2 From 10","3 From 10","4 From 10","5 From 10","6 From 10","7 From 10","8 From 10","9 From 10","10 From 10"],
+                    ["1 From 10","2 From 10","3 From 10","4 From 10","5 From 10","6 From 10","7 From 10","8 From 10","9 From 10","10 From 10"],
                     ]
             try:
                 obj_res=Iris.objects.filter(Person_email=patient)[0]

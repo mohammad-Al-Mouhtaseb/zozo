@@ -5,7 +5,7 @@ from datetime import date
 # Create your models here.
 
 class Iris(models.Model):
-    Person_email = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True, related_name='Person_Id')
+    Person_email = models.OneToOneField(Patient, on_delete=models.CASCADE, null=True, blank=True, related_name='Person_Id')
     Doctor_email = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='Doctor_Id') 
 
     das1=models.IntegerField(null=True, blank=True)#EXP
@@ -37,24 +37,24 @@ class Iris(models.Model):
     Lifestyle_Factors=models.IntegerField(null=True, blank=True)#Panic_Disorder
     Positive_Negative_panic=models.BooleanField(null=True, blank=True)#Panic_Disorder_res
 
-    Sadness = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Euphoric = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Exhausted = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Sleep_Dissorder = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Mood_Swing = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Suicidal_Thoughts = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Anorxia = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Authority_Respect = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Try_Explanation = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Aggressiv_Response = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Ignore_And_Move_On = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Nervous_BreakDown = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Admin_Mistakes = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Overthinking = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Sexual_Activity = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Concentration = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Optimisim = models.IntegerField(null=True, blank=True)#Dep_Bi
-    Expert_Diagnose = models.BooleanField(null=True, blank=True)#Dep_Bi_res
+    Sadness = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Euphoric = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Exhausted = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Sleep_Dissorder = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Mood_Swing = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Suicidal_Thoughts = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Anorxia = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Authority_Respect = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Try_Explanation = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Aggressive_Response = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Ignore_And_Move_On = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Nervous_BreakDown = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Admit_Mistakes = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Overthinking = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Sexual_Activity = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Concentration = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Optimisim = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
+    Expert_Diagnose = models.CharField(max_length=20,choices=[("Bipolar Type-1","Bipolar Type-1"),("Bipolar Type-2","Bipolar Type-2"),("Depression","Depression"),("Normal","Normal")],null=True, blank=True)#Dep_Bi_res
 
     # Age...Panic_Disorder
     # Gender...Panic_Disorder 
