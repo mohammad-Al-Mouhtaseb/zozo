@@ -21,20 +21,20 @@ class Iris(models.Model):
     das_s=models.BooleanField(default=False, null=True, blank=True)#EXP_res
 
     Age=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Gender=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Family_History=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Personal_History=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Current_Stressors=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Symptoms=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Severity=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Impact_on_Life=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Demographics=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Medical_History=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Psychiatric_History=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Substance_Use=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Coping_Mechanisms=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Social_Support=models.IntegerField(null=True, blank=True)#Panic_Disorder
-    Lifestyle_Factors=models.IntegerField(null=True, blank=True)#Panic_Disorder
+    Gender=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Family_History=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Personal_History=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Current_Stressors=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Symptoms=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Severity=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Impact_on_Life=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Demographics=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Medical_History=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Psychiatric_History=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Substance_Use=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Coping_Mechanisms=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Social_Support=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
+    Lifestyle_Factors=models.CharField(max_length=35,null=True, blank=True)#Panic_Disorder
     Positive_Negative_panic=models.BooleanField(null=True, blank=True)#Panic_Disorder_res
 
     Sadness = models.CharField(max_length=35,null=True, blank=True)#Dep_Bi
