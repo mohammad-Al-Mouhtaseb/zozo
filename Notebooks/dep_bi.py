@@ -7,7 +7,6 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 
 mental_data = pd.read_csv("Notebooks/dataset/Dataset-Mental-Disorders.csv")
-# mental_data['Suicidal thoughts'].replace('YES ', 'YES', inplace=True)
 mental_data.drop("Patient Number",axis=1,inplace=True)
 ordinal_cols = ['Sadness', 'Euphoric', 'Exhausted', 'Sleep_Dissorder']
 categorical_cols = ['Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressive_Response','Ignore_And_Move_On','Nervous_BreakDown','Admit_Mistakes','Overthinking']
