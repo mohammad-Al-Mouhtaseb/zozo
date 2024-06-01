@@ -21,7 +21,7 @@ def gen_fun(request):
     doctor=data['doctor']
     patient=data['patient']
     type=data['type']
-    flac_name="sounds/music/"+type+"/"+desc+".flac"
+    flac_name="/app/sounds/music/"+type+"/"+desc+".flac"
     wav_name="sounds/music/"+type+"/"+desc+".wav"
 
     API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
@@ -33,7 +33,7 @@ def gen_fun(request):
     with open(flac_name, 'wb') as f:
         f.write(response.content)
 
-    music=Music.objects.create(doctor=doctor,patient=patient,music_path=wav_name,type=type)
+    music=Music.objects.create(doctor=doctor,patient=patient,music_path=flac_name,type=type)
     music.save()
 
 @csrf_exempt

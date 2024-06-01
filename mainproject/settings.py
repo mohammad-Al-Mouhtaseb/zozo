@@ -85,6 +85,7 @@ JAZZMIN_SETTINGS = {
         "auth.Group": "fas fa-users",
         "admin.LogEntry": "fas fa-file",
         "to_do_list.To_Do": "fa fa-th-list",
+        "sounds.Music":"fa fa-music",
         "irisApp.IRIS": "fa fa-heartbeat",
     },
     # # Icons that are used when one is not manually specified
