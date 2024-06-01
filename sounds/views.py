@@ -3,9 +3,12 @@ from django.http import JsonResponse, HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests, json, threading
 from . models import *
+from django.core.files.base import ContentFile
+
 from pathlib import Path
 import os
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 # # Create your views here.
 
 # import scipy, torch
@@ -23,7 +26,7 @@ def gen_fun(request):
     doctor=data['doctor']
     patient=data['patient']
     type=data['type']
-    flac_name=os.path.join(BASE_DIR,'sounds','music',type,desc)
+    flac_name=os.path.join(BASE_DIR,'sounds','music',type)
     wav_name="sounds/music/"+type+"/"+desc+".wav"
 
     # inputs = processor(
@@ -35,16 +38,18 @@ def gen_fun(request):
     # scipy.io.wavfile.write(wav_name, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())
 
     API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
-    headers = {"Authorization": "Bearer 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"}
+    headers = {"Authorization": "Bearer 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"}
     audio_bytes = {
     	"inputs": desc,
     }
     response = requests.post(API_URL, headers=headers, json=audio_bytes)
-    with open(flac_name+'.flac', 'wb') as f:
+    with open(flac_name+'/'+desc+'.flac', 'wb') as f:
         f.write(response.content)
-
-    music=Music.objects.create(doctor=doctor,patient=patient,music_path=flac_name+'.flac',type=type)
-    music.save()
+    # audio = Music()
+    # audio.audio_file.save('output.flac', ContentFile(response.content))
+    # audio.save()
+    # music=Music.objects.create(doctor=doctor,patient=patient,music_path=flac_name+'/'+desc+'.flac',type=type)
+    # music.save()
 
 @csrf_exempt
 def gen(request):
