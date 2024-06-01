@@ -38,7 +38,7 @@ def gen_fun(request):
     # scipy.io.wavfile.write(wav_name, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())
 
     API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
-    headers = {"Authorization": "Bearer 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"}
+    headers = {"Authorization": "Bearer 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"}
     audio_bytes = {
     	"inputs": desc,
     }
