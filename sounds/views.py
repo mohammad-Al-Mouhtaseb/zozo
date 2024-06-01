@@ -1,33 +1,90 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests, json
 from . models import *
 
 # # Create your views here.
 
-# music_ip="http://127.0.0.1:5000/"
+# import scipy, torch
+# from transformers import AutoProcessor, MusicgenForConditionalGeneration
+# model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
+# processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
+# device = "cuda:0" if torch.cuda.is_available() else "cpu"
+# model.to(device)
+# sampling_rate = model.config.audio_encoder.sampling_rate
 
-# @csrf_exempt
-# def m_gen(request):
-#     print()
-    # url=music_ip+"music/gen"
-    # return HttpResponseRedirect(redirect_to=url)
+@csrf_exempt
+def gen(request):
+    data = json.loads(request.body)
+    desc=data['desc']
+    doctor=data['doctor']
+    patient=data['patient']
+    type=data['type']
+    flac_name="sounds/music/"+type+"/"+desc+".flac"
+    wav_name="sounds/music/"+type+"/"+desc+".wav"
+    # inputs = processor(
+    #     text=[desc],
+    #     padding=True,
+    #     return_tensors="pt",
+    # )
+    # audio_values = model.generate(**inputs.to(device), do_sample=True, guidance_scale=3, max_new_tokens=1202)
+    # scipy.io.wavfile.write(wav_name, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())
+    API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
+    headers = {"Authorization": "Bearer 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"}
+    audio_bytes = {
+    	"inputs": desc,
+    }
+    response = requests.post(API_URL, headers=headers, json=audio_bytes)
+    with open(flac_name, 'wb') as f:
+        f.write(response.content)
 
-# @csrf_exempt
-# def m_get_my_list(request):
-#     url=music_ip+"music/get_my_list"
-#     return HttpResponseRedirect(redirect_to=url)
 
-# @csrf_exempt
-# def m_get_folder_list(request):
-#     url=music_ip+"music/get_folder_list"
-#     return HttpResponseRedirect(redirect_to=url)
+    music=Music.objects.create(doctor=doctor,patient=patient,music_path=wav_name,type=type)
+    music.save()
+    return HttpResponse(response, headers={"Content-Type":"audio/flac"},)
 
-# @csrf_exempt
-# def m_get_music(request):
-#     url=music_ip+"music/get_music"
-#     return HttpResponseRedirect(redirect_to=url)
+@csrf_exempt
+def get_music(request):
+    data = json.loads(request.body)
+    music_urls=data['url']
+    try:
+        m = open(music_urls, 'rb')
+        response = FileResponse(m)
+        return response
+    except:
+        return JsonResponse({"res":None})
+
+@csrf_exempt
+def get_my_list(request):
+    data = json.loads(request.body)
+    user=data['user']
+    m=None
+    m=Music.objects.filter(patient=user)
+    if len(m)==0:
+        m=Music.objects.filter(doctor=user)
+
+    music_urls=[]
+    music_names=[]
+    for i in m:
+        music_urls.append(str(i.music_path))
+        n=i.music_path.split('/')
+        music_names.append(n[-1])
+    return JsonResponse({"music_names":music_names,"music_urls":music_urls})
+
+@csrf_exempt
+def get_folder_list(request):
+    data = json.loads(request.body)
+    folder_name=data['folder_name']
+    m=Music.objects.all()
+    music_urls=[]
+    music_names=[]
+    for i in m:
+        n=i.music_path.split('/')
+        if n[2]==folder_name:
+            music_urls.append(str(i.music_path))
+            music_names.append(n[-1])
+    return JsonResponse({"music_names":music_names,"music_urls":music_urls})
 
 @csrf_exempt
 def q_surahList(request):
