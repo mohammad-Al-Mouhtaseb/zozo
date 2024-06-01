@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
-import requests, json
+import requests, json, threading
 from . models import *
 
 # # Create your views here.
@@ -15,7 +15,7 @@ from . models import *
 # sampling_rate = model.config.audio_encoder.sampling_rate
 
 @csrf_exempt
-def gen(request):
+def gen_fun(request):
     data = json.loads(request.body)
     desc=data['desc']
     doctor=data['doctor']
@@ -23,13 +23,7 @@ def gen(request):
     type=data['type']
     flac_name="sounds/music/"+type+"/"+desc+".flac"
     wav_name="sounds/music/"+type+"/"+desc+".wav"
-    # inputs = processor(
-    #     text=[desc],
-    #     padding=True,
-    #     return_tensors="pt",
-    # )
-    # audio_values = model.generate(**inputs.to(device), do_sample=True, guidance_scale=3, max_new_tokens=1202)
-    # scipy.io.wavfile.write(wav_name, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())
+
     API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
     headers = {"Authorization": "Bearer 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"}
     audio_bytes = {
@@ -39,10 +33,23 @@ def gen(request):
     with open(flac_name, 'wb') as f:
         f.write(response.content)
 
-
     music=Music.objects.create(doctor=doctor,patient=patient,music_path=wav_name,type=type)
     music.save()
-    return HttpResponse(response, headers={"Content-Type":"audio/flac"},)
+
+@csrf_exempt
+def gen(request):
+    # inputs = processor(
+    #     text=[desc],
+    #     padding=True,
+    #     return_tensors="pt",
+    # )
+    # audio_values = model.generate(**inputs.to(device), do_sample=True, guidance_scale=3, max_new_tokens=1202)
+    # scipy.io.wavfile.write(wav_name, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())
+    
+    thread = threading.Thread(target=gen_fun(request))
+    thread.start()
+
+    return JsonResponse({"res":"sucsess"})
 
 @csrf_exempt
 def get_music(request):
