@@ -43,7 +43,7 @@ def gen_fun(request):
     	"inputs": desc,
     }
     response = requests.post(API_URL, headers=headers, json=audio_bytes)
-    with open('/opt/venv/'+flac_name+'/'+desc+'.flac', 'wb') as f:
+    with open('/opt/venv'+flac_name+'/'+desc+'.flac', 'wb') as f:
         f.write(response.content)
     # audio = Music()
     # audio.audio_file.save('output.flac', ContentFile(response.content))
