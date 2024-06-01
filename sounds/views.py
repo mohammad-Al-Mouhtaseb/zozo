@@ -23,7 +23,7 @@ def gen_fun(request):
     doctor=data['doctor']
     patient=data['patient']
     type=data['type']
-    flac_name=os.path.join(BASE_DIR,'sounds/music/'+type+'/'+desc+'.flac')
+    flac_name=os.path.join(BASE_DIR,'sounds','music',type,desc)
     wav_name="sounds/music/"+type+"/"+desc+".wav"
 
     # inputs = processor(
@@ -40,10 +40,10 @@ def gen_fun(request):
     	"inputs": desc,
     }
     response = requests.post(API_URL, headers=headers, json=audio_bytes)
-    with open(flac_name, 'wb') as f:
+    with open(flac_name+'.flac', 'wb') as f:
         f.write(response.content)
 
-    music=Music.objects.create(doctor=doctor,patient=patient,music_path=flac_name,type=type)
+    music=Music.objects.create(doctor=doctor,patient=patient,music_path=flac_name+'.flac',type=type)
     music.save()
 
 @csrf_exempt
