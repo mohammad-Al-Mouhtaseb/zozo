@@ -40,13 +40,13 @@ def gen_fun(request):
 
     try:
         API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
-        key=Music.objects.get(doctor="api@api.com")
-        headers = {"Authorization": "Bearer "+key}
+        key=Music.objects.get(doctor="api@api.com").type
+        headers = {"Authorization": "Bearer "+str(key)}
         audio_bytes = {
             "inputs": desc,
         }
         response = requests.post(API_URL, headers=headers, json=audio_bytes)
-        music=Music.objects.create(doctor=doctor,patient=patient,music=ContentFile(response.content, name=desc+'.flac'),type=type)
+        music=Music.objects.create(doctor=doctor,patient=patient,music=ContentFile(response.content, name=type+'_'+desc+'.flac'),type=type)
         music.save()
     except Exception as e:
         print(e)
