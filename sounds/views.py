@@ -37,9 +37,10 @@ def gen_fun(request):
     # )
     # audio_values = model.generate(**inputs.to(device), do_sample=True, guidance_scale=3, max_new_tokens=1202)
     # scipy.io.wavfile.write(wav_name, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())
+
     try:
         API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
-        headers = {"Authorization": "Bearer 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"}
+        headers = {"Authorization": "Bearer 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"}
         audio_bytes = {
             "inputs": desc,
         }
@@ -48,6 +49,7 @@ def gen_fun(request):
         music.save()
     except Exception as e:
         print(e)
+
 
 @csrf_exempt
 def gen(request):
