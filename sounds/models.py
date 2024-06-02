@@ -9,3 +9,6 @@ class Music(models.Model):
     music = models.FileField(upload_to='sounds/music', null=True, blank=True)
     music_path = models.FilePathField(null=True, blank=True)
     type = models.CharField(max_length=50,default='',null=True, blank=True)
+
+    def __str__(self):
+        return self.music_path.split("/")[-1]
