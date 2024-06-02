@@ -55,10 +55,9 @@ def gen_fun(request):
 
 @csrf_exempt
 def gen(request):
-    
     thread = threading.Thread(target=gen_fun(request))
+    thread.setDaemon(True)
     thread.start()
-
     return JsonResponse({"res":"sucsess"})
 
 @csrf_exempt
