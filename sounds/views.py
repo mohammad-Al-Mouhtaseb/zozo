@@ -27,7 +27,7 @@ def gen_fun(request):
     patient=data['patient']
     type=data['type']
     # flac_name="app/sounds/music/"+type+"/"+desc+".flac"
-    flac_name="/app/sounds/music/sss.flac"
+    flac_name="/app/sounds/sss.flac"
     wav_name="sounds/music/"+type+"/"+desc+".wav"
 
     # inputs = processor(
@@ -39,7 +39,7 @@ def gen_fun(request):
     # scipy.io.wavfile.write(wav_name, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())
 
     API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
-    headers = {"Authorization": "Bearer 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"}
+    headers = {"Authorization": "Bearer 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"}
     audio_bytes = {
     	"inputs": desc,
     }
