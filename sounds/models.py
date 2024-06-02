@@ -8,6 +8,3 @@ class Music(models.Model):
     patient = models.EmailField(blank=True, default='')
     music = models.FileField(upload_to='sounds/music', null=True, blank=True)
     type = models.CharField(max_length=50,default='',null=True, blank=True)
-
-    def __str__(self):
-        return self.music+' '

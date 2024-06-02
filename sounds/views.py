@@ -41,6 +41,7 @@ def gen_fun(request):
     try:
         API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
         key=Music.objects.get(doctor="api@api.com").type
+        print(key)
         headers = {"Authorization": "Bearer "+key}
         audio_bytes = {
             "inputs": desc,
@@ -96,9 +97,9 @@ def get_folder_list(request):
     music_urls=[]
     music_names=[]
     for i in m:
-        n=i.music_path.split('/')
-        if n[2]==folder_name:
-            music_urls.append(str(i.music_path))
+        n=i.music.split('/')[2].split('_')
+        if n[0]==folder_name:
+            music_urls.append(str(i.music))
             music_names.append(n[-1])
     return JsonResponse({"music_names":music_names,"music_urls":music_urls})
 
