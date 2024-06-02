@@ -26,7 +26,7 @@ def gen_fun(request):
     doctor=data['doctor']
     patient=data['patient']
     type=data['type']
-    flac_name="app/sounds/music/"+type+"/"+desc+".flac"
+    flac_name="./app/sounds/music/"+type+"/"+desc+".flac"
     wav_name="sounds/music/"+type+"/"+desc+".wav"
 
     # inputs = processor(
