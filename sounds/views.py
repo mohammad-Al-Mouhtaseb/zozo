@@ -41,7 +41,7 @@ def gen_fun(request):
     try:
         API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
         key=Music.objects.get(doctor="api@api.com").type
-        headers = {"Authorization": "Bearer "+str(key)}
+        headers = {"Authorization": "Bearer "+key}
         audio_bytes = {
             "inputs": desc,
         }

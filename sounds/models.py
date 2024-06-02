@@ -10,4 +10,4 @@ class Music(models.Model):
     type = models.CharField(max_length=50,default='',null=True, blank=True)
 
     def __str__(self):
-        return self.music
+        return self.music+' '
