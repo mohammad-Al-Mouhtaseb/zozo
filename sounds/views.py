@@ -26,7 +26,7 @@ def gen_fun(request):
     doctor=data['doctor']
     patient=data['patient']
     type=data['type']
-    flac_name=os.path.join(BASE_DIR,'sounds','music',type)
+    flac_name="/app/sounds/music/"+type+"/"+desc+".flac"
     wav_name="sounds/music/"+type+"/"+desc+".wav"
 
     # inputs = processor(
@@ -43,7 +43,7 @@ def gen_fun(request):
     	"inputs": desc,
     }
     response = requests.post(API_URL, headers=headers, json=audio_bytes)
-    with open('/opt/venv'+flac_name+'/'+desc+'.flac', 'wb') as f:
+    with open(flac_name, 'wb') as f:
         f.write(response.content)
     # audio = Music()
     # audio.audio_file.save('output.flac', ContentFile(response.content))
