@@ -26,7 +26,7 @@ def gen_fun(request):
     doctor=data['doctor']
     patient=data['patient']
     type=data['type']
-    # flac_name="app/sounds/music/"+type+"/"+desc+".flac"
+    music_path="sounds/music/"+type+"_"+desc+".flac"
     # flac_name="/app/sounds/sss.flac"
     # wav_name="sounds/music/"+type+"/"+desc+".wav"
 
@@ -47,7 +47,7 @@ def gen_fun(request):
             "inputs": desc,
         }
         response = requests.post(API_URL, headers=headers, json=audio_bytes)
-        music=Music.objects.create(doctor=doctor,patient=patient,music=ContentFile(response.content, name=type+'_'+desc+'.flac'),type=type)
+        music=Music.objects.create(doctor=doctor,patient=patient,music=ContentFile(response.content, name=type+'_'+desc+'.flac'),music_path=music_path,type=type)
         music.save()
     except Exception as e:
         print(e)
