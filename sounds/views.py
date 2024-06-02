@@ -52,7 +52,6 @@ def gen_fun(request):
     except Exception as e:
         print(e)
 
-
 @csrf_exempt
 def gen(request):
     thread = threading.Thread(target=gen_fun(request))
