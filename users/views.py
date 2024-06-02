@@ -9,7 +9,6 @@ from django.contrib.auth import authenticate
 import base64
 from django.core.files.base import ContentFile
 import requests
-import base64
 from cryptography.hazmat.primitives import asymmetric, serialization
 
 # Create your views here.

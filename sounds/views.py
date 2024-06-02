@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import requests, json, threading
 from . models import *
 from django.core.files.base import ContentFile
-
+import base64
 from pathlib import Path
 import os
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,8 +27,8 @@ def gen_fun(request):
     patient=data['patient']
     type=data['type']
     # flac_name="app/sounds/music/"+type+"/"+desc+".flac"
-    flac_name="/app/sounds/sss.flac"
-    wav_name="sounds/music/"+type+"/"+desc+".wav"
+    # flac_name="/app/sounds/sss.flac"
+    # wav_name="sounds/music/"+type+"/"+desc+".wav"
 
     # inputs = processor(
     #     text=[desc],
@@ -37,20 +37,19 @@ def gen_fun(request):
     # )
     # audio_values = model.generate(**inputs.to(device), do_sample=True, guidance_scale=3, max_new_tokens=1202)
     # scipy.io.wavfile.write(wav_name, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())
-
-    API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
-    headers = {"Authorization": "Bearer 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"}
-    audio_bytes = {
-    	"inputs": desc,
-    }
-    response = requests.post(API_URL, headers=headers, json=audio_bytes)
-    with open(flac_name, 'wb') as f:
-        f.write(response.content)
-    # audio = Music()
-    # audio.audio_file.save('output.flac', ContentFile(response.content))
-    # audio.save()
-    # music=Music.objects.create(doctor=doctor,patient=patient,music_path=flac_name+'/'+desc+'.flac',type=type)
-    # music.save()
+    try:
+        API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
+        headers = {"Authorization": "Bearer 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"}
+        audio_bytes = {
+            "inputs": desc,
+        }
+        response = requests.post(API_URL, headers=headers, json=audio_bytes)
+        # with open(flac_name, 'wb') as f:
+        #     f.write(response.content)
+        music=Music.objects.create(doctor=doctor,patient=patient,music=ContentFile(response.content, name=desc+'.flac'),type=type)
+        music.save()
+    except Exception as e:
+        print(e)
 
 @csrf_exempt
 def gen(request):
