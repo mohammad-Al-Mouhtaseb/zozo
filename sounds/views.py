@@ -42,7 +42,7 @@ def gen_fun(request):
         print(key)
         headers = {"Authorization": "Bearer "+key}
         audio_bytes = {
-            "inputs": desc,
+            "inputs": desc
         }
         print("111")
         response = requests.post(API_URL, headers=headers, json=audio_bytes, timeout=120)
