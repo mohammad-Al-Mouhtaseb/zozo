@@ -21,12 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 @csrf_exempt
 def gen_fun(request):
-    data = json.loads(request.body)
-    desc=data['desc']
-    doctor=data['doctor']
-    patient=data['patient']
-    type=data['type']
-    music_path="sounds/music/"+type+"_"+desc+".flac"
+    pass
     # wav_name="sounds/music/"+type+"/"+desc+".wav"
     # inputs = processor(
     #     text=[desc],
@@ -36,27 +31,26 @@ def gen_fun(request):
     # audio_values = model.generate(**inputs.to(device), do_sample=True, guidance_scale=3, max_new_tokens=1202)
     # scipy.io.wavfile.write(wav_name, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())
 
-    try:
-        API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
-        key=Music.objects.get(doctor="api@api.com").type
-        print(key)
-        headers = {"Authorization": "Bearer "+key}
-        audio_bytes = {
-            "inputs": desc
-        }
-        print("111")
-        response = requests.post(API_URL, headers=headers, json=audio_bytes, timeout=120)
-        print("222")
-        music=Music.objects.create(doctor=doctor,patient=patient,music=ContentFile(response.content, name=type+'_'+desc+'.flac'),music_path=music_path,type=type)
-        music.save()
-    except Exception as e:
-        print(e)
-
 @csrf_exempt
 def gen(request):
-    thread = threading.Thread(target=gen_fun(request))
-    thread.setDaemon(True)
-    thread.start()
+    data = json.loads(request.body)
+    desc=data['desc']
+    doctor=data['doctor']
+    patient=data['patient']
+    type=data['type']
+    music_path="sounds/music/"+type+"_"+desc+".flac"
+    API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
+    key=Music.objects.get(doctor="api@api.com").type
+    print(key)  
+    headers = {"Authorization": "Bearer "+key}
+    audio_bytes = {
+        "inputs": desc
+    }
+    print("111")
+    response = requests.post(API_URL, headers=headers, json=audio_bytes, timeout=120)
+    print("222")
+    music=Music.objects.create(doctor=doctor,patient=patient,music=ContentFile(response.content, name=type+'_'+desc+'.flac'),music_path=music_path,type=type)
+    music.save()
     return JsonResponse({"res":"sucsess"})
 
 @csrf_exempt
