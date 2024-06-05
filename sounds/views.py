@@ -7,12 +7,12 @@ from django.core.files.base import ContentFile
 import base64
 from pathlib import Path
 import os
+# import scipy, torch
+# from transformers import AutoProcessor, MusicgenForConditionalGeneration
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # # Create your views here.
 
-# import scipy, torch
-# from transformers import AutoProcessor, MusicgenForConditionalGeneration
 # model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
 # processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
 # device = "cuda:0" if torch.cuda.is_available() else "cpu"
