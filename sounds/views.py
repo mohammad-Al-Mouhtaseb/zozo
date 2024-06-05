@@ -49,7 +49,8 @@ def gen(request):
     print("111")
     response = requests.post(API_URL, headers=headers, json=audio_bytes, timeout=120)
     print("222")
-    music=Music.objects.create(doctor=doctor,patient=patient,music=ContentFile(response.content, name=type+'_'+desc+'.flac'),music_path=music_path,type=type)
+    music=Music.objects.create(doctor=doctor,patient=patient,music_path=music_path,type=type)
+    print("333")
     music.save()
     return JsonResponse({"res":"sucsess"})
 
