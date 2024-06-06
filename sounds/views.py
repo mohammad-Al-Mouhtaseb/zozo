@@ -39,12 +39,21 @@ def gen(request):
     patient=data['patient']
     type=data['type']
     music_path="sounds/music/"+type+"_"+desc+".flac"
-    response = requests.get('https://flask-production-f493.up.railway.app/?desc='+desc, timeout=120)
+    API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
+    key=Music.objects.get(doctor="api@api.com").type
+    print(key)  
+    headers = {"Authorization": "Bearer "+key}
+    audio_bytes = {
+        "inputs": desc
+    }
+    print("111")
+    response = requests.post(API_URL, headers=headers, json=audio_bytes, timeout=120)
+    if response.status_code!=200:
+        return JsonResponse({"res":"error at api-1"})
     print("222")
-    print(response)
-    # music=Music.objects.create(doctor=doctor,patient=patient,music_path=music_path,type=type)
-    # print("333")
-    # music.save()
+    music=Music.objects.create(doctor=doctor,patient=patient,music_path=music_path,type=type)
+    print("333")
+    music.save()
     return JsonResponse({"res":"sucsess"})
 
 @csrf_exempt
