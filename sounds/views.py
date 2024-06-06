@@ -47,7 +47,7 @@ def gen(request):
         "inputs": desc
     }
     print("111")
-    response = requests.post(API_URL, headers=headers, json=audio_bytes, timeout=120)
+    response = requests.post(API_URL, headers=headers, json=audio_bytes)
     if response.status_code!=200:
         return JsonResponse({"res":"error at api-1"})
     print("222")
