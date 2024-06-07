@@ -39,15 +39,10 @@ def gen(request):
     patient=data['patient']
     type=data['type']
     music_path="sounds/music/"+type+"_"+desc+".flac"
-    API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
     key=Music.objects.get(doctor="api@api.com").type
-    print(key)  
-    headers = {"Authorization": "Bearer "+key}
-    audio_bytes = {
-        "inputs": desc,
-    }
+    API_URL = "https://flask-production-3ad5.up.railway.app/?desc="+desc+"&key="+key
     print("111")
-    response = requests.post(API_URL, headers=headers, json=audio_bytes)
+    response = requests.get(API_URL)
     if response.status_code!=200:
         return JsonResponse({"res":"error at api-1"})
     print("222")
