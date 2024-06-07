@@ -41,13 +41,14 @@ def gen(request):
     music_path="sounds/music/"+type+"_"+desc+".flac"
     key=Music.objects.get(doctor="api@api.com").type
     API_URL = "https://flask-production-3ad5.up.railway.app/?desc="+desc+"&key="+key
-    print("111")
     response = requests.get(API_URL)
     if response.status_code!=200:
-        return JsonResponse({"res":"error at api-1"})
-    print("222")
+        return JsonResponse({"res":"error at api"})
+    fout = open('sounds/music/'+type+"_"+desc+".flac", 'wb+')
+    for i in response:
+        fout.write(i)
+    fout.close()
     music=Music.objects.create(doctor=doctor,patient=patient,music_path=music_path,type=type)
-    print("333")
     music.save()
     return JsonResponse({"res":"sucsess"})
 
@@ -75,8 +76,8 @@ def get_my_list(request):
     music_names=[]
     for i in m:
         music_urls.append(str(i.music_path))
-        n=i.music_path.split('/')
-        music_names.append(n[-1])
+        name=i.music_path.split('/')[-1].split(".")[0]
+        music_names.append(name)
     return JsonResponse({"music_names":music_names,"music_urls":music_urls})
 
 @csrf_exempt
@@ -90,7 +91,8 @@ def get_folder_list(request):
         n=i.music.split('/')[2].split('_')
         if n[0]==folder_name:
             music_urls.append(str(i.music))
-            music_names.append(n[-1])
+            name=i.music_path.split('/')[-1].split(".")[0]
+            music_names.append(name)
     return JsonResponse({"music_names":music_names,"music_urls":music_urls})
 
 @csrf_exempt
