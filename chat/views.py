@@ -12,8 +12,6 @@ from cryptography.hazmat.primitives import asymmetric, serialization
 # from googletrans import Translator
 # from deep_translator import GoogleTranslator
 
-
-
 # url = "https://chatgpt-42.p.rapidapi.com/chatbotapi"
 
 # payload = {
@@ -41,6 +39,24 @@ from cryptography.hazmat.primitives import asymmetric, serialization
 
 # print(response.json())
 
+
+# url = "https://open-ai21.p.rapidapi.com/conversationpalm2"
+
+# payload = { "messages": [
+# 		{
+# 			"role": "user",
+# 			"content": "hi"
+# 		}
+# 	] }
+# headers = {
+# 	"x-rapidapi-key": "4120ca7630msh5566122415863dep16069fjsn207bd1f0e6f4",
+# 	"x-rapidapi-host": "open-ai21.p.rapidapi.com",
+# 	"Content-Type": "application/json"
+# }
+
+# response = requests.post(url, json=payload, headers=headers)
+
+# print(response.json())
 
 @csrf_exempt 
 def chat(request):  
