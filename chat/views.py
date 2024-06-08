@@ -12,6 +12,36 @@ from cryptography.hazmat.primitives import asymmetric, serialization
 # from googletrans import Translator
 # from deep_translator import GoogleTranslator
 
+
+
+# url = "https://chatgpt-42.p.rapidapi.com/chatbotapi"
+
+# payload = {
+# 	"bot_id": "OEXJ8qFp5E5AwRwymfPts90vrHnmr8yZgNE171101852010w2S0bCtN3THp448W7kDSfyTf3OpW5TUVefz",
+# 	"messages": [
+# 		{
+# 			"role": "user",
+# 			"content": "hello"
+# 		}
+# 	],
+# 	"user_id": "",
+# 	"temperature": 0.9,
+# 	"top_k": 5,
+# 	"top_p": 0.9,
+# 	"max_tokens": 256,
+# 	"model": "matag2.0"
+# }
+# headers = {
+# 	"x-rapidapi-key": "4120ca7630msh5566122415863dep16069fjsn207bd1f0e6f4",
+# 	"x-rapidapi-host": "chatgpt-42.p.rapidapi.com",
+# 	"Content-Type": "application/json"
+# }
+
+# response = requests.post(url, json=payload, headers=headers)
+
+# print(response.json())
+
+
 @csrf_exempt 
 def chat(request):  
     if request.method == 'POST':
