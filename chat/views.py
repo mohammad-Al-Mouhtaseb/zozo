@@ -34,6 +34,7 @@ def chat(request):
                     ssl=True
                 )
                 pusher_client.trigger(recive, 'event', {'sender':str(send),'message': msg})
+                new_msg=Message.objects.create(sender=send,receiver=recive,message=msg).save()
 
             except:
                 pass
