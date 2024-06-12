@@ -88,9 +88,9 @@ def get_folder_list(request):
     music_urls=[]
     music_names=[]
     for i in m:
-        n=i.music.split('/')[2].split('_')
+        n=i.music_path.split('/')[2].split('_')
         if n[0]==folder_name:
-            music_urls.append(str(i.music))
+            music_urls.append(str(i.music_path))
             name=i.music_path.split('/')[-1].split(".")[0]
             music_names.append(name)
     return JsonResponse({"music_names":music_names,"music_urls":music_urls})
