@@ -68,4 +68,4 @@ model.fit(X_train, y_train, epochs = 300, batch_size = 8)
 # zzz=np.array(z)
 # model.predict(zzz)
 def predict(x):
-    pass
+    return "cc"
