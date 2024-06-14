@@ -80,7 +80,7 @@ def firstquiz(request):
 
 panic_q_list=['Gender','Family_History','Personal_History','Current_Stressors','Symptoms','Severity','Impact_on_Life','Demographics','Medical_History','Psychiatric_History','Substance_Use','Coping_Mechanisms','Social_Support','Lifestyle_Factors']
 Dep_Bi_q_list=['Sadness','Euphoric','Exhausted','Sleep_Dissorder','Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressive_Response','Ignore_And_Move_On','Nervous_BreakDown','Admit_Mistakes','Overthinking','Sexual_Activity','Concentration','Optimisim']
-P_Dep_q_list=['Gender','Married','Number_Children','total_members','incoming_salary','incoming_business','incoming_no_business','labor_primary','Education_Level','gained_asset_Category','Durable_Asset_Category','Save_Asset_Category','Living_Expenses_Category','Other_Expenses_Category','Lasting_Investment_Category','No_Lasting_Investment_Category']
+P_Dep_q_list=['Gender','Age','Married','Number_Children','total_members','incoming_salary','incoming_business','incoming_no_business','labor_primary','Education_Level','gained_asset_Category','Durable_Asset_Category','Save_Asset_Category','Living_Expenses_Category','Other_Expenses_Category','Lasting_Investment_Category','No_Lasting_Investment_Category']
 
 
 @csrf_exempt
@@ -268,8 +268,7 @@ def P_Dep(request):
                 Gender = 1 if patient.gender == 'm' else 0 
                 data['Gender']=Gender
                 data["Age"]=Age
-                new_test = {key:data[key] for key in P_Dep_q_list}
-                new_test=pd.DataFrame(new_test, index=[0])
+                new_test = [data[key] for key in P_Dep_q_list]
                 pred=p_dep.predict(new_test)
                 pred = "False" if pred == 0 else "True"
                 fields = {'Person_email': patient, 'depressed': pred}
@@ -291,7 +290,7 @@ def P_Dep(request):
                     ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
                     ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High']
                     ]  
-                fields.update({key: answer[P_Dep_q_list.index(key)-1][data[key]] for key in P_Dep_q_list[1::]})
+                fields.update({key: answer[P_Dep_q_list.index(key)-2][data[key]] for key in P_Dep_q_list[2::]})
                 Iris.objects.filter(Person_email=patient).update(**fields)
                 return JsonResponse({'Iris_P_Dep' : pred}, status=200)
             except Exception as e:
@@ -347,16 +346,16 @@ def QP_Dep(request):
                     j=0
                     for i in all_q2:
                         if i== None or i=="":
-                            x={P_Dep_q_list[j+1]:(questions[j],answer[j])}
+                            x={P_Dep_q_list[j+2]:(questions[j],answer[j])}
                             q.append(x)
                         j+=1
                     return JsonResponse({'q':q}, status=200)
                 else:
-                    return JsonResponse({'q':P_Dep_q_list[1::]}, status=200)
+                    return JsonResponse({'q':P_Dep_q_list[2::]}, status=200)
             except:
                 q=list()
                 j=0
-                for i in P_Dep_q_list[1::]:
+                for i in P_Dep_q_list[2::]:
                     x={i:(questions[j],answer[j])}
                     q.append(x)
                     j+=1
