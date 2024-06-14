@@ -63,9 +63,10 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 model.fit(X_train, y_train, epochs = 300, batch_size = 8)
 
 
-
-# z=[ 1., 29.,  1.,  4.,  6.,  0.,  0.,  0.,  0.,  3.,  1.,  1.,  1.,2.,  1.,  2.,  1.]#18  17
-# zzz=np.array(z)
-# model.predict(zzz)
 def predict(x):
-    return "cc"
+    p = model.predict(np.array([x]))
+    if p>=0.5:
+        p=1
+    else:
+        p=0
+    return p

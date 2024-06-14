@@ -263,18 +263,37 @@ def P_Dep(request):
         person_result=check_token(request)
         if check_token(request):
             try:
-                patient = Patient.objects.get(email=person_result.email)
+                patient = Patient.objects.get(email=person_result.email) 
                 Age = date.today().year - patient.birth.year
-                Gender = "Male" if patient.gender == 'm' else "Female"
+                Gender = 1 if patient.gender == 'm' else 0 
                 data['Gender']=Gender
-                new_test=[panic.mapping[data[key]] for key in panic_q_list]
-                new_test.insert(0,Age)
-                pred=p_dep.predict(new_test)[0]
-                pred = False if pred == 0 else True
-                fields = {'Person_email': patient, 'Positive_Negative_panic': pred}
-                fields.update({key: data[key] for key in panic_q_list})
+                data["Age"]=Age
+                new_test = {key:data[key] for key in P_Dep_q_list}
+                new_test=pd.DataFrame(new_test, index=[0])
+                pred=p_dep.predict(new_test)
+                pred = "False" if pred == 0 else "True"
+                fields = {'Person_email': patient, 'depressed': pred}
+                int_list = []
+                for i in range(0, 10000):
+                    int_list.append(i)
+                answer=[["Yes","No"],
+                    int_list,
+                    int_list,
+                    int_list,
+                    int_list,
+                    int_list,
+                    ["Yes","No"],['No Education', 'Primary', 'Secondary', 'High School', 'College'],
+                    ['Very Low','Low','Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High']
+                    ]  
+                fields.update({key: answer[P_Dep_q_list.index(key)-1][data[key]] for key in P_Dep_q_list[1::]})
                 Iris.objects.filter(Person_email=patient).update(**fields)
-                return JsonResponse({'Iris_Panic' : pred}, status=200)
+                return JsonResponse({'Iris_P_Dep' : pred}, status=200)
             except Exception as e:
                 print(e)
                 return JsonResponse({'state':'form is not valid','Exception':str(e)}, status=201)
@@ -305,30 +324,39 @@ def QP_Dep(request):
                 "Lasting_Investment_Category",#6
                 "No_Lasting_Investment_Category"#6
             ]
-            answer=[["Yes","No"],[],[],[],[],[],["Yes","No"],['No Education', 'Primary', 'Secondary', 'High School', 'College'],
-                    ['Very Low','Low','Medium', 'High', 'Very High'],['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
-                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
-                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
-                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High']],
-                
+            answer=[["Yes","No"],
+                    [""],
+                    [""],
+                    [""],
+                    [""],
+                    [""],
+                    ["Yes","No"],['No Education', 'Primary', 'Secondary', 'High School', 'College'],
+                    ['Very Low','Low','Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High']
+                    ]   
             try:
                 obj_res=Iris.objects.filter(Person_email=patient)[0]
-                all_q2=[obj_res.Family_History,obj_res.Personal_History,obj_res.Current_Stressors,obj_res.Symptoms,obj_res.Severity,obj_res.Impact_on_Life,obj_res.Demographics,obj_res.Medical_History,obj_res.Psychiatric_History,obj_res.Substance_Use,obj_res.Coping_Mechanisms,obj_res.Social_Support,obj_res.Lifestyle_Factors]
+                all_q2=[obj_res.Married,obj_res.Number_Children,obj_res.total_members,obj_res.incoming_salary,obj_res.incoming_business,obj_res.incoming_no_business,obj_res.labor_primary,obj_res.Education_Level,obj_res.gained_asset_Category,obj_res.Durable_Asset_Category,obj_res.Save_Asset_Category,obj_res.Living_Expenses_Category,obj_res.Other_Expenses_Category,obj_res.Lasting_Investment_Category,obj_res.No_Lasting_Investment_Category]
                 if obj_res:
                     q=list()
                     j=0
                     for i in all_q2:
                         if i== None or i=="":
-                            x={panic_q_list[j+1]:(questions[j],answer[j])}
+                            x={P_Dep_q_list[j+1]:(questions[j],answer[j])}
                             q.append(x)
                         j+=1
                     return JsonResponse({'q':q}, status=200)
                 else:
-                    return JsonResponse({'q':panic_q_list[1::]}, status=200)
+                    return JsonResponse({'q':P_Dep_q_list[1::]}, status=200)
             except:
                 q=list()
                 j=0
-                for i in panic_q_list[1::]:
+                for i in P_Dep_q_list[1::]:
                     x={i:(questions[j],answer[j])}
                     q.append(x)
                     j+=1
