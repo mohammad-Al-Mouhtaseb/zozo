@@ -58,9 +58,22 @@ class Iris(models.Model):
 
     # Age...Panic_Disorder
     # Gender...Panic_Disorder 
-    # Married=   
-    # Number_Children=
-    # Education_Level=
+    Married = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    Number_Children = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    total_members = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    incoming_salary = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    incoming_business = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    incoming_no_business = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    labor_primary = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    Education_Level = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    gained_asset_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    Durable_Asset_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    Save_Asset_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    Living_Expenses_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    Other_Expenses_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    Lasting_Investment_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    No_Lasting_Investment_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
+    depressed = models.CharField(max_length=35,null=True, blank=True)#p_dep_res
 
 
     def __str__(self):

@@ -8,6 +8,7 @@ from . models import *
 
 import Notebooks.dep_bi as dep_bi
 import Notebooks.panic as panic
+import Notebooks.p_dep as p_dep
 
 @csrf_exempt
 def firstquiz(request):
@@ -79,6 +80,8 @@ def firstquiz(request):
 
 panic_q_list=['Gender','Family_History','Personal_History','Current_Stressors','Symptoms','Severity','Impact_on_Life','Demographics','Medical_History','Psychiatric_History','Substance_Use','Coping_Mechanisms','Social_Support','Lifestyle_Factors']
 Dep_Bi_q_list=['Sadness','Euphoric','Exhausted','Sleep_Dissorder','Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressive_Response','Ignore_And_Move_On','Nervous_BreakDown','Admit_Mistakes','Overthinking','Sexual_Activity','Concentration','Optimisim']
+P_Dep_q_list=['Gender','Married','Number_Children','total_members','incoming_salary','incoming_business','incoming_no_business','labor_primary','Education_Level','gained_asset_Category','Durable_Asset_Category','Save_Asset_Category','Living_Expenses_Category','Other_Expenses_Category','Lasting_Investment_Category','No_Lasting_Investment_Category']
+
 
 @csrf_exempt
 def Panic(request):
@@ -159,7 +162,6 @@ def QPanic(request):
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
-
 
 @csrf_exempt
 def Dep_Bi(request):
@@ -246,6 +248,87 @@ def QDep_Bi(request):
                 q=list()
                 j=0
                 for i in Dep_Bi_q_list:
+                    x={i:(questions[j],answer[j])}
+                    q.append(x)
+                    j+=1
+                return JsonResponse({'q':q}, status=200)
+        else:
+            return exp_logout(request)
+    return JsonResponse({'state':'error request method'}, status=201)
+
+@csrf_exempt
+def P_Dep(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        person_result=check_token(request)
+        if check_token(request):
+            try:
+                patient = Patient.objects.get(email=person_result.email)
+                Age = date.today().year - patient.birth.year
+                Gender = "Male" if patient.gender == 'm' else "Female"
+                data['Gender']=Gender
+                new_test=[panic.mapping[data[key]] for key in panic_q_list]
+                new_test.insert(0,Age)
+                pred=p_dep.predict(new_test)[0]
+                pred = False if pred == 0 else True
+                fields = {'Person_email': patient, 'Positive_Negative_panic': pred}
+                fields.update({key: data[key] for key in panic_q_list})
+                Iris.objects.filter(Person_email=patient).update(**fields)
+                return JsonResponse({'Iris_Panic' : pred}, status=200)
+            except Exception as e:
+                print(e)
+                return JsonResponse({'state':'form is not valid','Exception':str(e)}, status=201)
+        else:
+            return exp_logout(request)
+    return JsonResponse({'state':'error request method'}, status=201)
+@csrf_exempt
+def QP_Dep(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        person_result=check_token(request)
+        if check_token(request):
+            patient=Patient.objects.get(email=person_result.email)	
+            questions = [
+                "Married?",# ["Yes","No"]
+                "Number_Children?",# n
+                "total_members?",# n
+                "incoming_salary?",# n
+                "incoming_business?",# n
+                "incoming_no_business?",# n
+                "labor_primary?",# ["Yes","No"]
+                "Education_Level?",#  ['No Education', 'Primary', 'Secondary', 'High School', 'College']
+                "gained_asset_Category?",#5  ['Very Low','Low','Medium', 'High', 'Very High']
+                "Durable_Asset_Category?",#6  ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High']
+                "Save_Asset_Category?",#6
+                "Living_Expenses_Category?",#6
+                "Other_Expenses_Category?",#6
+                "Lasting_Investment_Category",#6
+                "No_Lasting_Investment_Category"#6
+            ]
+            answer=[["Yes","No"],[],[],[],[],[],["Yes","No"],['No Education', 'Primary', 'Secondary', 'High School', 'College'],
+                    ['Very Low','Low','Medium', 'High', 'Very High'],['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
+                    ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High']],
+                
+            try:
+                obj_res=Iris.objects.filter(Person_email=patient)[0]
+                all_q2=[obj_res.Family_History,obj_res.Personal_History,obj_res.Current_Stressors,obj_res.Symptoms,obj_res.Severity,obj_res.Impact_on_Life,obj_res.Demographics,obj_res.Medical_History,obj_res.Psychiatric_History,obj_res.Substance_Use,obj_res.Coping_Mechanisms,obj_res.Social_Support,obj_res.Lifestyle_Factors]
+                if obj_res:
+                    q=list()
+                    j=0
+                    for i in all_q2:
+                        if i== None or i=="":
+                            x={panic_q_list[j+1]:(questions[j],answer[j])}
+                            q.append(x)
+                        j+=1
+                    return JsonResponse({'q':q}, status=200)
+                else:
+                    return JsonResponse({'q':panic_q_list[1::]}, status=200)
+            except:
+                q=list()
+                j=0
+                for i in panic_q_list[1::]:
                     x={i:(questions[j],answer[j])}
                     q.append(x)
                     j+=1
