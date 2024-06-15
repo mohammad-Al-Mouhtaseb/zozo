@@ -19,5 +19,6 @@ class Data(models.Model):
     Send_Mail_API_HOST2 = models.CharField(max_length=100,null=True, blank=True)
 
     Whatsapp_URL =  models.CharField(max_length=100,null=True, blank=True)
+    Whatsapp_Token =  models.CharField(max_length=100,null=True, blank=True)
     Whatsapp_API_KEY = models.CharField(max_length=100,null=True, blank=True)
     Whatsapp_API_HOST = models.CharField(max_length=100,null=True, blank=True)

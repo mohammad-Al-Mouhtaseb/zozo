@@ -291,11 +291,11 @@ def send_mail(sendto,title,body):
 
 @csrf_exempt 
 def chack_email(email):
-    url = "https://validect-email-verification-v1.p.rapidapi.com/v1/verify"
+    url = Data.objects.get().Chack_Email_URL
     querystring = {"email":email}
     headers = {
-        'X-RapidAPI-Key': '2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378',
-        'X-RapidAPI-Host': 'validect-email-verification-v1.p.rapidapi.com'
+        'X-RapidAPI-Key': Data.objects.get().Chack_Email_API_KEY,
+        'X-RapidAPI-Host': Data.objects.get().Chack_Email_API_HOST
     }
     response = requests.get(url, headers=headers, params=querystring)
     if response.status_code==200:
@@ -308,25 +308,23 @@ def chack_email(email):
         return True
     return False
 
-# @csrf_exempt 
-# def whats_for_dev(email):
-#     url = "https://whatsapp-messaging-hub.p.rapidapi.com/WhatsappSendMessage"
-#     u=User.objects.get(email="m.almouhtaseb@gmail.com")
-#     mhd_token=u.token
-#     payload = {
-#         "token": mhd_token,
-#         "phone_number_or_group_id": "963941472414",
-#         "is_group": False,
-#         "message": "new registration: "+email,
-#         "mentioned_ids": "",
-#         "quoted_message_id": ""
-#     }
-#     headers = {
-#         'content-type': 'application/json',
-#         'X-RapidAPI-Key': '2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378',
-#         'X-RapidAPI-Host': 'whatsapp-messaging-hub.p.rapidapi.com'
-#     }
-#     response = requests.post(url, json=payload, headers=headers)
+@csrf_exempt 
+def whats_for_dev(email):
+    url = Data.objects.get().Whatsapp_URL
+    payload = {
+        "token": Data.objects.get().Whatsapp_Token,
+        "phone_number_or_group_id": "963941472414",
+        "is_group": False,
+        "message": "new registration: "+email,
+        "mentioned_ids": "",
+        "quoted_message_id": ""
+    }
+    headers = {
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': Data.objects.get().Whatsapp_API_KEY,
+        'X-RapidAPI-Host': Data.objects.get().Whatsapp_API_HOST
+    }
+    response = requests.post(url, json=payload, headers=headers)
 
 @csrf_exempt 
 def auth(request,email,token):
