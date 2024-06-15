@@ -1,13 +1,11 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
-import datetime ,json , pandas as pd
+import datetime ,json , pandas as pd, Notebooks.dep_bi as dep_bi, Notebooks.panic as panic, Notebooks.p_dep as p_dep
 from experta import *
+from collections.abc import Mapping
 from users.views import *
 from . models import *
-import Notebooks.dep_bi as dep_bi
-import Notebooks.panic as panic
-import Notebooks.p_dep as p_dep
 
 @csrf_exempt
 def firstquiz(request):
