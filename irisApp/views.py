@@ -28,50 +28,50 @@ def firstquiz(request):
             patient=Patient.objects.get(email=person_result.email)
             iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
             iris=Iris.objects.get(Person_email=patient)
-            # class Robot(KnowledgeEngine):
-            #     @Rule(NOT(Fact(Depression=W())))
-            #     def Depression(self):
-            #         self.declare(Fact(Depression=bool((a3+a5+a7)>=4)))
+            class Robot(KnowledgeEngine):
+                @Rule(NOT(Fact(Depression=W())))
+                def Depression(self):
+                    self.declare(Fact(Depression=bool((a3+a5+a7)>=4)))
 
-            #     @Rule((Fact(Depression=W())) and (NOT(Fact(Anxiety=W()))))
-            #     def Anxiety(self):
-            #         self.declare(Fact(Anxiety=bool((a2+a6+a8)>=4)))
+                @Rule((Fact(Depression=W())) and (NOT(Fact(Anxiety=W()))))
+                def Anxiety(self):
+                    self.declare(Fact(Anxiety=bool((a2+a6+a8)>=4)))
 
-            #     @Rule((Fact(Anxiety=W())) and (NOT(Fact(Stress=W()))))
-            #     def Stress(self):
-            #         self.declare(Fact(Stress=bool((a1+a4)>=3)))
+                @Rule((Fact(Anxiety=W())) and (NOT(Fact(Stress=W()))))
+                def Stress(self):
+                    self.declare(Fact(Stress=bool((a1+a4)>=3)))
                     
-            # engine = Robot()
-            # engine.reset()
-            # engine.run()
-            # facts=list(engine.facts.items())
-            # d=str(facts[1])
-            # a=str(facts[2])
-            # s=str(facts[3])
-            # d=d[9:len(d)-2]
-            # a=a[9:len(a)-2]
-            # s=s[9:len(s)-2]
-            # d=d.split('=')
-            # a=a.split('=')
-            # s=s.split('=')
-            # if(d[1]=="True"):
-            #     a[1]="False"
-            #     s[1]="False"
-            #     iris.das_d=True
-            # elif(a[1]=="True"):
-            #     s[1]="False"
-            #     iris.das_a=True
-            # elif(s[1]=="True"):
-            #     iris.das_s=True
-            # iris.save()
-            # return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
+            engine = Robot()
+            engine.reset()
+            engine.run()
+            facts=list(engine.facts.items())
+            d=str(facts[1])
+            a=str(facts[2])
+            s=str(facts[3])
+            d=d[9:len(d)-2]
+            a=a[9:len(a)-2]
+            s=s[9:len(s)-2]
+            d=d.split('=')
+            a=a.split('=')
+            s=s.split('=')
+            if(d[1]=="True"):
+                a[1]="False"
+                s[1]="False"
+                iris.das_d=True
+            elif(a[1]=="True"):
+                s[1]="False"
+                iris.das_a=True
+            elif(s[1]=="True"):
+                iris.das_s=True
+            iris.save()
+            return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
             
 
-            iris.das_d=True
-            iris.das_d=False
-            iris.das_d=False
-            iris.save()
-            return JsonResponse({'Depression':True,'Anxiety':False,'Stress':False}, status=200)
+            # iris.das_d=True
+            # iris.das_d=False
+            # iris.das_d=False
+            # iris.save()
+            # return JsonResponse({'Depression':True,'Anxiety':False,'Stress':False}, status=200)
 
 
         else:
@@ -81,7 +81,6 @@ def firstquiz(request):
 panic_q_list=['Gender','Family_History','Personal_History','Current_Stressors','Symptoms','Severity','Impact_on_Life','Demographics','Medical_History','Psychiatric_History','Substance_Use','Coping_Mechanisms','Social_Support','Lifestyle_Factors']
 Dep_Bi_q_list=['Sadness','Euphoric','Exhausted','Sleep_Dissorder','Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressive_Response','Ignore_And_Move_On','Nervous_BreakDown','Admit_Mistakes','Overthinking','Sexual_Activity','Concentration','Optimisim']
 P_Dep_q_list=['Gender','Age','Married','Number_Children','total_members','incoming_salary','incoming_business','incoming_no_business','labor_primary','Education_Level','gained_asset_Category','Durable_Asset_Category','Save_Asset_Category','Living_Expenses_Category','Other_Expenses_Category','Lasting_Investment_Category','No_Lasting_Investment_Category']
-
 
 @csrf_exempt
 def Panic(request):
@@ -297,6 +296,7 @@ def P_Dep(request):
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
+
 @csrf_exempt
 def QP_Dep(request):
     if request.method == 'POST':
