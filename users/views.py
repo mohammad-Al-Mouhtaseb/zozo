@@ -10,6 +10,7 @@ import base64
 from django.core.files.base import ContentFile
 import requests
 from cryptography.hazmat.primitives import asymmetric, serialization
+from setting_apps.models import *
 
 # Create your views here.
 
@@ -254,6 +255,11 @@ def get_public_key(request,email):
     except Exception as e:
         return JsonResponse({'error':str(e)}, status=201)
     
+
+
+
+    import requests
+
 @csrf_exempt 
 def send_mail(sendto,title,body):
     body="<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Welcome to Selene</title><style>body { font-family: Arial, sans-serif; line-height: 1.6; }.container { width: 85%; margin: 17px auto; padding: 17px; }.header { background: #83c5be; padding: 5px 0; text-align: center; color: #fff; }.content { margin-top: 17px; }.footer { margin-top: 30px; text-align: center; color: #333; }</style></head><body><div class='container'><div class='header'><h1>Welcome to Selene!</h1> </div><div class='content'><p>Hello,<br>We're excited to have you on board. Selene is dedicated to supporting your mental health journey using the power of artificial intelligence.</p>With Selene, you can:<ul><li>Track your well-being through goal setting and to-do lists.</li><li>Enjoy music tailored by AI to fit your mood.</li><li>Connect with professionals for guidance and support.</li></ul><p>To get started, simply open the Selene app and explore the features designed to empower you every day.</p><p>You must authentication your email, to do that open this link: <a href='https://selene-m-h.up.railway.app/users/auth/"+body['email']+"/"+body['token']+"'> Authentication</a></p><p>If you have any questions or need assistance, our support team is here to help.</p><p>Warm regards,</p><p>The Selene Team</p></div><div class='footer'><p>© 2024 Selene. All rights reserved.</p></div></div></body></html>"
@@ -265,21 +271,20 @@ def send_mail(sendto,title,body):
         "title": title,
         "body": body
     }
-    
+    url = Data.objects.get().Send_Mail_URL
     headers = {
         "content-type": "application/json",
-        "X-RapidAPI-Key": "2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378",
-        "X-RapidAPI-Host": "rapidmail.p.rapidapi.com"
+        "X-RapidAPI-Key": Data.objects.get().Send_Mail_API_KEY1,
+        "X-RapidAPI-Host": Data.objects.get().Send_Mail_API_HOST1
     }
-    url = "https://rapidmail.p.rapidapi.com/"
     response = requests.post(url, json=payload, headers=headers)
     if(response.status_code!=200):
-        headers= {
+        url = Data.objects.get().Send_Mail_URL2
+        headers = {
             "content-type": "application/json",
-            "X-RapidAPI-Key": "2e207fa9f9msha855123558f946dp1ec4f6jsn4ef4935f1378",
-            "X-RapidAPI-Host": "mail-sender-api1.p.rapidapi.com"
+            "X-RapidAPI-Key": Data.objects.get().Send_Mail_API_KEY2,
+            "X-RapidAPI-Host": Data.objects.get().Send_Mail_API_HOST2
         }
-        url = "https://mail-sender-api1.p.rapidapi.com/"
         response = requests.post(url, json=payload, headers=headers)
 
     print(response.json())

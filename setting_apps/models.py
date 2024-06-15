@@ -10,11 +10,11 @@ class Data(models.Model):
     Chack_Email_API_KEY = models.CharField(max_length=100,null=True, blank=True)
     Chack_Email_API_HOST = models.CharField(max_length=100,null=True, blank=True)
     
-    Send_Mail_URL = models.CharField(max_length=100,null=True, blank=True)
+    Send_Mail_URL1 = models.CharField(max_length=100,null=True, blank=True)
     Send_Mail_API_KEY1 = models.CharField(max_length=100,null=True, blank=True)
     Send_Mail_API_HOST1 = models.CharField(max_length=100,null=True, blank=True)
 
-    Send_Mail_URL =  models.CharField(max_length=100,null=True, blank=True)
+    Send_Mail_URL2 =  models.CharField(max_length=100,null=True, blank=True)
     Send_Mail_API_KEY2 = models.CharField(max_length=100,null=True, blank=True)
     Send_Mail_API_HOST2 = models.CharField(max_length=100,null=True, blank=True)
 
