@@ -1,0 +1,9 @@
+make backup:
+
+pg_dump -h <host> -d <database> -U <user> -p <port> -W -F t > latest.dump
+
+
+restore:
+
+pg_restore -U <username> -h <host> -p <port> -W -F t -d <db_name> <dump_file_name>
+

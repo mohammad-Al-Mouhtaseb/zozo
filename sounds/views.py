@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import requests, json, threading
 from . models import *
 from django.core.files.base import ContentFile
+from setting_apps.models import *
 import base64
 from pathlib import Path
 import os
@@ -39,7 +40,7 @@ def gen(request):
     patient=data['patient']
     type=data['type']
     music_path="sounds/music/"+type+"_"+desc+".flac"
-    key=Music.objects.get(doctor="api@api.com").type
+    key=Data.objects.get().Huggingface_API
     API_URL = "https://flask-production-3ad5.up.railway.app/?desc="+desc+"&key="+key
     response = requests.get(API_URL)
     if response.status_code!=200:

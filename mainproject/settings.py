@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "irisApp",
     "chat",
     "sounds",
+    "setting_apps",
 ]
 
 JAZZMIN_SETTINGS = {

@@ -272,9 +272,7 @@ def P_Dep(request):
                 pred=p_dep.predict(new_test)
                 pred = "False" if pred == 0 else "True"
                 fields = {'Person_email': patient, 'depressed': pred}
-                int_list = []
-                for i in range(0, 10000):
-                    int_list.append(i)
+                int_list = [i for i in range(0, 100)]
                 answer=[["Yes","No"],
                     int_list,
                     int_list,
