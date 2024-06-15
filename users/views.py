@@ -271,7 +271,7 @@ def send_mail(sendto,title,body):
         "title": title,
         "body": body
     }
-    url = Data.objects.get().Send_Mail_URL
+    url = Data.objects.get().Send_Mail_URL1
     headers = {
         "content-type": "application/json",
         "X-RapidAPI-Key": Data.objects.get().Send_Mail_API_KEY1,
