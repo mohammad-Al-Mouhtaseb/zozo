@@ -5,7 +5,7 @@ from datetime import date
 # Create your models here.
 
 class Iris(models.Model):
-    Person_email = models.OneToOneField(Patient, on_delete=models.CASCADE, null=True, blank=True, related_name='Person_Id')
+    Person_email = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True, related_name='Person_Id')
     Doctor_email = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='Doctor_Id') 
 
     das1=models.IntegerField(null=True, blank=True)#EXP
