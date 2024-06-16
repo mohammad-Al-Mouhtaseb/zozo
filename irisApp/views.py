@@ -2,8 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 import datetime ,json , pandas as pd, Notebooks.dep_bi as dep_bi, Notebooks.panic as panic, Notebooks.p_dep as p_dep
-from experta import *
-from collections.abc import Mapping
+# from experta import *
 from users.views import *
 from . models import *
 
@@ -25,50 +24,52 @@ def firstquiz(request):
             patient=Patient.objects.get(email=person_result.email)
             iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
             iris=Iris.objects.get(Person_email=patient)
-            class Robot(KnowledgeEngine):
-                @Rule(NOT(Fact(Depression=W())))
-                def Depression(self):
-                    self.declare(Fact(Depression=bool((a3+a5+a7)>=4)))
+            # class Robot(KnowledgeEngine):
+            #     @Rule(NOT(Fact(Depression=W())))
+            #     def Depression(self):
+            #         self.declare(Fact(Depression=bool((a3+a5+a7)>=4)))
 
-                @Rule((Fact(Depression=W())) and (NOT(Fact(Anxiety=W()))))
-                def Anxiety(self):
-                    self.declare(Fact(Anxiety=bool((a2+a6+a8)>=4)))
+            #     @Rule((Fact(Depression=W())) and (NOT(Fact(Anxiety=W()))))
+            #     def Anxiety(self):
+            #         self.declare(Fact(Anxiety=bool((a2+a6+a8)>=4)))
 
-                @Rule((Fact(Anxiety=W())) and (NOT(Fact(Stress=W()))))
-                def Stress(self):
-                    self.declare(Fact(Stress=bool((a1+a4)>=3)))
+            #     @Rule((Fact(Anxiety=W())) and (NOT(Fact(Stress=W()))))
+            #     def Stress(self):
+            #         self.declare(Fact(Stress=bool((a1+a4)>=3)))
                     
-            engine = Robot()
-            engine.reset()
-            engine.run()
-            facts=list(engine.facts.items())
-            d=str(facts[1])
-            a=str(facts[2])
-            s=str(facts[3])
-            d=d[9:len(d)-2]
-            a=a[9:len(a)-2]
-            s=s[9:len(s)-2]
-            d=d.split('=')
-            a=a.split('=')
-            s=s.split('=')
-            if(d[1]=="True"):
-                a[1]="False"
-                s[1]="False"
-                iris.das_d=True
-            elif(a[1]=="True"):
-                s[1]="False"
-                iris.das_a=True
-            elif(s[1]=="True"):
-                iris.das_s=True
-            iris.save()
-            return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
-            
-
-            # iris.das_d=True
-            # iris.das_d=False
-            # iris.das_d=False
+            # engine = Robot()
+            # engine.reset()
+            # engine.run()
+            # facts=list(engine.facts.items())
+            # d=str(facts[1])
+            # a=str(facts[2])
+            # s=str(facts[3])
+            # d=d[9:len(d)-2]
+            # a=a[9:len(a)-2]
+            # s=s[9:len(s)-2]
+            # d=d.split('=')
+            # a=a.split('=')
+            # s=s.split('=')
+            # if(d[1]=="True"):
+            #     a[1]="False"
+            #     s[1]="False"
+            #     iris.das_d=True
+            # elif(a[1]=="True"):
+            #     s[1]="False"
+            #     iris.das_a=True
+            # elif(s[1]=="True"):
+            #     iris.das_s=True
             # iris.save()
-            # return JsonResponse({'Depression':True,'Anxiety':False,'Stress':False}, status=200)
+            # return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
+            API_URL = "https://flask-production-3ad5.up.railway.app/?a1="+a1+"&a2="+a2+"&a3="+a3+"&a4="+a4+"&a5="+a5+"&a6="+a6+"&a7="+a7+"&a8="+a8
+            response = requests.get(API_URL)
+            if response.status_code!=200:
+                return JsonResponse({"res":"error at api"})
+            iris.das_d=response['Depression']
+            iris.das_a=response['Anxiety']
+            iris.das_s=response['Stress']
+            iris.save()
+            return JsonResponse(response, status=200)
 
 
         else:
