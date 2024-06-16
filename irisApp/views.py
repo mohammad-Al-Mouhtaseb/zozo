@@ -12,18 +12,18 @@ def firstquiz(request):
         data = json.loads(request.body)
         person_result=check_token(request)
         if check_token(request):
-            a1=int(data['a1'])#Stress
-            a2=int(data['a2'])#Anxiety
-            a3=int(data['a3'])#Depression
-            a4=int(data['a4'])#Stress
-            a5=int(data['a5'])#Depression
-            a6=int(data['a6'])#Anxiety
-            a7=int(data['a7'])#Depression
-            a8=int(data['a8'])#Anxiety
+            a1=data['a1']#Stress
+            a2=data['a2']#Anxiety
+            a3=data['a3']#Depression
+            a4=data['a4']#Stress
+            a5=data['a5']#Depression
+            a6=data['a6']#Anxiety
+            a7=data['a7']#Depression
+            a8=data['a8']#Anxiety
 
-            patient=Patient.objects.get(email=person_result.email)
-            iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
-            iris=Iris.objects.get(Person_email=patient)
+            # patient=Patient.objects.get(email=person_result.email)
+            # iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
+            # iris=Iris.objects.get(Person_email=patient)
             # class Robot(KnowledgeEngine):
             #     @Rule(NOT(Fact(Depression=W())))
             #     def Depression(self):
@@ -64,10 +64,12 @@ def firstquiz(request):
             API_URL = "https://flask-production-3ad5.up.railway.app/?a1="+a1+"&a2="+a2+"&a3="+a3+"&a4="+a4+"&a5="+a5+"&a6="+a6+"&a7="+a7+"&a8="+a8
             response = requests.get(API_URL)
             if response.status_code!=200:
-                return JsonResponse({"res":"error at api"})
-            iris.das_d=response['Depression']
-            iris.das_a=response['Anxiety']
-            iris.das_s=response['Stress']
+                return JsonResponse({"res":"error at api"}, status=201)
+            
+            
+            patient=Patient.objects.get(email=person_result.email)
+            iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
+                                               das_d=response['Depression'],das_a=response['Anxiety'],das_s=response['Stress'])
             iris.save()
             return JsonResponse(response, status=200)
 
