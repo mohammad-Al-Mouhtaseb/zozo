@@ -66,10 +66,11 @@ def firstquiz(request):
             if response.status_code!=200:
                 return JsonResponse({"res":"error at api"}, status=201)
             else:
+                response_json = response.json()
                 patient=Patient.objects.get(email=person_result.email)
                 iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
-                                                das_d=response.content['Depression'],das_a=response.content['Anxiety'],
-                                                das_s=response.content['Stress'])
+                                                das_d=response_json['Depression'],das_a=response_json['Anxiety'],
+                                                das_s=response_json['Stress'])
                 iris.save()
                 return response
 
