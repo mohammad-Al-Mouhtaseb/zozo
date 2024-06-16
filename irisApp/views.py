@@ -68,7 +68,11 @@ def firstquiz(request):
             else:
                 response_json = response.json()
                 patient=Patient.objects.get(email=person_result.email)
-                iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
+                try:
+                    iris=Iris.objects.create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
+                                                das_d=response_json['Depression'],das_a=response_json['Anxiety'],das_s=response_json['Stress'])
+                except:
+                    iris=Iris.objects.update(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
                                                 das_d=response_json['Depression'],das_a=response_json['Anxiety'],das_s=response_json['Stress'])
                 return JsonResponse({'Depression':response_json['Depression'],'Anxiety':response_json['Anxiety'],'Stress':response_json['Stress']}, status=200)
 
