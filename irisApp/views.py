@@ -61,17 +61,16 @@ def firstquiz(request):
             #     iris.das_s=True
             # iris.save()
             # return JsonResponse({d[0]:d[1],a[0]:a[1],s[0]:s[1]}, status=200)
-            API_URL = "https://flask-production-3ad5.up.railway.app/?a1="+a1+"&a2="+a2+"&a3="+a3+"&a4="+a4+"&a5="+a5+"&a6="+a6+"&a7="+a7+"&a8="+a8
+            API_URL = "https://flaskexpert-production.up.railway.app/?a1="+a1+"&a2="+a2+"&a3="+a3+"&a4="+a4+"&a5="+a5+"&a6="+a6+"&a7="+a7+"&a8="+a8
             response = requests.get(API_URL)
             if response.status_code!=200:
                 return JsonResponse({"res":"error at api"}, status=201)
-            
-            
-            patient=Patient.objects.get(email=person_result.email)
-            iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
-                                               das_d=response['Depression'],das_a=response['Anxiety'],das_s=response['Stress'])
-            iris.save()
-            return JsonResponse(response, status=200)
+            else:
+                patient=Patient.objects.get(email=person_result.email)
+                iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
+                                                das_d=response['Depression'],das_a=response['Anxiety'],das_s=response['Stress'])
+                iris.save()
+                return JsonResponse(response, status=200)
 
 
         else:
