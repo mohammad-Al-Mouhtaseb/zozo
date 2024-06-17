@@ -203,29 +203,29 @@ def QDep_Bi(request):
         person_result=check_token(request)
         if check_token(request):
             patient=Patient.objects.get(email=person_result.email)
-            questions = [
-                "Sadness?",
-                "Euphoric?",
-                "Exhausted?",
-                "Sleep dissorder?",
-                "Mood Swing?",
-                "Suicidal thoughts?",
-                "Anorxia?",
-                "Authority Respect?",
-                "Try-Explanation?",
-                "Aggressive Response?",
-                "Ignore & Move-On?",
-                "Nervous Break-down?",
-                "Admit_Mistakes?",
-                "Overthinking?",
-                "Sexual Activity?",
-                "Concentration?",
-                "Optimisim?"
+            questions = [ 
+                "How often do you feel sadness?",
+                "How often do you feel euphoric or extremely happy?",
+                "How often do you feel exhausted?",
+                "How often do you experience sleep disorders or disturbances?",
+                "Do you experience frequent mood swings?",
+                "Have you experienced suicidal thoughts?",
+                "Have you experienced anorexia or significant loss of appetite?",
+                "Do you usually respect authority figures?",
+                "Do you try to explain your actions or feelings to others?",
+                "Do you often respond aggressively in challenging situations?",
+                "Do you tend to ignore problems and move on rather than addressing them?",
+                " Have you ever had a nervous breakdown?",
+                "Do you admit your mistakes when you recognize them?",
+                "Do you frequently find yourself overthinking situations?",
+                "How would you rate your level of sexual activity?",
+                "How would you rate your concentration levels?",
+                "How would you rate your level of optimism?"
             ]	
-            answer=[["Usually","Sometimes","Seldom","Most-Often"],
-                    ["Seldom","Most-Often","Usually","Sometimes"],
-                    ["Sometimes","Usually","Seldom","Most-Often"],
-                    ["Sometimes","Most-Often","Usually","Seldom"],
+            answer=[["Usually","Sometimes","Most-Often","Seldom"],
+                    ["Usually","Sometimes","Most-Often","Seldom"],
+                    ["Usually","Sometimes","Most-Often","Seldom"],
+                    ["Usually","Sometimes","Most-Often","Seldom"],
                     ["YES","NO"],["YES","NO"],["YES","NO"],["YES","NO"],["YES","NO"],
                     ["YES","NO"],["YES","NO"],["YES","NO"],["YES","NO"],["YES","NO"],
                     ["1 From 10","2 From 10","3 From 10","4 From 10","5 From 10","6 From 10","7 From 10","8 From 10","9 From 10","10 From 10"],
@@ -275,13 +275,14 @@ def P_Dep(request):
                 pred = "False" if pred == 0 else "True"
                 fields = {'Person_email': patient, 'depressed': pred}
                 int_list = [i for i in range(0, 100)]
-                answer=[["Yes","No"],
+                answer=[["Not Married", "Married"],
                     int_list,
                     int_list,
                     int_list,
                     int_list,
                     int_list,
-                    ["Yes","No"],['No Education', 'Primary', 'Secondary', 'High School', 'College'],
+                    ["Yes","No"],
+                    ['No Education', 'Primary', 'Secondary', 'High School', 'College'],
                     ['Very Low','Low','Medium', 'High', 'Very High'],
                     ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
                     ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
@@ -289,7 +290,7 @@ def P_Dep(request):
                     ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
                     ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
                     ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High']
-                    ]  
+                    ] 
                 fields.update({key: answer[P_Dep_q_list.index(key)-2][data[key]] for key in P_Dep_q_list[2::]})
                 Iris.objects.filter(Person_email=patient).update(**fields)
                 return JsonResponse({'Iris_P_Dep' : pred}, status=200)
@@ -308,29 +309,30 @@ def QP_Dep(request):
         if check_token(request):
             patient=Patient.objects.get(email=person_result.email)	
             questions = [
-                "Married?",# ["Yes","No"]
-                "Number_Children?",# n
-                "total_members?",# n
-                "incoming_salary?",# n
-                "incoming_business?",# n
-                "incoming_no_business?",# n
-                "labor_primary?",# ["Yes","No"]
-                "Education_Level?",#  ['No Education', 'Primary', 'Secondary', 'High School', 'College']
-                "gained_asset_Category?",#5  ['Very Low','Low','Medium', 'High', 'Very High']
-                "Durable_Asset_Category?",#6  ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High']
-                "Save_Asset_Category?",#6
-                "Living_Expenses_Category?",#6
-                "Other_Expenses_Category?",#6
-                "Lasting_Investment_Category",#6
-                "No_Lasting_Investment_Category"#6
+                "What is your marital status?",
+                "How many children do you have?",
+                "How many members are there in your household?",
+                "Do you receive income from a salary?",
+                "incoming_business?",
+                "incoming_no_business?",
+                "labor_primary?",
+                "What is your highest level of education?",
+                "How would you categorize the total value of assets you have gained?",
+                "How would you categorize the total value of your durable assets (e.g., house, car)?",
+                "How would you categorize the total value of your savings and other liquid assets?",
+                "How would you categorize your average monthly living expenses?",
+                "How would you categorize your average monthly other expenses (e.g., entertainment, travel)?"
+                "How would you categorize the total value of your lasting investments (e.g., real estate, bonds)?",
+                "How would you categorize the total value of your non-lasting investments (e.g., stocks, cryptocurrency)?"
             ]
-            answer=[["Yes","No"],
+            answer=[["Not Married", "Married"],
                     [""],
                     [""],
                     [""],
                     [""],
                     [""],
-                    ["Yes","No"],['No Education', 'Primary', 'Secondary', 'High School', 'College'],
+                    ["Yes","No"],
+                    ['No Education', 'Primary', 'Secondary', 'High School', 'College'],
                     ['Very Low','Low','Medium', 'High', 'Very High'],
                     ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
                     ['Very Low','Low','Low Medium', 'High Medium', 'High', 'Very High'],
