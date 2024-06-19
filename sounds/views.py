@@ -41,7 +41,7 @@ def gen(request):
     type=data['type']
     music_path="sounds/music/"+type+"_"+desc+".flac"
     key=Data.objects.get().Huggingface_API
-    API_URL = "https://flask-production-3ad5.up.railway.app/?desc="+desc+"&key="+key
+    API_URL = "https://selene-flask.up.railway.app/music?desc="+desc+"&key="+key
     response = requests.get(API_URL)
     if response.status_code!=200:
         return JsonResponse({"res":"error at api"})
