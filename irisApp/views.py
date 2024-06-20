@@ -68,6 +68,8 @@ def firstquiz(request):
             else:
                 response_json = response.json()
                 patient=Patient.objects.get(email=person_result.email)
+                Age = date.today().year - patient.birth.year
+                Gender = "Male" if patient.gender == 'm' else "Female"
                 try:
                     iris=Iris.objects.get(Person_email=patient)
                     iris.das1=a1
@@ -83,8 +85,12 @@ def firstquiz(request):
                     iris.das_s=response_json['Stress']
                     iris.save()
                 except:
-                    iris=Iris.objects.create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
-                                                das_d=response_json['Depression'],das_a=response_json['Anxiety'],das_s=response_json['Stress'])
+                    iris=Iris.objects.create(Person_email=patient,
+                                                das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
+                                                das_d=response_json['Depression'],
+                                                das_a=response_json['Anxiety'],
+                                                das_s=response_json['Stress'], 
+                                                Age=Age, Gender=Gender)
                 return JsonResponse({'Depression':response_json['Depression'],'Anxiety':response_json['Anxiety'],'Stress':response_json['Stress']}, status=200)
 
 
@@ -109,10 +115,9 @@ def Panic(request):
                 data['Gender']=Gender
                 new_test=[panic.mapping[data[key]] for key in panic_q_list]
                 new_test.insert(0,Age)
-                # pred = XGBoost.predict([new_test])[0]
                 pred=panic.predict(new_test)[0]
                 pred = False if pred == 0 else True
-                fields = {'Person_email': patient, 'Positive_Negative_panic': pred}
+                fields = {'Person_email': patient, 'Positive_Negative_panic': pred, "Age" : Age}
                 fields.update({key: data[key] for key in panic_q_list})
                 Iris.objects.filter(Person_email=patient).update(**fields)
                 return JsonResponse({'Iris_Panic' : pred}, status=200)
@@ -195,7 +200,11 @@ def Dep_Bi(request):
                     pred="Depression"
                 elif pred == 3:
                     pred="Normal"
-                fields = {'Person_email': patient, 'Expert_Diagnose': pred}
+
+                
+                Age = date.today().year - patient.birth.year
+                Gender = "Male" if patient.gender == 'm' else "Female"
+                fields = {'Person_email': patient, 'Expert_Diagnose': pred, 'Age' : Age, 'Gender' : Gender}
                 fields.update({key: data[key] for key in Dep_Bi_q_list})
                 Iris.objects.filter(Person_email=patient).update(**fields)
 
@@ -284,7 +293,7 @@ def P_Dep(request):
                 new_test = [data[key] for key in P_Dep_q_list]
                 pred=p_dep.predict(new_test)
                 pred = False if pred == 0 else True
-                fields = {'Person_email': patient, 'depressed': pred}
+                fields = {'Person_email': patient, 'depressed': pred, 'Age' :Age, 'Gender' : Gender}
                 int_list = [i for i in range(0, 100)]
                 answer=[["Not Married", "Married"],
                     int_list,
