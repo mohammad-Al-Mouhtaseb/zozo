@@ -283,7 +283,7 @@ def P_Dep(request):
                 data["Age"]=Age
                 new_test = [data[key] for key in P_Dep_q_list]
                 pred=p_dep.predict(new_test)
-                pred = "False" if pred == 0 else "True"
+                pred = False if pred == 0 else True
                 fields = {'Person_email': patient, 'depressed': pred}
                 int_list = [i for i in range(0, 100)]
                 answer=[["Not Married", "Married"],

@@ -73,8 +73,7 @@ class Iris(models.Model):
     Other_Expenses_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
     Lasting_Investment_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
     No_Lasting_Investment_Category = models.CharField(max_length=35,null=True, blank=True)#p_dep
-    depressed = models.CharField(max_length=35,null=True, blank=True)#p_dep_res
-
+    depressed = models.BooleanField(null=True, blank=True)#p_dep_res
 
     def __str__(self):
         return  str(self.Person_email)
