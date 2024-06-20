@@ -143,9 +143,9 @@ def edit(request):
                             if obj_res:
                                 setattr(obj_res, i, j)
                                 obj_res.save()
-                                return JsonResponse({'state':"success"}, status=200)
                         except: 
-                            return JsonResponse({'state':'form is not valid'}, status=201)       
+                            return JsonResponse({'state':'form is not valid'}, status=201)   
+                return JsonResponse({'state':"success"}, status=200)    
             else:
                 for i ,j in zip(params,new_values):
                     if hasattr(Doctor, i):
@@ -154,9 +154,10 @@ def edit(request):
                             if obj_res:
                                 setattr(obj_res, i, j)
                                 obj_res.save()
-                                return JsonResponse({'state':"success"}, status=200)
                         except: 
                             return JsonResponse({'state':'form is not valid'}, status=201)
+                    
+                        return JsonResponse({'state':"success"}, status=200)
         return JsonResponse({'state':'form is not valid'}, status=201)
     return JsonResponse({'state':'error request method'}, status=201)
 
