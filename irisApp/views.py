@@ -91,7 +91,7 @@ def firstquiz(request):
                                                 das_a=response_json['Anxiety'],
                                                 das_s=response_json['Stress'], 
                                                 Age=Age, Gender=Gender)
-                return JsonResponse({'Depression':response_json['Depression'],'Anxiety':response_json['Anxiety'],'Stress':response_json['Stress']}, status=200)
+                return JsonResponse({'Depression':response_json['Depression'],'Panic':response_json['Anxiety'],'Bipolar':response_json['Stress']}, status=200)
 
 
         else:
