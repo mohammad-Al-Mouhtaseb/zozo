@@ -321,7 +321,7 @@ def QP_Dep(request):
                 "How would you categorize the total value of your durable assets (e.g., house, car)?",
                 "How would you categorize the total value of your savings and other liquid assets?",
                 "How would you categorize your average monthly living expenses?",
-                "How would you categorize your average monthly other expenses (e.g., entertainment, travel)?"
+                "How would you categorize your average monthly other expenses (e.g., entertainment, travel)?",
                 "How would you categorize the total value of your lasting investments (e.g., real estate, bonds)?",
                 "How would you categorize the total value of your non-lasting investments (e.g., stocks, cryptocurrency)?"
             ]
