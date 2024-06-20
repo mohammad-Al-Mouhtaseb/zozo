@@ -69,10 +69,21 @@ def firstquiz(request):
                 response_json = response.json()
                 patient=Patient.objects.get(email=person_result.email)
                 try:
-                    iris=Iris.objects.create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
-                                                das_d=response_json['Depression'],das_a=response_json['Anxiety'],das_s=response_json['Stress'])
+                    iris=Iris.objects.get(Person_email=patient)
+                    iris.das1=a1
+                    iris.das2=a2
+                    iris.das3=a3
+                    iris.das4=a4
+                    iris.das5=a5
+                    iris.das6=a6
+                    iris.das7=a7
+                    iris.das8=a8
+                    iris.das_d=response_json['Depression']
+                    iris.das_a=response_json['Anxiety']
+                    iris.das_s=response_json['Stress']
+                    iris.save()
                 except:
-                    iris=Iris.objects.update(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
+                    iris=Iris.objects.create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
                                                 das_d=response_json['Depression'],das_a=response_json['Anxiety'],das_s=response_json['Stress'])
                 return JsonResponse({'Depression':response_json['Depression'],'Anxiety':response_json['Anxiety'],'Stress':response_json['Stress']}, status=200)
 
