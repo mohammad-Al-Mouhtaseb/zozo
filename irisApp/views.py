@@ -333,9 +333,9 @@ def QP_Dep(request):
                 "How many children do you have?",
                 "How many members are there in your household?",
                 "Do you receive income from a salary?",
-                "incoming_business?",
-                "incoming_no_business?",
-                "labor_primary?",
+                "Do you receive income from a business?",
+                "Do you receive income from non-business sources?",
+                "Is your main source of income from your primary occupation?",
                 "What is your highest level of education?",
                 "How would you categorize the total value of assets you have gained?",
                 "How would you categorize the total value of your durable assets (e.g., house, car)?",
@@ -395,15 +395,13 @@ def select_doctor(request):
         if check_token(request):
             try:
                 p=Patient.objects.get(email=person_result.email)
-                obj_res = Iris.objects.filter(Person_email=p)
-                if len(obj_res)!=0:
-                    selection=data['doctor']
-                    doc=Doctor.objects.get(email=selection)
-                    setattr(obj_res, "Doctor_email", doc)
-                    obj_res.save()
-                    return JsonResponse({'state':'success'}, status=200)
-                else:
-                    return JsonResponse({'state':'you must doing test'}, status=201)
+                obj_res = Iris.objects.get(Person_email=p)
+                
+                selection=data['doctor']
+                doc=Doctor.objects.get(email=selection)
+                setattr(obj_res, "Doctor_email", doc)
+                obj_res.save()
+                return JsonResponse({'state':'success'}, status=200)
             except Exception as e: 
                 print(e)
                 return JsonResponse({'state':'form is not valid'}, status=201)  
