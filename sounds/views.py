@@ -88,7 +88,7 @@ def get_folder_list(request):
     m=Music.objects.all()
     music_urls=[]
     music_names=[]
-    for i in m:
+    for i in m: 
         n=i.music_path.split('/')[2].split('_')
         if n[0]==folder_name:
             music_urls.append(str(i.music_path))
@@ -117,13 +117,25 @@ def q_surahList(request):
 
 @csrf_exempt
 def q_surah_audio(request,name):
-    name=name.split('`')
-    url = "https://online-quran-api.p.rapidapi.com/surahs/"
-    for i in name:
-        url+=i
-    headers = {
-        "X-RapidAPI-Key": "4120ca7630msh5566122415863dep16069fjsn207bd1f0e6f4",
-        "X-RapidAPI-Host": "online-quran-api.p.rapidapi.com"
-    }
-    response = requests.get(url, headers=headers)
-    return JsonResponse({"audio":response.json()['audio']})
+    surahList= [
+        "Surah-Al-Fatihah","Surah-Al-Baqara","Surah-Al-Imran","Surah-An-Nisaa","Surah-Al-Maidah","Surah-Al-An`am","Surah-Al-A`raf","Surah-Al-Anfal","Surah-At-Taubah","Surah-Yunus","Surah-Hud","Surah-Yusuf","Surah-Ar-Ra`d","Surah-Ibrahim","Surah-Al-Hijr","Surah-An-Nahl","Surah-Israel","Surah-Al-Kahf","Surah-Maryam","Surah-Ta-ha","Surah-Al-Anbiyaa","Surah-Al-Hajj","Surah-Al-Muminun","Surah-An-Nur","Surah-Al-Furqan","Surah-Ash-Shu`araa","Surah-An-Naml","Surah-Al-Qasas","Surah-Al-Ankabut","Surah-Ar-Rum","Surah-Luqman","Surah-As-Sajda","Surah-Al-Ahzab","Surah-Saba","Surah-Fatir","Surah-Ya-Sin","Surah-As-Saffat","Surah-Sad","Surah-Az-Zumar","Surah-Al-Mu`min","Surah-Ha-Mim","Surah-Ash-Shura","Surah-Az-Zukhruf","Surah-Ad-Dukhan","Surah-Al-Jathiya","Surah-Al-Ahqaf","Surah-Muhammad","Surah-Al-Fat-h","Surah-Al-Hujurat","Surah-Qaf","Surah-Az-Zariyat","Surah-At-Tur","Surah-An-Najm","Surah-Al-Qamar","Surah-Ar-Rahman","Surah-Al-Waqi`a","Surah-Al-Hadid","Surah-Al-Mujadila","Surah-Al-Hashr","Surah-Al-Mumtahana","Surah-As-Saff","Surah-Al-Jumu`a","Surah-Al-Munafiqun","Surah-At-Tagabun","Surah-At-Talaq","Surah-At-Tahrim","Surah-Al-Mulk","Surah-Al-Qalam","Surah-Al-Haqqa","Surah-Al-Ma`arij","Surah-Nuh","Surah-Al-Jinn","Surah-Al-Muzzammil","Surah-Al-Muddathth","Surah-Al-Qiyamat","Surah-Ad-Dahr","Surah-Al-Mursalat","Surah-An-Nabaa","Surah-An-Nazi`at","Surah-Abasa","Surah-At-Takwir","Surah-Al-Infitar","Surah-Al-Mutaffife","Surah-Al-Inshiqaq","Surah-Al-Buruj","Surah-At-Tariq","Surah-Al-A`la","Surah-Al-Gashiya","Surah-Al-Fajr","Surah-Al-Balad","Surah-Ash-Shams","Surah-Al-Lail","Surah-Adh-Dhuha","Surah-Al-Sharh","Surah-At-Tin","Surah-Al-Alaq","Surah-Al-Qadr","Surah-Al-Baiyina","Surah-Al-Zalzalah","Surah-Al-Adiyat","Surah-Al-Qari`a","Surah-At-Takathur","Surah-Al-Asr","Surah-Al-Humaza","Surah-Al-Fil","Surah-Quraish","Surah-Al-Ma`un","Surah-Al-Kauthar","Surah-Al-Kafirun","Surah-An-Nasr","Surah-Al-Lahab","Surah-Al-Ikhlas","Surah-Al-Falaq","Surah-Al-Nas"
+    ]
+    x=str(surahList.index(name)+1)
+    if len(x)==1:
+        return JsonResponse({"audio":"https://server8.mp3quran.net/afs/00"+x+".mp3"})
+    if len(x)==2:
+        return JsonResponse({"audio":"https://server8.mp3quran.net/afs/0"+x+".mp3"})
+    if len(x)==3:
+        return JsonResponse({"audio":"https://server8.mp3quran.net/afs/"+x+".mp3"})
+    
+
+    # name=name.split('`')
+    # url = "https://online-quran-api.p.rapidapi.com/surahs/"
+    # for i in name:
+    #     url+=i
+    # headers = {
+    #     "X-RapidAPI-Key": "4120ca7630msh5566122415863dep16069fjsn207bd1f0e6f4",
+    #     "X-RapidAPI-Host": "online-quran-api.p.rapidapi.com"
+    # }
+    # response = requests.get(url, headers=headers)
+    # return JsonResponse({"audio":response.json()['audio']})
