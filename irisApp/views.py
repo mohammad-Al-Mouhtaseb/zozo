@@ -453,3 +453,18 @@ def patient_list_for_doctor(request): #for doctor view Patient list
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
+
+@csrf_exempt
+def id_do_test(request): 
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        person_result=check_token(request)
+        if check_token(request):
+            try:
+                iris=Iris.objects.get(Person_email=person_result)
+                return JsonResponse({'res':True}, status=200)
+            except:
+                return JsonResponse({'res':False}, status=200)
+        else:
+            return exp_logout(request)
+    return JsonResponse({'state':'error request method'}, status=201)
