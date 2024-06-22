@@ -88,7 +88,7 @@ def get_folder_list(request):
     m=Music.objects.all()
     music_urls=[]
     music_names=[]
-    for i in m[1:]:
+    for i in m:
         n=i.music_path.split('/')[2].split('_')
         if n[0]==folder_name:
             music_urls.append(str(i.music_path))
