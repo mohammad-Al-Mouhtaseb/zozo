@@ -462,9 +462,9 @@ def id_do_test(request):
         if check_token(request):
             try:
                 iris=Iris.objects.get(Person_email=person_result)
-                return JsonResponse({'res':True}, status=200)
+                return JsonResponse({'res':True,"doctor":iris.Doctor_email}, status=200)
             except:
-                return JsonResponse({'res':False}, status=200)
+                return JsonResponse({'res':False,"doctor":None}, status=200)
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
