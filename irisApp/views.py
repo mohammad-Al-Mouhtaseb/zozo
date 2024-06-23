@@ -296,8 +296,8 @@ def P_Dep(request):
                 fields = {'Person_email': patient, 'depressed': pred, 'Age' :Age, 'Gender' : Gender}
                 int_list = [i for i in range(0, 100)]
                 answer=[["Not Married", "Married"],
-                    int_list,
-                    int_list,
+                    ["0","1","2","3","4","5","6","7","8","9+"],
+                    ["1","2","3","4","5","6","7","8","9","10+"],
                     ["Yes","No"],
                     ["Yes","No"],
                     ["Yes","No"],
@@ -346,8 +346,8 @@ def QP_Dep(request):
                 "How would you categorize the total value of your non-lasting investments (e.g., stocks, cryptocurrency)?"
             ]
             answer=[["Not Married", "Married"],
-                    [""],
-                    [""],
+                    ["0","1","2","3","4","5","6","7","8","9+"],
+                    ["1","2","3","4","5","6","7","8","9","10+"],
                     ["Yes","No"],
                     ["Yes","No"],
                     ["Yes","No"],
