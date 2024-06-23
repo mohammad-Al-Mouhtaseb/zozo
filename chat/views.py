@@ -100,7 +100,7 @@ def get_my_network(request):
             if person_resul.type=='patient':
                 doctor=Doctor.objects.all()
                 for user in doctor:
-                    res.append({"first_name":user.first_name,"last_name":user.last_name,"email":user.email,"birth":user.birth,"gender":user.gender,"clinic_address":user.clinic_address,"rate":user.rate})
+                    res.append({"first_name":user.first_name,"last_name":user.last_name,"email":user.email,"birth":user.birth,"gender":user.gender,"clinic_address":user.clinic_address,"specialization":user.specialization,"rate":user.rate})
             else:
                 i_am = data['email']
                 i_am=User.objects.get(email=i_am)
