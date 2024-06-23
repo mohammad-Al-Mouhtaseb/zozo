@@ -70,27 +70,20 @@ def firstquiz(request):
                 patient=Patient.objects.get(email=person_result.email)
                 Age = date.today().year - patient.birth.year
                 Gender = "Male" if patient.gender == 'm' else "Female"
+                last_doctor=None
                 try:
                     iris=Iris.objects.get(Person_email=patient)
-                    iris.das1=a1
-                    iris.das2=a2
-                    iris.das3=a3
-                    iris.das4=a4
-                    iris.das5=a5
-                    iris.das6=a6
-                    iris.das7=a7
-                    iris.das8=a8
-                    iris.das_d=response_json['Depression']
-                    iris.das_a=response_json['Anxiety']
-                    iris.das_s=response_json['Stress']
-                    iris.save()
+                    last_doctor = iris.Doctor_email
+                    iris.delete()
                 except:
-                    iris=Iris.objects.create(Person_email=patient,
-                                                das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
-                                                das_d=response_json['Depression'],
-                                                das_a=response_json['Anxiety'],
-                                                das_s=response_json['Stress'], 
-                                                Age=Age, Gender=Gender)
+                    pass
+
+                iris=Iris.objects.create(Person_email=patient,Doctor_email=last_doctor,
+                                            das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
+                                            das_d=response_json['Depression'],
+                                            das_a=response_json['Anxiety'],
+                                            das_s=response_json['Stress'], 
+                                            Age=Age, Gender=Gender)
                 return JsonResponse({'Depression':response_json['Depression'],'Panic':response_json['Anxiety'],'Bipolar':response_json['Stress']}, status=200)
 
 
@@ -462,7 +455,10 @@ def id_do_test(request):
         if check_token(request):
             try:
                 iris=Iris.objects.get(Person_email=person_result)
-                return JsonResponse({'res':True,"doctor":iris.Doctor_email}, status=200)
+                doctor=Doctor.objects.get(email=iris.Doctor_email)
+                return JsonResponse({'res':True,"doctor":doctor.email,'first_name': doctor.first_name,'last_name': doctor.last_name,
+                                     'specialization': doctor.specialization,'clinic_address': doctor.clinic_address,
+                                     'rate': doctor.rate}, status=200)
             except:
                 return JsonResponse({'res':False,"doctor":None}, status=200)
         else:
