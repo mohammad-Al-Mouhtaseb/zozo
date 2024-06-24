@@ -78,14 +78,56 @@ def firstquiz(request):
                 try:
                     iris=Iris.objects.get(Person_email=patient)
                     if response_json['Anxiety']:
-                        for i in panic_q_list[1:]:
-                            iris.i=None
+                        iris.Family_History=None
+                        iris.Personal_History=None
+                        iris.Current_Stressors=None
+                        iris.Symptoms=None
+                        iris.Severity=None
+                        iris.Impact_on_Life=None
+                        iris.Demographics=None
+                        iris.Medical_History=None
+                        iris.Psychiatric_History=None
+                        iris.Substance_Use=None
+                        iris.Coping_Mechanisms=None
+                        iris.Social_Support=None
+                        iris.Lifestyle_Factors=None
+                        iris.Positive_Negative_panic=None
                     elif response_json['Stress']:
-                        for i in Dep_Bi_q_list:
-                            iris.i=None
+                        iris.Sadness = None
+                        iris.Euphoric = None
+                        iris.Exhausted = None
+                        iris.Sleep_Dissorder = None
+                        iris.Mood_Swing = None
+                        iris.Suicidal_Thoughts = None
+                        iris.Anorxia = None
+                        iris.Authority_Respect = None
+                        iris.Try_Explanation = None
+                        iris.Aggressive_Response = None
+                        iris.Ignore_And_Move_On = None
+                        iris.Nervous_BreakDown = None
+                        iris.Admit_Mistakes = None
+                        iris.Overthinking = None
+                        iris.Sexual_Activity = None
+                        iris.Concentration = None
+                        iris.Optimisim = None
+                        iris.Expert_Diagnose = None
                     elif response_json['Depression']:
-                        for i in P_Dep_q_list[2:]:
-                            iris.i=None
+                        iris.Married = None
+                        iris.Number_Children = None
+                        iris.total_members = None
+                        iris.incoming_salary = None
+                        iris.incoming_business = None
+                        iris.incoming_no_business = None
+                        iris.labor_primary = None
+                        iris.Education_Level = None
+                        iris.gained_asset_Category = None
+                        iris.Durable_Asset_Category = None
+                        iris.Save_Asset_Category = None
+                        iris.Living_Expenses_Category = None
+                        iris.Other_Expenses_Category = None
+                        iris.Lasting_Investment_Category = None
+                        iris.No_Lasting_Investment_Category = None
+                        iris.depressed = None
                     iris.das1=a1
                     iris.das2=a2
                     iris.das3=a3
@@ -98,8 +140,8 @@ def firstquiz(request):
                     iris.das_a=response_json['Anxiety']
                     iris.das_s=response_json['Stress']
                     iris.save()
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
 
                 iris=Iris.objects.create(Person_email=patient,Doctor_email=last_doctor,
                                             das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8,
