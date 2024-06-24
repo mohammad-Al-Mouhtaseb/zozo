@@ -107,7 +107,7 @@ def get_my_network(request):
                 i_am=User.objects.get(email=i_am)
                 users=Iris.objects.filter(Doctor_email=i_am)
                 for i in users:
-                    user=Patient.objects.filter(email=i.sender)[0]
+                    user=Patient.objects.filter(email=i.Person_email)[0]
                     res.append({"first_name":user.first_name,"last_name":user.last_name,"email":user.email,"birth":user.birth,"gender":user.gender})
             return JsonResponse({"network":res})
         else:
