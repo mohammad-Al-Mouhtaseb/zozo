@@ -479,7 +479,9 @@ def id_do_test(request):
                                      'specialization': doctor.specialization,'clinic_address': doctor.clinic_address,
                                      'rate': doctor.rate}, status=200)
             except:
-                return JsonResponse({'res':False,"doctor":None}, status=200)
+                return JsonResponse({'res':False,"doctor":'','first_name': '','last_name': '',
+                                     'specialization': '','clinic_address': '',
+                                     'rate': ''}, status=200)
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
