@@ -73,43 +73,31 @@ def chat(request):
                     pusher_client.trigger(recive, 'event', {'sender':str(send),'message': msg})
                 else:
                     ms=[]
-                    try:
-                        d=Doctor.objects.get(email=send)
-                        m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
-                        for i in m2:
-                            ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
-                    except:
-                        m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
-                        m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
-                        for i in m1:
-                            ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
-                        for i in m2:
-                            ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+                    m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
+                    m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
+                    for i in m1:
+                        ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+                    for i in m2:
+                        ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
 
-                        ms.sort(key=lambda x: x['timestamp'])
+                    ms.sort(key=lambda x: x['timestamp'])
 
-                    return JsonResponse({"send":send,"recive": recive,"ms":ms})
+                    return JsonResponse({"send":send,"recive": recive,"ms":ms[-30:]})
 
             except Exception as e:
                 print(e)
 
             ms=[]
-            try:
-                d=Doctor.objects.get(email=send)
-                m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
-                for i in m2:
-                    ms.append({'sender': i.receiver.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
-            except:
-                m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
-                m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
-                for i in m1:
-                    ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
-                for i in m2:
-                    ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+            m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
+            m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
+            for i in m1:
+                ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+            for i in m2:
+                ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
 
-                ms.sort(key=lambda x: x['timestamp'])
+            ms.sort(key=lambda x: x['timestamp'])
 
-            return JsonResponse({"send":send,"recive": recive,"ms":ms})
+            return JsonResponse({"send":send,"recive": recive,"ms":ms[-30:]})
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
