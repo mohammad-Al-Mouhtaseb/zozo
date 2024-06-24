@@ -140,6 +140,7 @@ def firstquiz(request):
                     iris.das_a=response_json['Anxiety']
                     iris.das_s=response_json['Stress']
                     iris.save()
+                    return JsonResponse({'Depression':response_json['Depression'],'Panic':response_json['Anxiety'],'Bipolar':response_json['Stress']}, status=200)
                 except Exception as e:
                     print(e)
 
