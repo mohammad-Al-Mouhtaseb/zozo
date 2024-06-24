@@ -58,11 +58,6 @@ def chat(request):
             send = data['email']
             recive = data['recive']
             try:
-                msg = data['msg']
-                # Create a new Message object and save it to the database
-                message = Message(sender=User.objects.get(email=send), receiver=User.objects.get(email=recive), message=msg)
-                message.save()
-                
                 pusher_client = pusher.Pusher(
                     app_id='1767996',
                     key='5571a7e3223bf9795d51',
@@ -70,9 +65,12 @@ def chat(request):
                     cluster='ap2',
                     ssl=True
                 )
+                msg = data['msg']
                 if msg!="":
+                    # Create a new Message object and save it to the database
+                    message = Message(sender=User.objects.get(email=send), receiver=User.objects.get(email=recive), message=msg)
+                    message.save()
                     pusher_client.trigger(recive, 'event', {'sender':str(send),'message': msg})
-                    new_msg=Message.objects.create(sender=send,receiver=recive,message=msg).save()
                 else:
                     ms=[]
                     m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
