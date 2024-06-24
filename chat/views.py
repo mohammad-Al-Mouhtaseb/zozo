@@ -76,9 +76,9 @@ def chat(request):
                     m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
                     m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
                     for i in m1:
-                        ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+                        ms.append({'sender': i.recive.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
                     for i in m2:
-                        ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+                        ms.append({'sender': i.recive.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
 
                     ms.sort(key=lambda x: x['timestamp'])
 
@@ -91,9 +91,9 @@ def chat(request):
             m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
             m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
             for i in m1:
-                ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+                ms.append({'sender': i.recive.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
             for i in m2:
-                ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+                ms.append({'sender': i.recive.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
 
             ms.sort(key=lambda x: x['timestamp'])
 
