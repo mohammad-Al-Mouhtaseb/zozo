@@ -73,8 +73,8 @@ def chat(request):
                 pusher_client.trigger(recive, 'event', {'sender':str(send),'message': msg})
                 new_msg=Message.objects.create(sender=send,receiver=recive,message=msg).save()
 
-            except:
-                pass
+            except Exception as e:
+                print(e)
 
             ms=[]
             m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
