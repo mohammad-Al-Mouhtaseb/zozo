@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse, FileResponse
 from users.views import *
 from users.models import *
+from irisApp.models import *
 from .models import Message
 import pusher, json, requests
 import base64
@@ -104,7 +105,7 @@ def get_my_network(request):
             else:
                 i_am = data['email']
                 i_am=User.objects.get(email=i_am)
-                users=Message.objects.filter(receiver=i_am)
+                users=Iris.objects.filter(Doctor_email=i_am)
                 for i in users:
                     user=Patient.objects.filter(email=i.sender)[0]
                     res.append({"first_name":user.first_name,"last_name":user.last_name,"email":user.email,"birth":user.birth,"gender":user.gender})
