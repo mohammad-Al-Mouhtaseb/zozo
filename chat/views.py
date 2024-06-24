@@ -98,7 +98,7 @@ def chat(request):
                 d=Doctor.objects.get(email=send)
                 m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
                 for i in m2:
-                    ms.append({'sender': i.sender.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+                    ms.append({'sender': i.receiver.email, 'message': i.message, 'timestamp': i.timestamp.strftime("%Y-%m-%d %H:%M:%S")})
             except:
                 m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))
                 m2=Message.objects.filter(sender=User.objects.get(email=recive),receiver=User.objects.get(email=send))
