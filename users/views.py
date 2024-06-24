@@ -172,6 +172,15 @@ def photo(request,email):
         return JsonResponse({"res":None})
     
 @csrf_exempt 
+def photos(request,name):
+    try:
+        img = open("users/photos/"+name, 'rb')
+        response = FileResponse(img)
+        return response
+    except:
+        return JsonResponse({"res":None})
+    
+@csrf_exempt 
 def upload_photo(request,email):
     try:
         # data:image/jpeg;base64,

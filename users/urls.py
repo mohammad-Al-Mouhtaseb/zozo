@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import photos
 
 urlpatterns = [
     path('register',views.register,name='register'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('add-rate',views.reating,name='reating'),
     path('auth/<str:email>/<str:token>',views.auth,name='auth'),
     path('public_key/<str:email>',views.get_public_key,name='get_public_key'),
+    path('photos/<str:name>',views.photos),
 ]
