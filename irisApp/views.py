@@ -6,6 +6,10 @@ import datetime ,json , pandas as pd, Notebooks.dep_bi as dep_bi, Notebooks.pani
 from users.views import *
 from . models import *
 
+panic_q_list=['Gender','Family_History','Personal_History','Current_Stressors','Symptoms','Severity','Impact_on_Life','Demographics','Medical_History','Psychiatric_History','Substance_Use','Coping_Mechanisms','Social_Support','Lifestyle_Factors']
+Dep_Bi_q_list=['Sadness','Euphoric','Exhausted','Sleep_Dissorder','Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressive_Response','Ignore_And_Move_On','Nervous_BreakDown','Admit_Mistakes','Overthinking','Sexual_Activity','Concentration','Optimisim']
+P_Dep_q_list=['Gender','Age','Married','Number_Children','total_members','incoming_salary','incoming_business','incoming_no_business','labor_primary','Education_Level','gained_asset_Category','Durable_Asset_Category','Save_Asset_Category','Living_Expenses_Category','Other_Expenses_Category','Lasting_Investment_Category','No_Lasting_Investment_Category']
+
 @csrf_exempt
 def firstquiz(request):
     if request.method == 'POST':
@@ -73,8 +77,16 @@ def firstquiz(request):
                 last_doctor=None
                 try:
                     iris=Iris.objects.get(Person_email=patient)
-                    last_doctor = iris.Doctor_email
-                    iris.delete()
+                    if response_json['Anxiety']:
+                        for i in panic_q_list[1:]:
+                            iris.i=None
+                    elif response_json['Stress']:
+                        for i in Dep_Bi_q_list:
+                            iris.i=None
+                    elif response_json['Depression']:
+                        for i in P_Dep_q_list[2:]:
+                            iris.i=None
+                    iris.save()
                 except:
                     pass
 
@@ -90,10 +102,6 @@ def firstquiz(request):
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
-
-panic_q_list=['Gender','Family_History','Personal_History','Current_Stressors','Symptoms','Severity','Impact_on_Life','Demographics','Medical_History','Psychiatric_History','Substance_Use','Coping_Mechanisms','Social_Support','Lifestyle_Factors']
-Dep_Bi_q_list=['Sadness','Euphoric','Exhausted','Sleep_Dissorder','Mood_Swing','Suicidal_Thoughts','Anorxia','Authority_Respect','Try_Explanation','Aggressive_Response','Ignore_And_Move_On','Nervous_BreakDown','Admit_Mistakes','Overthinking','Sexual_Activity','Concentration','Optimisim']
-P_Dep_q_list=['Gender','Age','Married','Number_Children','total_members','incoming_salary','incoming_business','incoming_no_business','labor_primary','Education_Level','gained_asset_Category','Durable_Asset_Category','Save_Asset_Category','Living_Expenses_Category','Other_Expenses_Category','Lasting_Investment_Category','No_Lasting_Investment_Category']
 
 @csrf_exempt
 def Panic(request):
