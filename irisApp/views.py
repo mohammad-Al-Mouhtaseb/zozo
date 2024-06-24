@@ -86,6 +86,17 @@ def firstquiz(request):
                     elif response_json['Depression']:
                         for i in P_Dep_q_list[2:]:
                             iris.i=None
+                    iris.das1=a1
+                    iris.das2=a2
+                    iris.das3=a3
+                    iris.das4=a4
+                    iris.das5=a5
+                    iris.das6=a6
+                    iris.das7=a7
+                    iris.das8=a8
+                    iris.das_d=response_json['Depression']
+                    iris.das_a=response_json['Anxiety']
+                    iris.das_s=response_json['Stress']
                     iris.save()
                 except:
                     pass
