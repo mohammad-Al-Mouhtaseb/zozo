@@ -58,7 +58,8 @@ def get_music(request):
         m = open(music_urls, 'rb')
         response = FileResponse(m)
         return response
-    except:
+    except Exception as e:
+        print(e)
         return JsonResponse({"res":None})
 
 @csrf_exempt

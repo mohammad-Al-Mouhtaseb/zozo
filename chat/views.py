@@ -85,7 +85,6 @@ def chat(request):
                     return JsonResponse({"send":send,"recive": recive,"ms":ms[-30:]})
 
             except Exception as e:
-                print(e)
 
             ms=[]
             m1=Message.objects.filter(sender=User.objects.get(email=send),receiver=User.objects.get(email=recive))

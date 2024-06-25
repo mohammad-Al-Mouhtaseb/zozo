@@ -52,8 +52,8 @@ def get_to_do_list(request):
                     else:
                         x[k]=[v]
                 return JsonResponse({'state':x}, status=200)
-            except:
-                pass
+            except Exception as  e:
+                print(e)
             return JsonResponse({'state':'form is not valid'}, status=201)
         else:
             return exp_logout(request)
@@ -74,8 +74,8 @@ def done_to_do_goal(request):
                     setattr(res, 'is_done', True)
                     res.save()
                 return JsonResponse({'state':"success"}, status=200)
-            except:
-                pass
+            except Exception as  e:
+                print(e)
             return JsonResponse({'state':'form is not valid'}, status=201)
         else:
             return exp_logout(request)

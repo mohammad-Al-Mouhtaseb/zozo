@@ -224,7 +224,7 @@ def QPanic(request):
                     return JsonResponse({'q':q}, status=200)
                 else:
                     return JsonResponse({'q':panic_q_list[1::]}, status=200)
-            except:
+            except Exception as e:
                 q=list()
                 j=0
                 for i in panic_q_list[1::]:

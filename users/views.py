@@ -99,8 +99,8 @@ def logout(request):
         obj_res=None
         try:
             obj_res=User.objects.get(email=email,token=token)
-        except:
-            pass
+        except Exception as  e:
+            print(e)
         if obj_res!=None:
             obj_res.token= None
             obj_res.save()
@@ -116,8 +116,8 @@ def exp_logout(request):
         obj_res=None
         try:
             obj_res=User.objects.get(email=email)
-        except:
-            pass
+        except Exception as  e:
+            print(e)
         if obj_res:
             obj_res.token= None
             obj_res.save()
@@ -143,7 +143,8 @@ def edit(request):
                             if obj_res:
                                 setattr(obj_res, i, j)
                                 obj_res.save()
-                        except: 
+                        except Exception as  e:
+                            print(e)
                             return JsonResponse({'state':'form is not valid'}, status=201)   
                 return JsonResponse({'state':"success"}, status=200)    
             else:
@@ -154,7 +155,8 @@ def edit(request):
                             if obj_res:
                                 setattr(obj_res, i, j)
                                 obj_res.save()
-                        except: 
+                        except Exception as  e:
+                            print(e)
                             return JsonResponse({'state':'form is not valid'}, status=201)
                     
                         return JsonResponse({'state':"success"}, status=200)
@@ -168,7 +170,8 @@ def photo(request,email):
         img = open(str(person.photo), 'rb')
         response = FileResponse(img)
         return response
-    except:
+    except Exception as  e:
+        print(e)
         return JsonResponse({"res":None})
     
 @csrf_exempt 
@@ -177,7 +180,8 @@ def photos(request,name):
         img = open("users/photos/"+name, 'rb')
         response = FileResponse(img)
         return response
-    except:
+    except Exception as  e:
+        print(e)
         return JsonResponse({"res":None})
     
 @csrf_exempt 
@@ -262,7 +266,8 @@ def get_public_key(request,email):
     try:
         user=User.objects.get(email=email)
         return JsonResponse({'public_key':user.public_key}, status=200)
-    except Exception as e:
+    except Exception as  e:
+        print(e)
         return JsonResponse({'error':str(e)}, status=201)
     
 
@@ -344,7 +349,8 @@ def auth(request,email,token):
         user.token=None
         user.save()
         return render(request,'auth.html')
-    except:
+    except Exception as  e:
+        print(e)
         return HttpResponseForbidden(request)
 
 @csrf_exempt 
