@@ -142,7 +142,6 @@ def edit(request):
                             obj_res=Patient.objects.get(email=email)
                             if obj_res:
                                 if i=="password":
-                                    from django.contrib.auth.hashers import make_password
                                     j=make_password(j)
                                     setattr(obj_res, i, j)
                                 else:
