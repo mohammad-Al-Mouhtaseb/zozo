@@ -8,7 +8,6 @@ from sklearn.impute import SimpleImputer
 
 data = pd.read_csv('Notebooks/dataset/b_depressed.csv')
 
-
 data.drop(["Survey_id","Ville_id","incoming_own_farm","incoming_agricultural","farm_expenses"],inplace=True,axis=1)
 data.ffill(inplace=True)
 
