@@ -54,8 +54,8 @@ def register(request):
                     generate_key_pair(email,2048)
                     return JsonResponse({'state':'success'}, status=200)
             except Exception as e:
-                return JsonResponse({'state':'Email already exists','Exception':str(e)}, status=201)
                 print(e)
+                return JsonResponse({'state':'Email already exists','Exception':str(e)}, status=201)
             return JsonResponse({'state':'form is not valid'}, status=201)
         return JsonResponse({'state':'email is not valid'}, status=201)
     return JsonResponse({'state':'error request method'}, status=201)
@@ -141,7 +141,12 @@ def edit(request):
                         try:
                             obj_res=Patient.objects.get(email=email)
                             if obj_res:
-                                setattr(obj_res, i, j)
+                                if i=="password":
+                                    from django.contrib.auth.hashers import make_password
+                                    j=make_password(j)
+                                    setattr(obj_res, i, j)
+                                else:
+                                    setattr(obj_res, i, j)
                                 obj_res.save()
                         except Exception as  e:
                             print(e)
