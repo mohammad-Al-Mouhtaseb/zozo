@@ -19,4 +19,5 @@ urlpatterns = [
 
     
     path('id_do_test',views.id_do_test,name='id_do_test'),
+    path('patient_all_info',views.patient_all_info,name='patient_all_info'),
 ]

@@ -528,3 +528,43 @@ def id_do_test(request):
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
+
+@csrf_exempt
+def patient_all_info(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        person_result=check_token(request)
+        if check_token(request):
+            p=data['patient']
+            params=["Person_email","Gender","Age","das1","das2","das3","das4","das5","das6","das7","das8","das_d","das_a","das_s",
+                    "Family_History","Personal_History","Current_Stressors","Symptoms","Severity","Impact_on_Life","Demographics",
+                    "Medical_History","Psychiatric_History","Substance_Use","Coping_Mechanisms","Social_Support","Lifestyle_Factors",
+                    "Positive_Negative_panic","Sadness","Euphoric","Exhausted","Sleep_Dissorder","Mood_Swing","Suicidal_Thoughts",
+                    "Anorxia","Authority_Respect","Try_Explanation","Aggressive_Response","Ignore_And_Move_On","Nervous_BreakDown",
+                    "Admit_Mistakes","Overthinking","Sexual_Activity","Concentration","Optimisim","Expert_Diagnose ","Married",
+                    "Number_Children","total_members","incoming_salary","incoming_business","incoming_no_business","labor_primary",
+                    "Education_Level","gained_asset_Category","Durable_Asset_Category","Save_Asset_Category","Living_Expenses_Category",
+                    "Other_Expenses_Category","Lasting_Investment_Category","No_Lasting_Investment_Category","depressed"
+                ]
+            p=Patient.objects.get(email=p)
+            iris=Iris.objects.get(Person_email=p)
+            value=[p.email,iris.Gender,iris.Age,iris.das1,iris.das2,iris.das3,iris.das4,iris.das5,iris.das6,iris.das7,iris.das8,iris.das_d,iris.das_a,iris.das_s,
+                    iris.Family_History,iris.Personal_History,iris.Current_Stressors,iris.Symptoms,iris.Severity,iris.Impact_on_Life,iris.Demographics,
+                    iris.Medical_History,iris.Psychiatric_History,iris.Substance_Use,iris.Coping_Mechanisms,iris.Social_Support,iris.Lifestyle_Factors,
+                    iris.Positive_Negative_panic,iris.Sadness,iris.Euphoric,iris.Exhausted,iris.Sleep_Dissorder,iris.Mood_Swing,iris.Suicidal_Thoughts,
+                    iris.Anorxia,iris.Authority_Respect,iris.Try_Explanation,iris.Aggressive_Response,iris.Ignore_And_Move_On,iris.Nervous_BreakDown,
+                    iris.Admit_Mistakes,iris.Overthinking,iris.Sexual_Activity,iris.Concentration,iris.Optimisim,iris.Expert_Diagnose ,iris.Married,
+                    iris.Number_Children,iris.total_members,iris.incoming_salary,iris.incoming_business,iris.incoming_no_business,iris.labor_primary,
+                    iris.Education_Level,iris.gained_asset_Category,iris.Durable_Asset_Category,iris.Save_Asset_Category,iris.Living_Expenses_Category,
+                    iris.Other_Expenses_Category,iris.Lasting_Investment_Category,iris.No_Lasting_Investment_Category,iris.depressed
+                ]
+            arr={}
+            j=0
+            for i in params:
+                arr[i]=value[j]
+                j=j+1
+            print(arr)
+            return JsonResponse({"arr":arr})
+        else:
+            return exp_logout(request)
+    return JsonResponse({'state':'error request method'}, status=201)
