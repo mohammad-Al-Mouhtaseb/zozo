@@ -22,3 +22,4 @@ class Data(models.Model):
     Whatsapp_Token =  models.CharField(max_length=100,null=True, blank=True)
     Whatsapp_API_KEY = models.CharField(max_length=100,null=True, blank=True)
     Whatsapp_API_HOST = models.CharField(max_length=100,null=True, blank=True)
+

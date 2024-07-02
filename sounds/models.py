@@ -10,4 +10,4 @@ class Music(models.Model):
     type = models.CharField(max_length=50,default='',null=True, blank=True)
 
     def __str__(self):
-        return str(self.music_path).split("/")[-1]
+        return f'Type: {self.type}     |||     Name: {str(self.music_path.split("/")[-1]).split("_")[-1]}'
