@@ -8,7 +8,6 @@ from .models import Message
 import pusher, json, requests
 import base64
 from cryptography.hazmat.primitives import asymmetric, serialization
-
 from langdetect import detect
 from deep_translator import GoogleTranslator
 
