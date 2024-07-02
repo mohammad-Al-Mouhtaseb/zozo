@@ -62,7 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Patient(User):
     
     def __str__(self):
-        return f'{self.email}     |||     Name: {self.first_name} {self.last_name}'
+        return str(self.email)
     
     class Meta:
         verbose_name = 'Patient'
@@ -75,7 +75,7 @@ class Doctor(User):
     num_of_rate=models.DecimalField(max_digits=5, decimal_places=1, default=0.0, null=True, blank=True)
  
     def __str__(self):
-        return f'{self.email}     |||     Name: {self.first_name} {self.last_name}'
+        return str(self.email)
     
     class Meta:
         verbose_name = 'Doctor'

@@ -10,7 +10,7 @@ class To_Do(models.Model):
     is_done=models.BooleanField(default=False)
 
     def __str__(self):
-        return f'from: {self.doctor}     |||     to: {self.patient}     |||     Aim: {self.aim}     |||     Goal: {self.goal}'
+        return f'from: {self.doctor} ||| to: {self.patient} ||| Aim: {self.aim} ||| Goal: {self.goal}'
     
     class Meta:
         verbose_name = 'To_Do_list'
