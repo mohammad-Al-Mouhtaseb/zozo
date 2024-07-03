@@ -76,7 +76,7 @@ class Iris(models.Model):
     depressed = models.BooleanField(null=True, blank=True)#p_dep_res
 
     def __str__(self):
-        return  f'patient: {self.Person_email.first_name} {self.Person_email.last_name} ||| doctor: {self.Doctor_email.first_name} {self.Doctor_email.last_name}'
+        return  str(self.Person_email)
     
     class Meta:
         verbose_name = 'Test'
