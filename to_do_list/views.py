@@ -46,34 +46,12 @@ def get_to_do_list(request):
                 x=dict()
                 for i in res:
                     k=i.aim
-                    v={i.goal:i.is_done}
+                    v={i.goal:True}
                     if k in x:
                         x[k].append(v)
                     else:
                         x[k]=[v]
                 return JsonResponse({'state':x}, status=200)
-            except Exception as  e:
-                print(e)
-            return JsonResponse({'state':'form is not valid'}, status=201)
-        else:
-            return exp_logout(request)
-    return JsonResponse({'state':'error request method'}, status=201)
-
-@csrf_exempt
-def done_to_do_goal(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        person_resul=check_token(request)
-        if check_token(request):
-            aim=data['aim']
-            goal=data['goal']
-            try:
-                res=To_Do.objects.get(patient=person_resul,aim=aim,goal=goal)
-                print(res)
-                if res:
-                    setattr(res, 'is_done', True)
-                    res.save()
-                return JsonResponse({'state':"success"}, status=200)
             except Exception as  e:
                 print(e)
             return JsonResponse({'state':'form is not valid'}, status=201)

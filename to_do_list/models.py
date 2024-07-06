@@ -7,7 +7,6 @@ class To_Do(models.Model):
     patient = models.ForeignKey(Patient, null=True,related_name='patient_appointments', on_delete=models.CASCADE)
     aim=models.CharField(max_length=100)
     goal=models.CharField(max_length=100)
-    is_done=models.BooleanField(default=False)
 
     def __str__(self):
         return ' from: '+str(self.doctor_id) + ' to: '+str(self.patient_id) + ' | ' + self.aim +' | '+ self.goal

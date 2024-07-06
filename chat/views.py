@@ -8,45 +8,6 @@ from .models import Message
 import pusher, json, requests
 import base64
 from cryptography.hazmat.primitives import asymmetric, serialization
-from langdetect import detect
-from deep_translator import GoogleTranslator
-
-
-@csrf_exempt
-def chat_ai(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        text=data['text']
-        url = "https://open-ai21.p.rapidapi.com/conversationpalm2"
-
-        payload = { "messages": [
-        		{
-        			"role": "user",
-        			"content": text
-        		}
-        	] }
-        headers = {
-        	"x-rapidapi-key": "4120ca7630msh5566122415863dep16069fjsn207bd1f0e6f4",
-        	"x-rapidapi-host": "open-ai21.p.rapidapi.com",
-        	"Content-Type": "application/json"
-        }
-
-        response = requests.post(url, json=payload, headers=headers)
-        return JsonResponse(response.json())
-    return JsonResponse({'error':'error'},status=404)
-
-
-@csrf_exempt
-def translate(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        text=data['text']
-        detected_language = detect(text)
-        t_l=data['to']
-        translated_text = GoogleTranslator(source=detected_language, target=t_l).translate(text)
-        return JsonResponse({'translated':translated_text},status=200)
-    return JsonResponse({'error':'error'},status=404)
-
 
 @csrf_exempt 
 def chat(request):  
@@ -122,7 +83,3 @@ def get_my_network(request):
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)
-
-@csrf_exempt
-def note(request,channel):
-    return render(request,'chat.html',{'channel':channel})

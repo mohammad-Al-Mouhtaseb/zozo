@@ -24,7 +24,8 @@ def firstquiz(request):
             a6=data['a6']#Anxiety
             a7=data['a7']#Depression
             a8=data['a8']#Anxiety
-
+            
+            ###################### Same code at server 3
             # patient=Patient.objects.get(email=person_result.email)
             # iris=Iris.objects.update_or_create(Person_email=patient,das1=a1,das2=a2,das3=a3,das4=a4,das5=a5,das6=a6,das7=a7,das8=a8)
             # iris=Iris.objects.get(Person_email=patient)
@@ -151,8 +152,6 @@ def firstquiz(request):
                                             das_s=response_json['Stress'], 
                                             Age=Age, Gender=Gender)
                 return JsonResponse({'Depression':response_json['Depression'],'Panic':response_json['Anxiety'],'Bipolar':response_json['Stress']}, status=200)
-
-
         else:
             return exp_logout(request)
     return JsonResponse({'state':'error request method'}, status=201)

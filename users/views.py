@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, FileResponse, HttpResponseForbidden
-from django.views.decorators.csrf import csrf_exempt
-import string ,random,json
 from django.contrib.auth.hashers import make_password
-from . models import *
-from chat.models import *
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
+import string ,random,json
+from . models import *
 import base64
 from django.core.files.base import ContentFile
 import requests
@@ -28,31 +27,13 @@ def register(request):
         roll=None
         if chack_email(email):
             try:
-                roll=data['type']
-                if roll:
-                    if roll=="doctor":
-                        d=Doctor.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                        d=Doctor.objects.get(email=email)
-                        d.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-                        d.save()
-                        send_mail(email,"Welcome to selene..",{"email":email,"token":d.token})
-                        generate_key_pair(email,2048)
-                        return JsonResponse({'state':'success'}, status=200)
-                    else:
-                        roll="patient"
-                        p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                        p=Patient.objects.get(email=email)
-                        p.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-                        p.save()
-                        send_mail(email,"Welcome to selene..",{"email":email,"token":p.token})
-                        generate_key_pair(email,2048)
-                        return JsonResponse({'state':'success'}, status=200)      
-                if roll==None:
-                    roll="patient"
-                    p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
-                    send_mail(email,"Welcome to selene..",None)
-                    generate_key_pair(email,2048)
-                    return JsonResponse({'state':'success'}, status=200)
+                p=Patient.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,country=country,gender=gender,birth=birth,type=roll)
+                p=Patient.objects.get(email=email)
+                p.token= ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                p.save()
+                send_mail(email,"Welcome to selene..",{"email":email,"token":p.token})
+                generate_key_pair(email,2048)
+                return JsonResponse({'state':'success'}, status=200)      
             except Exception as e:
                 print(e)
                 return JsonResponse({'state':'Email already exists','Exception':str(e)}, status=201)
@@ -168,20 +149,13 @@ def edit(request):
     return JsonResponse({'state':'error request method'}, status=201)
 
 @csrf_exempt 
-def photo(request,email):
+def photo(request,text):
     try:
-        person=User.objects.get(email=email)
-        img = open(str(person.photo), 'rb')
-        response = FileResponse(img)
-        return response
-    except Exception as  e:
-        print(e)
-        return JsonResponse({"res":None})
-    
-@csrf_exempt 
-def photos(request,name):
-    try:
-        img = open("users/photos/"+name, 'rb')
+        try:
+            person=User.objects.get(email=text)
+            img = open(str(person.photo), 'rb')
+        except:
+            img = open("users/photos/"+text, 'rb')
         response = FileResponse(img)
         return response
     except Exception as  e:
@@ -196,7 +170,7 @@ def upload_photo(request,email):
         user= User.objects.get(email=email)
         format, imgstr = data["photo"].split(';base64,') 
         ext = format.split('/')[-1] 
-        user.photo = ContentFile(base64.b64decode(imgstr), name=user.type+' '+user.first_name+' '+user.last_name+'.' + ext)
+        user.photo = ContentFile(base64.b64decode(imgstr), name=user.email+'.' + ext)
         user.save()
         return JsonResponse({'state':"success"}, status=200)
     except Exception as e:
@@ -233,10 +207,6 @@ def get_doctor_list(request):
     res=[]
     try:
         users=Doctor.objects.all()
-        # def myFunc(e):
-        #     return e['rate']
-        # users.sort(reverse=True,key=myFunc)
-        # userss = sorted(users, reverse=True)
         for i in users:
             res.append({"email":i.email,"first_name":i.first_name,"last_name":i.last_name,"specialization":i.specialization,"clinic_address":i.clinic_address,"rate":i.rate})
     except Exception as e:
@@ -275,9 +245,6 @@ def get_public_key(request,email):
         return JsonResponse({'error':str(e)}, status=201)
     
 
-
-
-    import requests
 
 @csrf_exempt 
 def send_mail(sendto,title,body):
@@ -360,7 +327,7 @@ def auth(request,email,token):
 @csrf_exempt 
 def generate_key_pair(email,key_size):
     private_key = asymmetric.rsa.generate_private_key(
-        public_exponent=65537,  # Common public exponent for RSA
+        public_exponent=65537,
         key_size=key_size
     )
     public_key = private_key.public_key()
