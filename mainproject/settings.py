@@ -29,7 +29,7 @@ CSRF_TRUSTED_ORIGINS = ['https://selene-m-h.up.railway.app']
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app','.now.sh','127.0.0.1','localhost','.up.railway.app','*']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','.up.railway.app','*']
 
 # Application definition
 
