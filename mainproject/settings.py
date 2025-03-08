@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     "sounds",
     "setting_apps",
 ]
-
 JAZZMIN_SETTINGS = {
     "site_title": "Selene",
     "site_header": "Selene",
@@ -58,7 +57,7 @@ JAZZMIN_SETTINGS = {
     "site_logo": "./index/files/main-icon.png",
     "welcome_sign": "Welcome to the Selene",
     # Copyright on the footer
-    "copyright": "Admin Page",
+    "copyright": "Selene",
     "user_avatar": None,
     ############
     # Top Menu #
@@ -69,6 +68,11 @@ JAZZMIN_SETTINGS = {
         {"name": "Admin Page", "url": "home", "permissions": ["auth.view_user"]},
         # model admin to link to (Permissions checked against model)
         {"model": "auth.User"},
+        {"name": "Support", "url": "mailto://m.almouhtaseb@gmail.com", "new_window": True},
+
+    ],
+    "usermenu_links": [
+        {"model": "auth.user"}
     ],
     #############
     # Side Menu #
@@ -96,7 +100,7 @@ JAZZMIN_SETTINGS = {
     # Related Modal #
     #################
     # Use modals instead of popups
-    "related_modal_active": False,
+    "related_modal_active": True,
     #############
     # UI Tweaks #
     #############
@@ -105,7 +109,7 @@ JAZZMIN_SETTINGS = {
     # "custom_css": "css/bootstrap-dark.css",
     "custom_js": None,
     # Whether to show the UI customizer on the sidebar
-    "show_ui_builder": False,
+    "show_ui_builder": True,
     ###############
     # Change view #
     ###############
@@ -118,15 +122,36 @@ JAZZMIN_SETTINGS = {
 }
 
 JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": True,
+    "brand_small_text": False,
+    "brand_colour": False,
+    "accent": "accent-navy",
     "navbar": "navbar-dark",
+    "no_navbar_border": True,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": True,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-info",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_legacy_style": True,
+    "sidebar_nav_flat_style": True,
+    "theme": "default",
+    "dark_mode_theme": None,
     "button_classes": {
-        "primary": "btn-primary",
+        "primary": "btn-outline-primary",
         "secondary": "btn-secondary",
         "info": "btn-info",
         "warning": "btn-warning",
         "danger": "btn-danger",
-        "success": "btn-success",
+        "success": "btn-success"
     },
+    "actions_sticky_top": False
 }
 
 AUTH_USER_MODEL = "users.User"
